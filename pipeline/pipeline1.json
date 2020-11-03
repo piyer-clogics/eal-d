@@ -44,6 +44,37 @@
 						"type": "DatasetReference"
 					}
 				]
+			},
+			{
+				"name": "Web1",
+				"type": "WebActivity",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://api.airline-choice.com/rest/airports",
+					"connectVia": {
+						"referenceName": "AutoResolveIntegrationRuntime",
+						"type": "IntegrationRuntimeReference"
+					},
+					"method": "GET",
+					"linkedServices": [
+						{
+							"referenceName": "eal_airlinechoice_src",
+							"type": "LinkedServiceReference"
+						}
+					],
+					"authentication": {
+						"type": "Basic",
+						"username": "eastern-test"
+					}
+				}
 			}
 		],
 		"annotations": []
