@@ -8,7 +8,7 @@
 		"annotations": [],
 		"type": "RestResource",
 		"typeProperties": {
-			"relativeUrl": "flights​/GetActiveFlights"
+			"relativeUrl": "flights/GetActiveFlights"
 		},
 		"schema": []
 	}
