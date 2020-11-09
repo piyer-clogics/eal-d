@@ -1,5 +1,5 @@
 {
-	"name": "AzureSqlTable1",
+	"name": "sql_active_flights",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "eal_sqldb_piyer",
