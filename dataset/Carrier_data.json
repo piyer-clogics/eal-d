@@ -1,5 +1,5 @@
 {
-	"name": "DelimitedText1",
+	"name": "Carrier_data",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ealblobdconnection",
