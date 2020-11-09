@@ -1,0 +1,296 @@
+{
+	"name": "AzureSqlTable1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "eal_sqldb_piyer",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "AircraftCapacity",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "AncillaryTemplateID",
+				"type": "varchar"
+			},
+			{
+				"name": "ArrivalGate",
+				"type": "varchar"
+			},
+			{
+				"name": "ArrivalTerminal",
+				"type": "varchar"
+			},
+			{
+				"name": "BatchCrewMemberMask",
+				"type": "varchar"
+			},
+			{
+				"name": "BatchPassengerMask",
+				"type": "varchar"
+			},
+			{
+				"name": "BoardingTime",
+				"type": "varchar"
+			},
+			{
+				"name": "BookedPassengersCount",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "CancelledBy",
+				"type": "varchar"
+			},
+			{
+				"name": "CancelledReason",
+				"type": "varchar"
+			},
+			{
+				"name": "CarrierCode",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "CrewFlightPostDepartureCloseOutStatus",
+				"type": "varchar"
+			},
+			{
+				"name": "CrewFlightPreDepartureCloseOutStatus",
+				"type": "varchar"
+			},
+			{
+				"name": "CustomerID",
+				"type": "varchar"
+			},
+			{
+				"name": "DepartureGate",
+				"type": "varchar"
+			},
+			{
+				"name": "DepartureTerminal",
+				"type": "varchar"
+			},
+			{
+				"name": "DestinationAirportCity",
+				"type": "varchar"
+			},
+			{
+				"name": "DestinationAirportCountryCode",
+				"type": "varchar"
+			},
+			{
+				"name": "DestinationAirportName",
+				"type": "varchar"
+			},
+			{
+				"name": "DestinationIATA",
+				"type": "varchar"
+			},
+			{
+				"name": "DestinationICAO",
+				"type": "varchar"
+			},
+			{
+				"name": "EnableBoarding",
+				"type": "bit"
+			},
+			{
+				"name": "EnableCrewAPIS",
+				"type": "bit"
+			},
+			{
+				"name": "EnableDCS",
+				"type": "bit"
+			},
+			{
+				"name": "EnablePassengerAPIS",
+				"type": "bit"
+			},
+			{
+				"name": "EnableThroughCheckIn",
+				"type": "bit"
+			},
+			{
+				"name": "EstimatedArrivalTime",
+				"type": "varchar"
+			},
+			{
+				"name": "EstimatedDepartureTime",
+				"type": "varchar"
+			},
+			{
+				"name": "ExternalID",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "FlightDelays",
+				"type": "varchar"
+			},
+			{
+				"name": "FlightNo",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "HasPassengerSecurityTransactions",
+				"type": "bit"
+			},
+			{
+				"name": "HealthCheckRulesID",
+				"type": "varchar"
+			},
+			{
+				"name": "Passengers",
+				"type": "varchar"
+			},
+			{
+				"name": "PaxBatchPreVetStatus",
+				"type": "varchar"
+			},
+			{
+				"name": "FlightID",
+				"type": "varchar"
+			},
+			{
+				"name": "IsCancelled",
+				"type": "bit"
+			},
+			{
+				"name": "IsOpenSeating",
+				"type": "bit"
+			},
+			{
+				"name": "IsProgressiveFlight",
+				"type": "bit"
+			},
+			{
+				"name": "MarketingCarrierCode",
+				"type": "varchar"
+			},
+			{
+				"name": "Message",
+				"type": "varchar"
+			},
+			{
+				"name": "OriginAirportCity",
+				"type": "varchar"
+			},
+			{
+				"name": "OriginAirportCountryCode",
+				"type": "varchar"
+			},
+			{
+				"name": "OriginAirportName",
+				"type": "varchar"
+			},
+			{
+				"name": "OriginIATA",
+				"type": "varchar"
+			},
+			{
+				"name": "OriginICAO",
+				"type": "varchar"
+			},
+			{
+				"name": "ApplicationRecipientID",
+				"type": "varchar"
+			},
+			{
+				"name": "PaxFlightPostDepartureCloseOutStatus",
+				"type": "varchar"
+			},
+			{
+				"name": "PaxFlightPreDepartureCloseOutStatus",
+				"type": "varchar"
+			},
+			{
+				"name": "PnlImported",
+				"type": "bit"
+			},
+			{
+				"name": "PostDepartureCloseOutCrewMemberMask",
+				"type": "varchar"
+			},
+			{
+				"name": "PostDepartureCloseOutPassengerMask",
+				"type": "varchar"
+			},
+			{
+				"name": "PreDepartureCloseOutCrewMemberMask",
+				"type": "varchar"
+			},
+			{
+				"name": "PreDepartureCloseOutPassengerMask",
+				"type": "varchar"
+			},
+			{
+				"name": "RemainingFuelLoad",
+				"type": "bit"
+			},
+			{
+				"name": "ScheduledArrivalTime",
+				"type": "varchar"
+			},
+			{
+				"name": "ScheduledDepartureTime",
+				"type": "varchar"
+			},
+			{
+				"name": "ScheduledDepartureTimeUTC",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "SegmentNo",
+				"type": "bit"
+			},
+			{
+				"name": "Status",
+				"type": "varchar"
+			},
+			{
+				"name": "TailNo",
+				"type": "varchar"
+			},
+			{
+				"name": "TotalCargoLoad",
+				"type": "bit"
+			},
+			{
+				"name": "TotalFuelLoad",
+				"type": "bit"
+			},
+			{
+				"name": "Type",
+				"type": "varchar"
+			},
+			{
+				"name": "UpliftFuelLoad",
+				"type": "bit"
+			},
+			{
+				"name": "UseAverageBagWeight",
+				"type": "bit"
+			},
+			{
+				"name": "UseAveragePaxWeight",
+				"type": "bit"
+			},
+			{
+				"name": "WeightUnitsKgs",
+				"type": "bit"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "active_flights"
+		}
+	}
+}
