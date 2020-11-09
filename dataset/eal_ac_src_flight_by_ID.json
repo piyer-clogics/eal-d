@@ -1,0 +1,15 @@
+{
+	"name": "eal_ac_src_flight_by_ID",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "eal_airlinechoice_src",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "RestResource",
+		"typeProperties": {
+			"relativeUrl": "flights/GetFlightByID"
+		},
+		"schema": []
+	}
+}
