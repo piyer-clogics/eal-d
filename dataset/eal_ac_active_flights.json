@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "eal_ac_active_flights",
+				"fileName": "eal_ac_active_flights.json",
 				"container": "eal-src-stg"
 			}
 		},
