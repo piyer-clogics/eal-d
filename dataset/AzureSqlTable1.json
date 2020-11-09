@@ -10,7 +10,7 @@
 		"schema": [],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "stg_active_flights"
+			"table": "[stg_active_flight]"
 		}
 	}
 }
