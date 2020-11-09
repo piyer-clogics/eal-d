@@ -1,0 +1,178 @@
+{
+	"name": "sql_crew_security_rules",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "eal_sqldb_piyer",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Destination Table"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "ApplicationRecipientID",
+				"type": "varchar"
+			},
+			{
+				"name": "BatchContactDetails",
+				"type": "bit"
+			},
+			{
+				"name": "BatchDestinationAddressCondition",
+				"type": "bit"
+			},
+			{
+				"name": "BatchSubmission",
+				"type": "bit"
+			},
+			{
+				"name": "BatchTriggerHours",
+				"type": "bit"
+			},
+			{
+				"name": "BatchValidation",
+				"type": "bit"
+			},
+			{
+				"name": "BuildFcmFromMclOnly",
+				"type": "bit"
+			},
+			{
+				"name": "CheckinBirthPlace",
+				"type": "bit"
+			},
+			{
+				"name": "CheckinClearance",
+				"type": "bit"
+			},
+			{
+				"name": "CheckinContactDetails",
+				"type": "bit"
+			},
+			{
+				"name": "CheckinDOB",
+				"type": "bit"
+			},
+			{
+				"name": "CheckinDestinationAddress",
+				"type": "bit"
+			},
+			{
+				"name": "CheckinDestinationAddressCondition",
+				"type": "bit"
+			},
+			{
+				"name": "CheckinGender",
+				"type": "bit"
+			},
+			{
+				"name": "CheckinHomeAddress",
+				"type": "bit"
+			},
+			{
+				"name": "Nationality",
+				"type": "bit"
+			},
+			{
+				"name": "CheckinOrigDest",
+				"type": "bit"
+			},
+			{
+				"name": "Residence",
+				"type": "bit"
+			},
+			{
+				"name": "CheckinStatusOnBoard",
+				"type": "bit"
+			},
+			{
+				"name": "CheckinTravelDoc",
+				"type": "bit"
+			},
+			{
+				"name": "CommonAccessReference",
+				"type": "varchar"
+			},
+			{
+				"name": "CountryEntity",
+				"type": "varchar"
+			},
+			{
+				"name": "CrewAdd",
+				"type": "bit"
+			},
+			{
+				"name": "CrewCancel",
+				"type": "bit"
+			},
+			{
+				"name": "CrewChange",
+				"type": "bit"
+			},
+			{
+				"name": "FlightAdd",
+				"type": "bit"
+			},
+			{
+				"name": "FlightCancel",
+				"type": "bit"
+			},
+			{
+				"name": "FlightChange",
+				"type": "bit"
+			},
+			{
+				"name": "FlightPostDepartureCloseout",
+				"type": "bit"
+			},
+			{
+				"name": "FlightPostDepartureCloseoutOnBoard",
+				"type": "bit"
+			},
+			{
+				"name": "FlightPreDepartureCloseout",
+				"type": "bit"
+			},
+			{
+				"name": "FlightRouting",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "FlightType",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "HasFlightCloseoutRequirement",
+				"type": "bit"
+			},
+			{
+				"name": "InteractiveComms",
+				"type": "bit"
+			},
+			{
+				"name": "InterchangeRecipientID",
+				"type": "varchar"
+			},
+			{
+				"name": "OutageVettingStatus",
+				"type": "bit"
+			},
+			{
+				"name": "RequireSecurityClearance",
+				"type": "bit"
+			},
+			{
+				"name": "WatchlistVet",
+				"type": "bit"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "carrier_crew_security_rules"
+		}
+	}
+}

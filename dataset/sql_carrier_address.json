@@ -1,9 +1,12 @@
 {
-	"name": "AzureSqlTable1",
+	"name": "sql_carrier_address",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "eal_sqldb_piyer",
 			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Destination Table"
 		},
 		"annotations": [],
 		"type": "AzureSqlTable",
