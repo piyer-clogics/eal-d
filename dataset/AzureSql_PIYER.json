@@ -1,8 +1,8 @@
 {
-	"name": "AzureSqlTable1",
+	"name": "AzureSql_PIYER",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "AzureSqlDatabase",
+			"referenceName": "eal_sqldb_piyer",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],
