@@ -5,6 +5,9 @@
 			"referenceName": "eal_airlinechoice_src",
 			"type": "LinkedServiceReference"
 		},
+		"folder": {
+			"name": "Read from API"
+		},
 		"annotations": [],
 		"type": "RestResource",
 		"typeProperties": {
