@@ -1,0 +1,133 @@
+{
+	"name": "sql_carrier",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "eal_sqldb_piyer",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "ApisCarrierCode",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "ApisContactName",
+				"type": "varchar"
+			},
+			{
+				"name": "ApisFax",
+				"type": "varchar"
+			},
+			{
+				"name": "ApisSenderID",
+				"type": "varchar"
+			},
+			{
+				"name": "ApisTelephone",
+				"type": "varchar"
+			},
+			{
+				"name": "CarrierName",
+				"type": "varchar"
+			},
+			{
+				"name": "Code",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "DefaultAdultAge",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "DefaultChildAge",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "Email",
+				"type": "varchar"
+			},
+			{
+				"name": "EmailSenderAddress",
+				"type": "varchar"
+			},
+			{
+				"name": "EmergencySeatGateStopInstructions",
+				"type": "varchar"
+			},
+			{
+				"name": "IATA",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "ICAO",
+				"type": "varchar"
+			},
+			{
+				"name": "Icon",
+				"type": "varchar"
+			},
+			{
+				"name": "IsPrintingBagTagWithoutCheckInAllowed",
+				"type": "bit"
+			},
+			{
+				"name": "Logo",
+				"type": "varchar"
+			},
+			{
+				"name": "MaximumPassengerBags",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "PnlImportCloseTime",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "Prefix",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "SelecteeGateStopInstructions",
+				"type": "varchar"
+			},
+			{
+				"name": "TsaPreCheck",
+				"type": "bit"
+			},
+			{
+				"name": "UnverifiedDocumentsGateStopInstructions",
+				"type": "varchar"
+			},
+			{
+				"name": "WatchlistNoFlyMatchInstructions",
+				"type": "varchar"
+			},
+			{
+				"name": "WatchlistPreventMatchInstructions",
+				"type": "varchar"
+			},
+			{
+				"name": "WatchlistSelecteeMatchInstructions",
+				"type": "varchar"
+			},
+			{
+				"name": "Website",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "carrier"
+		}
+	}
+}
