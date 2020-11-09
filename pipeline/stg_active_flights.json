@@ -3,8 +3,8 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Copy data1",
-				"type": "Copy",
+				"name": "dataflow1",
+				"type": "ExecuteDataFlow",
 				"dependsOn": [],
 				"policy": {
 					"timeout": "7.00:00:00",
@@ -15,24 +15,15 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"source": {
-						"type": "JsonSource",
-						"storeSettings": {
-							"type": "AzureBlobStorageReadSettings",
-							"recursive": true
-						},
-						"formatSettings": {
-							"type": "JsonReadSettings"
-						}
+					"dataflow": {
+						"referenceName": "dataflow1",
+						"type": "DataFlowReference"
 					},
-					"enableStaging": false
-				},
-				"inputs": [
-					{
-						"referenceName": "eal_ac_active_flights",
-						"type": "DatasetReference"
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
 					}
-				]
+				}
 			}
 		],
 		"annotations": []
