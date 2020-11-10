@@ -1,0 +1,77 @@
+{
+	"name": "sql_health_check_rules",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "eal_sqldb_piyer",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Destination Table"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "CarrierCode",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "CreatedBy",
+				"type": "varchar"
+			},
+			{
+				"name": "CreatedTimestampUTC",
+				"type": "varchar"
+			},
+			{
+				"name": "DestinationAirport",
+				"type": "varchar"
+			},
+			{
+				"name": "DestinationCountryEntity",
+				"type": "varchar"
+			},
+			{
+				"name": "ID",
+				"type": "varchar"
+			},
+			{
+				"name": "Instructions",
+				"type": "varchar"
+			},
+			{
+				"name": "IsActive",
+				"type": "bit"
+			},
+			{
+				"name": "IsClearToBoard",
+				"type": "bit"
+			},
+			{
+				"name": "IsRequireProofForRemoteCheckIn",
+				"type": "bit"
+			},
+			{
+				"name": "IsRequireRemarksForFailStatus",
+				"type": "bit"
+			},
+			{
+				"name": "OriginAirport",
+				"type": "varchar"
+			},
+			{
+				"name": "OriginCountryEntity",
+				"type": "varchar"
+			},
+			{
+				"name": "UpdatedBy",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "health_check_rules"
+		}
+	}
+}
