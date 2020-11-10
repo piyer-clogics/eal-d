@@ -6,7 +6,7 @@
 			"type": "LinkedServiceReference"
 		},
 		"folder": {
-			"name": "Read from API"
+			"name": "Source API"
 		},
 		"annotations": [],
 		"type": "RestResource",
