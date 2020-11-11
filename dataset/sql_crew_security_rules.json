@@ -172,7 +172,7 @@
 		],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "carrier_crew_security_rules"
+			"table": "S_CREW_SEC_RULES"
 		}
 	}
 }

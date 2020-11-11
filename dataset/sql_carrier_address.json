@@ -47,7 +47,7 @@
 		],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "carrier_address"
+			"table": "S_CARRIER_ADDR"
 		}
 	}
 }

@@ -186,7 +186,7 @@
 		],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "passenger_security_rules"
+			"table": "S_PSNGR_SEC_RULES"
 		}
 	}
 }

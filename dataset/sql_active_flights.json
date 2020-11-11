@@ -293,7 +293,7 @@
 		],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "active_flights"
+			"table": "S_ACTV_FLT"
 		}
 	}
 }

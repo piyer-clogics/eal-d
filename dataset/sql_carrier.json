@@ -130,7 +130,7 @@
 		],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "carrier"
+			"table": "S_CARRIER"
 		}
 	}
 }

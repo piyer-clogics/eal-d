@@ -71,7 +71,7 @@
 		],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "health_check_rules"
+			"table": "S_HLTH_CHK_RULES"
 		}
 	}
 }
