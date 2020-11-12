@@ -1539,7 +1539,7 @@
 				]
 			},
 			{
-				"name": "dataflow1",
+				"name": "Data Flow Active Flights",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [
 					{
@@ -1589,6 +1589,12 @@
 				}
 			}
 		],
+		"parameters": {
+			"run_id": {
+				"type": "string",
+				"defaultValue": "@pipeline().RunId"
+			}
+		},
 		"variables": {
 			"ADF_run_ID": {
 				"type": "String"
