@@ -21,7 +21,7 @@
 					},
 					"activities": [
 						{
-							"name": "Copy data1",
+							"name": "Copy Passenger Data",
 							"type": "Copy",
 							"dependsOn": [],
 							"policy": {
@@ -47,7 +47,7 @@
 									},
 									"formatSettings": {
 										"type": "JsonWriteSettings",
-										"filePattern": "arrayOfObjects"
+										"filePattern": "setOfObjects"
 									}
 								},
 								"enableStaging": false

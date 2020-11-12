@@ -13,7 +13,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "passenger_by_id",
+				"fileName": "passenger_by_id.json",
 				"container": "eal-src-stg"
 			}
 		},
