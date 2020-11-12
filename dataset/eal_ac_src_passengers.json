@@ -5,6 +5,14 @@
 			"referenceName": "eal_airlinechoice_src",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"flightID": {
+				"type": "string"
+			},
+			"flightSegmentNo": {
+				"type": "int"
+			}
+		},
 		"folder": {
 			"name": "Source API"
 		},
