@@ -31,7 +31,10 @@
 		"annotations": [],
 		"type": "RestResource",
 		"typeProperties": {
-			"relativeUrl": "passengers/GetPassengersByFlightID"
+			"relativeUrl": {
+				"value": "@?flightID=dataset().flightID&flightSegmentNo=dataset().flightSegmentNo&includeBags=true&includeAncillaries=false&includeBagTracking=false",
+				"type": "Expression"
+			}
 		},
 		"schema": []
 	}
