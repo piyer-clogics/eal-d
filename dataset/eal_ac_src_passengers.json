@@ -11,6 +11,18 @@
 			},
 			"flightSegmentNo": {
 				"type": "int"
+			},
+			"includeBags": {
+				"type": "bool",
+				"defaultValue": true
+			},
+			"includeAncillaries": {
+				"type": "bool",
+				"defaultValue": false
+			},
+			"includeBagTracking": {
+				"type": "bool",
+				"defaultValue": false
 			}
 		},
 		"folder": {
