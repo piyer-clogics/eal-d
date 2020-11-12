@@ -32,7 +32,7 @@
 		"type": "RestResource",
 		"typeProperties": {
 			"relativeUrl": {
-				"value": "passengers/GetPassengersByFlightID?@flightID=dataset().flightID&flightSegmentNo=dataset().flightSegmentNo&includeBags=dataset().includeBags&includeAncillaries=dataset().includeAncillaries&includeBagTracking=dataset().includeBagTracking",
+				"value": "passengers/GetPassengersByFlightID?@flightID=dataset().flightID.value&flightSegmentNo=dataset().flightSegmentNo.value&includeBags=dataset().includeBags.value&includeAncillaries=dataset().includeAncillaries.value&includeBagTracking=dataset().includeBagTracking.value",
 				"type": "Expression"
 			}
 		},
