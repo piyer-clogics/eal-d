@@ -11,7 +11,7 @@
 		"annotations": [],
 		"type": "RestResource",
 		"typeProperties": {
-			"relativeUrl": "passengers/GetPassengersByFlightID"
+			"relativeUrl": ""
 		},
 		"schema": []
 	}
