@@ -7,7 +7,7 @@
 				"type": "ForEach",
 				"dependsOn": [
 					{
-						"activity": "Lookup1",
+						"activity": "GetFlightID",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -47,7 +47,7 @@
 				}
 			},
 			{
-				"name": "Lookup1",
+				"name": "GetFlightID",
 				"type": "Lookup",
 				"dependsOn": [],
 				"policy": {
