@@ -44,7 +44,17 @@
 							"inputs": [
 								{
 									"referenceName": "eal_ac_src_passengers",
-									"type": "DatasetReference"
+									"type": "DatasetReference",
+									"parameters": {
+										"flightID": {
+											"value": "@item().FLT_ID",
+											"type": "Expression"
+										},
+										"flightSegmentNo": {
+											"value": "@item().SEG_NO",
+											"type": "Expression"
+										}
+									}
 								}
 							]
 						}
