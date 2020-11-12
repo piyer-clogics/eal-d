@@ -12,283 +12,298 @@
 		"type": "AzureSqlTable",
 		"schema": [
 			{
-				"name": "AircraftCapacity",
+				"name": "AIR_CRAFT_CPTY",
 				"type": "smallint",
 				"precision": 5
 			},
 			{
-				"name": "AncillaryTemplateID",
+				"name": "ANCLRY_TMPLT_ID",
 				"type": "varchar"
 			},
 			{
-				"name": "ArrivalGate",
+				"name": "ARRVL_GT",
 				"type": "varchar"
 			},
 			{
-				"name": "ArrivalTerminal",
+				"name": "ARRVL_TRMNL",
 				"type": "varchar"
 			},
 			{
-				"name": "BatchCrewMemberMask",
+				"name": "BTCH_CREW_MBR_MASK",
 				"type": "varchar"
 			},
 			{
-				"name": "BatchPassengerMask",
+				"name": "BTCH_PSNGR_MASK",
 				"type": "varchar"
 			},
 			{
-				"name": "BoardingTime",
+				"name": "BRDNG_TIME",
 				"type": "varchar"
 			},
 			{
-				"name": "BookedPassengersCount",
+				"name": "BKD_PSNGR_CNT",
 				"type": "smallint",
 				"precision": 5
 			},
 			{
-				"name": "CancelledBy",
+				"name": "CNCLD_BY",
 				"type": "varchar"
 			},
 			{
-				"name": "CancelledReason",
+				"name": "CNCLD_RSN",
 				"type": "varchar"
 			},
 			{
-				"name": "CarrierCode",
+				"name": "CARR_CD",
 				"type": "float",
 				"precision": 15
 			},
 			{
-				"name": "CrewFlightPostDepartureCloseOutStatus",
+				"name": "CREW_FLT_POST_DPTR_CLS_OUT_STS",
 				"type": "varchar"
 			},
 			{
-				"name": "CrewFlightPreDepartureCloseOutStatus",
+				"name": "CREW_FLT_PRE_DPTR_CLS_OUT_STS",
 				"type": "varchar"
 			},
 			{
-				"name": "CustomerID",
+				"name": "CUST_ID",
 				"type": "varchar"
 			},
 			{
-				"name": "DepartureGate",
+				"name": "DPTR_GT",
 				"type": "varchar"
 			},
 			{
-				"name": "DepartureTerminal",
+				"name": "DPTR_TRMNL",
 				"type": "varchar"
 			},
 			{
-				"name": "DestinationAirportCity",
+				"name": "DEST_AIRPORT_CITY",
 				"type": "varchar"
 			},
 			{
-				"name": "DestinationAirportCountryCode",
+				"name": "DEST_AIRPORT_CNTRY_CD",
 				"type": "varchar"
 			},
 			{
-				"name": "DestinationAirportName",
+				"name": "DEST_AIRPORT_NAME",
 				"type": "varchar"
 			},
 			{
-				"name": "DestinationIATA",
+				"name": "DEST_IATA",
 				"type": "varchar"
 			},
 			{
-				"name": "DestinationICAO",
+				"name": "DEST_ICAO",
 				"type": "varchar"
 			},
 			{
-				"name": "EnableBoarding",
+				"name": "ENABL_BRDNG",
 				"type": "bit"
 			},
 			{
-				"name": "EnableCrewAPIS",
+				"name": "ENABL_CREW_APIS",
 				"type": "bit"
 			},
 			{
-				"name": "EnableDCS",
+				"name": "ENABL_DCS",
 				"type": "bit"
 			},
 			{
-				"name": "EnablePassengerAPIS",
+				"name": "ENABL_PSNGR_APIS",
 				"type": "bit"
 			},
 			{
-				"name": "EnableThroughCheckIn",
+				"name": "ENABL_THRU_CHK_IN",
 				"type": "bit"
 			},
 			{
-				"name": "EstimatedArrivalTime",
+				"name": "ESTD_ARRVL_TIME",
 				"type": "varchar"
 			},
 			{
-				"name": "EstimatedDepartureTime",
+				"name": "ESTD_DPTR_TIME",
 				"type": "varchar"
 			},
 			{
-				"name": "ExternalID",
+				"name": "EXTRNL_ID",
 				"type": "smallint",
 				"precision": 5
 			},
 			{
-				"name": "FlightDelays",
+				"name": "FLT_DLAY",
 				"type": "varchar"
 			},
 			{
-				"name": "FlightNo",
+				"name": "FLT_NO",
 				"type": "smallint",
 				"precision": 5
 			},
 			{
-				"name": "HasPassengerSecurityTransactions",
+				"name": "HAS_PSNGR_SCRTY_TRNS",
 				"type": "bit"
 			},
 			{
-				"name": "HealthCheckRulesID",
+				"name": "HLTH_CHK_RULES_ID",
 				"type": "varchar"
 			},
 			{
-				"name": "Passengers",
+				"name": "PSNGRS",
 				"type": "varchar"
 			},
 			{
-				"name": "PaxBatchPreVetStatus",
+				"name": "PAX_BTCH_PRE_VET_STS",
 				"type": "varchar"
 			},
 			{
-				"name": "FlightID",
+				"name": "FLT_ID",
 				"type": "varchar"
 			},
 			{
-				"name": "IsCancelled",
+				"name": "IS_CNCLD",
 				"type": "bit"
 			},
 			{
-				"name": "IsOpenSeating",
+				"name": "IS_OPEN_STNG",
 				"type": "bit"
 			},
 			{
-				"name": "IsProgressiveFlight",
+				"name": "IS_PRGRSV_FLT",
 				"type": "bit"
 			},
 			{
-				"name": "MarketingCarrierCode",
+				"name": "MKTG_CARR_CD",
 				"type": "varchar"
 			},
 			{
-				"name": "Message",
+				"name": "MSG",
 				"type": "varchar"
 			},
 			{
-				"name": "OriginAirportCity",
+				"name": "ORIG_AIRPORT_CITY",
 				"type": "varchar"
 			},
 			{
-				"name": "OriginAirportCountryCode",
+				"name": "ORIG_AIRPORT_CNTRY_CD",
 				"type": "varchar"
 			},
 			{
-				"name": "OriginAirportName",
+				"name": "ORIG_AIRPORT_NAME",
 				"type": "varchar"
 			},
 			{
-				"name": "OriginIATA",
+				"name": "ORIG_IATA",
 				"type": "varchar"
 			},
 			{
-				"name": "OriginICAO",
+				"name": "ORIG_ICAO",
 				"type": "varchar"
 			},
 			{
-				"name": "ApplicationRecipientID",
+				"name": "PSNGR_APP_RCPNT_ID",
 				"type": "varchar"
 			},
 			{
-				"name": "PaxFlightPostDepartureCloseOutStatus",
+				"name": "PAX_FLT_POST_DPTR_CLS_OUT_STS",
 				"type": "varchar"
 			},
 			{
-				"name": "PaxFlightPreDepartureCloseOutStatus",
+				"name": "PAX_FLT_PRE_DPTR_CLS_OUT_STS",
 				"type": "varchar"
 			},
 			{
-				"name": "PnlImported",
+				"name": "PNL_IMPRTD",
 				"type": "bit"
 			},
 			{
-				"name": "PostDepartureCloseOutCrewMemberMask",
+				"name": "POST_DPTR_CLS_OUT_CREW_MBR_MASK",
 				"type": "varchar"
 			},
 			{
-				"name": "PostDepartureCloseOutPassengerMask",
+				"name": "POST_DPTR_CLS_OUT_PSNGR_MASK",
 				"type": "varchar"
 			},
 			{
-				"name": "PreDepartureCloseOutCrewMemberMask",
+				"name": "PRE_DPTR_CLS_OUT_CREW_MBR_MASK",
 				"type": "varchar"
 			},
 			{
-				"name": "PreDepartureCloseOutPassengerMask",
+				"name": "PRE_DPTR_CLS_OUT_PSNGR_MASK",
 				"type": "varchar"
 			},
 			{
-				"name": "RemainingFuelLoad",
+				"name": "REMNG_FUEL_LOAD",
 				"type": "bit"
 			},
 			{
-				"name": "ScheduledArrivalTime",
+				"name": "SCHDD_ARRVL_TIME",
 				"type": "varchar"
 			},
 			{
-				"name": "ScheduledDepartureTime",
+				"name": "SCHDD_DPTR_TIME",
 				"type": "varchar"
 			},
 			{
-				"name": "ScheduledDepartureTimeUTC",
+				"name": "SCHDD_DPTR_TIME_UTC",
 				"type": "datetime",
 				"precision": 23,
 				"scale": 3
 			},
 			{
-				"name": "SegmentNo",
-				"type": "bit"
+				"name": "SEG_NO",
+				"type": "int",
+				"precision": 10
 			},
 			{
-				"name": "Status",
+				"name": "STS",
 				"type": "varchar"
 			},
 			{
-				"name": "TailNo",
+				"name": "TAIL_NO",
 				"type": "varchar"
 			},
 			{
-				"name": "TotalCargoLoad",
+				"name": "TOT_CRGO_LOAD",
 				"type": "bit"
 			},
 			{
-				"name": "TotalFuelLoad",
+				"name": "TOT_FUEL_LOAD",
 				"type": "bit"
 			},
 			{
-				"name": "Type",
+				"name": "TYPE",
 				"type": "varchar"
 			},
 			{
-				"name": "UpliftFuelLoad",
+				"name": "UPLIFT_FUEL_LOAD",
 				"type": "bit"
 			},
 			{
-				"name": "UseAverageBagWeight",
+				"name": "USE_AVG_BAG_WGT",
 				"type": "bit"
 			},
 			{
-				"name": "UseAveragePaxWeight",
+				"name": "USE_AVG_PAX_WGT",
 				"type": "bit"
 			},
 			{
-				"name": "WeightUnitsKgs",
+				"name": "WGT_UNITS_KG",
 				"type": "bit"
+			},
+			{
+				"name": "CREW_APP_RCPNT_ID",
+				"type": "varchar"
+			},
+			{
+				"name": "ETL_CAPT_DT",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "ADF_RUN_ID",
+				"type": "varchar"
 			}
 		],
 		"typeProperties": {
