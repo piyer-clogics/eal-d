@@ -39,6 +39,16 @@
 									"requestInterval": "00.00:00:00.010",
 									"requestMethod": "GET"
 								},
+								"sink": {
+									"type": "JsonSink",
+									"storeSettings": {
+										"type": "AzureBlobStorageWriteSettings",
+										"copyBehavior": "MergeFiles"
+									},
+									"formatSettings": {
+										"type": "JsonWriteSettings"
+									}
+								},
 								"enableStaging": false
 							},
 							"inputs": [
@@ -55,6 +65,12 @@
 											"type": "Expression"
 										}
 									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "passengers_by_Id",
+									"type": "DatasetReference"
 								}
 							]
 						}
