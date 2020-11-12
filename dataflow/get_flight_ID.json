@@ -1,0 +1,24 @@
+{
+	"name": "get_flight_ID",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "sql_active_flights",
+						"type": "DatasetReference"
+					},
+					"name": "ActiveFlightSource"
+				}
+			],
+			"sinks": [],
+			"transformations": [
+				{
+					"name": "SelectIdColumn"
+				}
+			],
+			"script": "source(output(\n\t\tAircraftCapacity as short,\n\t\tAncillaryTemplateID as string,\n\t\tArrivalGate as string,\n\t\tArrivalTerminal as string,\n\t\tBatchCrewMemberMask as string,\n\t\tBatchPassengerMask as string,\n\t\tBoardingTime as string,\n\t\tBookedPassengersCount as short,\n\t\tCancelledBy as string,\n\t\tCancelledReason as string,\n\t\tCarrierCode as double,\n\t\tCrewFlightPostDepartureCloseOutStatus as string,\n\t\tCrewFlightPreDepartureCloseOutStatus as string,\n\t\tCustomerID as string,\n\t\tDepartureGate as string,\n\t\tDepartureTerminal as string,\n\t\tDestinationAirportCity as string,\n\t\tDestinationAirportCountryCode as string,\n\t\tDestinationAirportName as string,\n\t\tDestinationIATA as string,\n\t\tDestinationICAO as string,\n\t\tEnableBoarding as boolean,\n\t\tEnableCrewAPIS as boolean,\n\t\tEnableDCS as boolean,\n\t\tEnablePassengerAPIS as boolean,\n\t\tEnableThroughCheckIn as boolean,\n\t\tEstimatedArrivalTime as string,\n\t\tEstimatedDepartureTime as string,\n\t\tExternalID as short,\n\t\tFlightDelays as string,\n\t\tFlightNo as short,\n\t\tHasPassengerSecurityTransactions as boolean,\n\t\tHealthCheckRulesID as string,\n\t\tPassengers as string,\n\t\tPaxBatchPreVetStatus as string,\n\t\tFlightID as string,\n\t\tIsCancelled as boolean,\n\t\tIsOpenSeating as boolean,\n\t\tIsProgressiveFlight as boolean,\n\t\tMarketingCarrierCode as string,\n\t\tMessage as string,\n\t\tOriginAirportCity as string,\n\t\tOriginAirportCountryCode as string,\n\t\tOriginAirportName as string,\n\t\tOriginIATA as string,\n\t\tOriginICAO as string,\n\t\tApplicationRecipientID as string,\n\t\tPaxFlightPostDepartureCloseOutStatus as string,\n\t\tPaxFlightPreDepartureCloseOutStatus as string,\n\t\tPnlImported as boolean,\n\t\tPostDepartureCloseOutCrewMemberMask as string,\n\t\tPostDepartureCloseOutPassengerMask as string,\n\t\tPreDepartureCloseOutCrewMemberMask as string,\n\t\tPreDepartureCloseOutPassengerMask as string,\n\t\tRemainingFuelLoad as boolean,\n\t\tScheduledArrivalTime as string,\n\t\tScheduledDepartureTime as string,\n\t\tScheduledDepartureTimeUTC as timestamp,\n\t\tSegmentNo as boolean,\n\t\tStatus as string,\n\t\tTailNo as string,\n\t\tTotalCargoLoad as boolean,\n\t\tTotalFuelLoad as boolean,\n\t\tType as string,\n\t\tUpliftFuelLoad as boolean,\n\t\tUseAverageBagWeight as boolean,\n\t\tUseAveragePaxWeight as boolean,\n\t\tWeightUnitsKgs as boolean\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> ActiveFlightSource\nActiveFlightSource select(mapColumn(\n\t\tFlightID\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> SelectIdColumn"
+		}
+	}
+}
