@@ -1,5 +1,5 @@
 {
-	"name": "passengers_by_Id",
+	"name": "eal_ac_passengers_by_Id",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ealblobdconnection",

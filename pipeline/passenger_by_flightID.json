@@ -73,7 +73,7 @@
 							],
 							"outputs": [
 								{
-									"referenceName": "passengers_by_Id",
+									"referenceName": "eal_ac_passengers_by_Id",
 									"type": "DatasetReference"
 								}
 							]
