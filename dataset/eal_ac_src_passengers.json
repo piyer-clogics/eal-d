@@ -32,7 +32,7 @@
 		"type": "RestResource",
 		"typeProperties": {
 			"relativeUrl": {
-				"value": "passengers/GetPassengersByFlightID?@flightID=dataset().flightID.value&flightSegmentNo=dataset().flightSegmentNo.value&includeBags=dataset().includeBags.value&includeAncillaries=dataset().includeAncillaries.value&includeBagTracking=dataset().includeBagTracking.value",
+				"value": "@concat('passengers/GetPassengersByFlightID?flightID=',dataset().flightID,'&flightsegmentNo=',string(dataset().flightSegmentNo))",
 				"type": "Expression"
 			}
 		},
