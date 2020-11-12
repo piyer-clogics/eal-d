@@ -1543,7 +1543,7 @@
 				"type": "ExecuteDataFlow",
 				"dependsOn": [
 					{
-						"activity": "Set variable1",
+						"activity": "Copy data from API to blob",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -1571,26 +1571,6 @@
 					"compute": {
 						"coreCount": 8,
 						"computeType": "General"
-					}
-				}
-			},
-			{
-				"name": "Set variable1",
-				"type": "SetVariable",
-				"dependsOn": [
-					{
-						"activity": "Copy data from API to blob",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"userProperties": [],
-				"typeProperties": {
-					"variableName": "ADF_run_ID",
-					"value": {
-						"value": "@pipeline().RunId",
-						"type": "Expression"
 					}
 				}
 			}
