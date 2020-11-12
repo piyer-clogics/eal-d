@@ -1560,7 +1560,13 @@
 				"typeProperties": {
 					"dataflow": {
 						"referenceName": "active_flight_dataflow",
-						"type": "DataFlowReference"
+						"type": "DataFlowReference",
+						"parameters": {
+							"run_id": {
+								"value": "'@{pipeline().RunId}'",
+								"type": "Expression"
+							}
+						}
 					},
 					"compute": {
 						"coreCount": 8,
