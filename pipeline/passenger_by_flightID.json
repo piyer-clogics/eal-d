@@ -108,11 +108,6 @@
 				}
 			}
 		],
-		"variables": {
-			"f": {
-				"type": "String"
-			}
-		},
 		"annotations": []
 	}
 }
