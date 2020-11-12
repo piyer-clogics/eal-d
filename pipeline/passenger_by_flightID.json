@@ -63,7 +63,10 @@
 										"flightSegmentNo": {
 											"value": "@item().SEG_NO",
 											"type": "Expression"
-										}
+										},
+										"includeBags": "True",
+										"includeAncillaries": "False",
+										"includeBagTracking": "False"
 									}
 								}
 							],
