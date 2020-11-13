@@ -1,0 +1,19 @@
+{
+	"name": "sql_passenger_info",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "eal_sqldb_piyer",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Destination Table"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "S_PSNGR_INFO"
+		}
+	}
+}
