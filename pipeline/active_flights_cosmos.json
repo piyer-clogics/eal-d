@@ -3,55 +3,6 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Copy from blob to Cosmos",
-				"type": "Copy",
-				"dependsOn": [
-					{
-						"activity": "Copy data from API to blob",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"policy": {
-					"timeout": "7.00:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"source": {
-						"type": "JsonSource",
-						"storeSettings": {
-							"type": "AzureBlobStorageReadSettings",
-							"recursive": true
-						},
-						"formatSettings": {
-							"type": "JsonReadSettings"
-						}
-					},
-					"sink": {
-						"type": "CosmosDbSqlApiSink",
-						"writeBehavior": "insert"
-					},
-					"enableStaging": false
-				},
-				"inputs": [
-					{
-						"referenceName": "eal_ac_active_flights",
-						"type": "DatasetReference"
-					}
-				],
-				"outputs": [
-					{
-						"referenceName": "eal_comos_db_dataset",
-						"type": "DatasetReference"
-					}
-				]
-			},
-			{
 				"name": "Copy data from API to blob",
 				"type": "Copy",
 				"dependsOn": [],
