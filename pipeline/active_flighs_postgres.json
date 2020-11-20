@@ -5,14 +5,7 @@
 			{
 				"name": "Copy data2",
 				"type": "Copy",
-				"dependsOn": [
-					{
-						"activity": "dataflow2",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
+				"dependsOn": [],
 				"policy": {
 					"timeout": "7.00:00:00",
 					"retry": 0,
@@ -37,11 +30,1037 @@
 						"writeBatchSize": 10000,
 						"writeBatchTimeout": "00:00:30"
 					},
-					"enableStaging": false
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"path": "['ID']"
+								}
+							},
+							{
+								"source": {
+									"path": "['SegmentNo']"
+								}
+							},
+							{
+								"source": {
+									"path": "['ExternalID']"
+								}
+							},
+							{
+								"source": {
+									"path": "['CarrierCode']"
+								}
+							},
+							{
+								"source": {
+									"path": "['FlightNo']"
+								}
+							},
+							{
+								"source": {
+									"path": "['MarketingCarrierCode']"
+								}
+							},
+							{
+								"source": {
+									"path": "['MarketingFlightNo']"
+								}
+							},
+							{
+								"source": {
+									"path": "['Type']"
+								}
+							},
+							{
+								"source": {
+									"path": "['TailNo']"
+								}
+							},
+							{
+								"source": {
+									"path": "['OriginIATA']"
+								}
+							},
+							{
+								"source": {
+									"path": "['OriginICAO']"
+								}
+							},
+							{
+								"source": {
+									"path": "['OriginAirportName']"
+								}
+							},
+							{
+								"source": {
+									"path": "['OriginAirportCity']"
+								}
+							},
+							{
+								"source": {
+									"path": "['OriginAirportCountryCode']"
+								}
+							},
+							{
+								"source": {
+									"path": "['DepartureTerminal']"
+								}
+							},
+							{
+								"source": {
+									"path": "['DepartureGate']"
+								}
+							},
+							{
+								"source": {
+									"path": "['DestinationIATA']"
+								}
+							},
+							{
+								"source": {
+									"path": "['DestinationICAO']"
+								}
+							},
+							{
+								"source": {
+									"path": "['DestinationAirportName']"
+								}
+							},
+							{
+								"source": {
+									"path": "['DestinationAirportCity']"
+								}
+							},
+							{
+								"source": {
+									"path": "['DestinationAirportCountryCode']"
+								}
+							},
+							{
+								"source": {
+									"path": "['ArrivalTerminal']"
+								}
+							},
+							{
+								"source": {
+									"path": "['ArrivalGate']"
+								}
+							},
+							{
+								"source": {
+									"path": "['ScheduledDepartureTime']"
+								}
+							},
+							{
+								"source": {
+									"path": "['ScheduledDepartureTimeUTC']"
+								}
+							},
+							{
+								"source": {
+									"path": "['OffBlocksTime']"
+								}
+							},
+							{
+								"source": {
+									"path": "['TakeOffTime']"
+								}
+							},
+							{
+								"source": {
+									"path": "['ScheduledArrivalTime']"
+								}
+							},
+							{
+								"source": {
+									"path": "['EstimatedArrivalTime']"
+								}
+							},
+							{
+								"source": {
+									"path": "['TouchDownTime']"
+								}
+							},
+							{
+								"source": {
+									"path": "['OnBlocksTime']"
+								}
+							},
+							{
+								"source": {
+									"path": "['FlightTimeMinutes']"
+								}
+							},
+							{
+								"source": {
+									"path": "['BoardingTime']"
+								}
+							},
+							{
+								"source": {
+									"path": "['Message']"
+								}
+							},
+							{
+								"source": {
+									"path": "['Status']"
+								}
+							},
+							{
+								"source": {
+									"path": "['EnablePassengerAPIS']"
+								}
+							},
+							{
+								"source": {
+									"path": "['EnableCrewAPIS']"
+								}
+							},
+							{
+								"source": {
+									"path": "['EnableDCS']"
+								}
+							},
+							{
+								"source": {
+									"path": "['WeightUnitsKgs']"
+								}
+							},
+							{
+								"source": {
+									"path": "['IsOpenSeating']"
+								}
+							},
+							{
+								"source": {
+									"path": "['IsProgressiveFlight']"
+								}
+							},
+							{
+								"source": {
+									"path": "['EnableThroughCheckIn']"
+								}
+							},
+							{
+								"source": {
+									"path": "['EnableBoarding']"
+								}
+							},
+							{
+								"source": {
+									"path": "['UseAveragePaxWeight']"
+								}
+							},
+							{
+								"source": {
+									"path": "['UseAverageBagWeight']"
+								}
+							},
+							{
+								"source": {
+									"path": "['PnlImported']"
+								}
+							},
+							{
+								"source": {
+									"path": "['IsCancelled']"
+								}
+							},
+							{
+								"source": {
+									"path": "['CancelledBy']"
+								}
+							},
+							{
+								"source": {
+									"path": "['CancelledReason']"
+								}
+							},
+							{
+								"source": {
+									"path": "['AircraftCapacity']"
+								}
+							},
+							{
+								"source": {
+									"path": "['BookedPassengersCount']"
+								}
+							},
+							{
+								"source": {
+									"path": "['TotalCargoLoad']"
+								}
+							},
+							{
+								"source": {
+									"path": "['UpliftFuelLoad']"
+								}
+							},
+							{
+								"source": {
+									"path": "['TotalFuelLoad']"
+								}
+							},
+							{
+								"source": {
+									"path": "['RemainingFuelLoad']"
+								}
+							},
+							{
+								"source": {
+									"path": "['Carrier']['CarrierName']"
+								}
+							},
+							{
+								"source": {
+									"path": "['Carrier']['Code']"
+								}
+							},
+							{
+								"source": {
+									"path": "['Carrier']['IATA']"
+								}
+							},
+							{
+								"source": {
+									"path": "['Carrier']['ICAO']"
+								}
+							},
+							{
+								"source": {
+									"path": "['Carrier']['ApisCarrierCode']"
+								}
+							},
+							{
+								"source": {
+									"path": "['Carrier']['Prefix']"
+								}
+							},
+							{
+								"source": {
+									"path": "['Carrier']['Logo']"
+								}
+							},
+							{
+								"source": {
+									"path": "['Carrier']['Icon']"
+								}
+							},
+							{
+								"source": {
+									"path": "['Carrier']['Address']['ID']"
+								}
+							},
+							{
+								"source": {
+									"path": "['Carrier']['Address']['Location']"
+								}
+							},
+							{
+								"source": {
+									"path": "['Carrier']['Address']['Street1']"
+								}
+							},
+							{
+								"source": {
+									"path": "['Carrier']['Address']['Street2']"
+								}
+							},
+							{
+								"source": {
+									"path": "['Carrier']['Address']['City']"
+								}
+							},
+							{
+								"source": {
+									"path": "['Carrier']['Address']['StateCode']"
+								}
+							},
+							{
+								"source": {
+									"path": "['Carrier']['Address']['PostalCode']"
+								}
+							},
+							{
+								"source": {
+									"path": "['Carrier']['Address']['CountryCode']"
+								}
+							},
+							{
+								"source": {
+									"path": "['Carrier']['Address']['CustomData']['Properties']"
+								}
+							},
+							{
+								"source": {
+									"path": "['Carrier']['ApisSenderID']"
+								}
+							},
+							{
+								"source": {
+									"path": "['Carrier']['ApisContactName']"
+								}
+							},
+							{
+								"source": {
+									"path": "['Carrier']['ApisTelephone']"
+								}
+							},
+							{
+								"source": {
+									"path": "['Carrier']['ApisFax']"
+								}
+							},
+							{
+								"source": {
+									"path": "['Carrier']['Email']"
+								}
+							},
+							{
+								"source": {
+									"path": "['Carrier']['Website']"
+								}
+							},
+							{
+								"source": {
+									"path": "['Carrier']['TsaPreCheck']"
+								}
+							},
+							{
+								"source": {
+									"path": "['Carrier']['MaximumPassengerBags']"
+								}
+							},
+							{
+								"source": {
+									"path": "['Carrier']['DefaultChildAge']"
+								}
+							},
+							{
+								"source": {
+									"path": "['Carrier']['DefaultAdultAge']"
+								}
+							},
+							{
+								"source": {
+									"path": "['Carrier']['PnlImportCloseTime']"
+								}
+							},
+							{
+								"source": {
+									"path": "['Carrier']['IsPrintingBagTagWithoutCheckInAllowed']"
+								}
+							},
+							{
+								"source": {
+									"path": "['Carrier']['WatchlistNoFlyMatchInstructions']"
+								}
+							},
+							{
+								"source": {
+									"path": "['Carrier']['WatchlistPreventMatchInstructions']"
+								}
+							},
+							{
+								"source": {
+									"path": "['Carrier']['WatchlistSelecteeMatchInstructions']"
+								}
+							},
+							{
+								"source": {
+									"path": "['Carrier']['SelecteeGateStopInstructions']"
+								}
+							},
+							{
+								"source": {
+									"path": "['Carrier']['EmergencySeatGateStopInstructions']"
+								}
+							},
+							{
+								"source": {
+									"path": "['Carrier']['UnverifiedDocumentsGateStopInstructions']"
+								}
+							},
+							{
+								"source": {
+									"path": "['Carrier']['EmailSenderAddress']"
+								}
+							},
+							{
+								"source": {
+									"path": "['Carrier']['CustomData']['Properties']"
+								}
+							},
+							{
+								"source": {
+									"path": "['Passengers']"
+								}
+							},
+							{
+								"source": {
+									"path": "['FlightDelays']"
+								}
+							},
+							{
+								"source": {
+									"path": "['AncillaryTemplateID']"
+								}
+							},
+							{
+								"source": {
+									"path": "['CustomerID']"
+								}
+							},
+							{
+								"source": {
+									"path": "['CrewMemberSecurityRules'][0]['CountryEntity']"
+								}
+							},
+							{
+								"source": {
+									"path": "['CrewMemberSecurityRules'][0]['FlightType']"
+								}
+							},
+							{
+								"source": {
+									"path": "['CrewMemberSecurityRules'][0]['FlightRouting']"
+								}
+							},
+							{
+								"source": {
+									"path": "['CrewMemberSecurityRules'][0]['InterchangeRecipientID']"
+								}
+							},
+							{
+								"source": {
+									"path": "['CrewMemberSecurityRules'][0]['ApplicationRecipientID']"
+								}
+							},
+							{
+								"source": {
+									"path": "['CrewMemberSecurityRules'][0]['CommonAccessReference']"
+								}
+							},
+							{
+								"source": {
+									"path": "['CrewMemberSecurityRules'][0]['BuildFcmFromMclOnly']"
+								}
+							},
+							{
+								"source": {
+									"path": "['CrewMemberSecurityRules'][0]['InteractiveComms']"
+								}
+							},
+							{
+								"source": {
+									"path": "['CrewMemberSecurityRules'][0]['BatchSubmission']"
+								}
+							},
+							{
+								"source": {
+									"path": "['CrewMemberSecurityRules'][0]['BatchTriggerHours']"
+								}
+							},
+							{
+								"source": {
+									"path": "['CrewMemberSecurityRules'][0]['BatchValidation']"
+								}
+							},
+							{
+								"source": {
+									"path": "['CrewMemberSecurityRules'][0]['WatchlistVet']"
+								}
+							},
+							{
+								"source": {
+									"path": "['CrewMemberSecurityRules'][0]['RequireSecurityClearance']"
+								}
+							},
+							{
+								"source": {
+									"path": "['CrewMemberSecurityRules'][0]['OutageVettingStatus']"
+								}
+							},
+							{
+								"source": {
+									"path": "['CrewMemberSecurityRules'][0]['FlightAdd']"
+								}
+							},
+							{
+								"source": {
+									"path": "['CrewMemberSecurityRules'][0]['FlightChange']"
+								}
+							},
+							{
+								"source": {
+									"path": "['CrewMemberSecurityRules'][0]['FlightCancel']"
+								}
+							},
+							{
+								"source": {
+									"path": "['CrewMemberSecurityRules'][0]['FlightPreDepartureCloseout']"
+								}
+							},
+							{
+								"source": {
+									"path": "['CrewMemberSecurityRules'][0]['FlightPostDepartureCloseout']"
+								}
+							},
+							{
+								"source": {
+									"path": "['CrewMemberSecurityRules'][0]['FlightPostDepartureCloseoutOnBoard']"
+								}
+							},
+							{
+								"source": {
+									"path": "['CrewMemberSecurityRules'][0]['HasFlightCloseoutRequirement']"
+								}
+							},
+							{
+								"source": {
+									"path": "['CrewMemberSecurityRules'][0]['CrewAdd']"
+								}
+							},
+							{
+								"source": {
+									"path": "['CrewMemberSecurityRules'][0]['CrewChange']"
+								}
+							},
+							{
+								"source": {
+									"path": "['CrewMemberSecurityRules'][0]['CrewCancel']"
+								}
+							},
+							{
+								"source": {
+									"path": "['CrewMemberSecurityRules'][0]['BatchDestinationAddressCondition']"
+								}
+							},
+							{
+								"source": {
+									"path": "['CrewMemberSecurityRules'][0]['BatchContactDetails']"
+								}
+							},
+							{
+								"source": {
+									"path": "['CrewMemberSecurityRules'][0]['CheckinStatusOnBoard']"
+								}
+							},
+							{
+								"source": {
+									"path": "['CrewMemberSecurityRules'][0]['CheckinDOB']"
+								}
+							},
+							{
+								"source": {
+									"path": "['CrewMemberSecurityRules'][0]['CheckinGender']"
+								}
+							},
+							{
+								"source": {
+									"path": "['CrewMemberSecurityRules'][0]['CheckinNationality']"
+								}
+							},
+							{
+								"source": {
+									"path": "['CrewMemberSecurityRules'][0]['CheckinResidence']"
+								}
+							},
+							{
+								"source": {
+									"path": "['CrewMemberSecurityRules'][0]['CheckinOrigDest']"
+								}
+							},
+							{
+								"source": {
+									"path": "['CrewMemberSecurityRules'][0]['CheckinClearance']"
+								}
+							},
+							{
+								"source": {
+									"path": "['CrewMemberSecurityRules'][0]['CheckinTravelDoc']"
+								}
+							},
+							{
+								"source": {
+									"path": "['CrewMemberSecurityRules'][0]['CheckinHomeAddress']"
+								}
+							},
+							{
+								"source": {
+									"path": "['CrewMemberSecurityRules'][0]['CheckinDestinationAddress']"
+								}
+							},
+							{
+								"source": {
+									"path": "['CrewMemberSecurityRules'][0]['CheckinDestinationAddressCondition']"
+								}
+							},
+							{
+								"source": {
+									"path": "['CrewMemberSecurityRules'][0]['CheckinBirthPlace']"
+								}
+							},
+							{
+								"source": {
+									"path": "['CrewMemberSecurityRules'][0]['CheckinContactDetails']"
+								}
+							},
+							{
+								"source": {
+									"path": "['PassengerSecurityRules'][0]['CountryEntity']"
+								}
+							},
+							{
+								"source": {
+									"path": "['PassengerSecurityRules'][0]['FlightType']"
+								}
+							},
+							{
+								"source": {
+									"path": "['PassengerSecurityRules'][0]['FlightRouting']"
+								}
+							},
+							{
+								"source": {
+									"path": "['PassengerSecurityRules'][0]['InterchangeRecipientID']"
+								}
+							},
+							{
+								"source": {
+									"path": "['PassengerSecurityRules'][0]['ApplicationRecipientID']"
+								}
+							},
+							{
+								"source": {
+									"path": "['PassengerSecurityRules'][0]['CommonAccessReference']"
+								}
+							},
+							{
+								"source": {
+									"path": "['PassengerSecurityRules'][0]['InteractiveComms']"
+								}
+							},
+							{
+								"source": {
+									"path": "['PassengerSecurityRules'][0]['BatchSubmission']"
+								}
+							},
+							{
+								"source": {
+									"path": "['PassengerSecurityRules'][0]['BatchTriggerHours']"
+								}
+							},
+							{
+								"source": {
+									"path": "['PassengerSecurityRules'][0]['BatchValidation']"
+								}
+							},
+							{
+								"source": {
+									"path": "['PassengerSecurityRules'][0]['WatchlistVet']"
+								}
+							},
+							{
+								"source": {
+									"path": "['PassengerSecurityRules'][0]['RequireSecurityClearance']"
+								}
+							},
+							{
+								"source": {
+									"path": "['PassengerSecurityRules'][0]['OutageVettingStatus']"
+								}
+							},
+							{
+								"source": {
+									"path": "['PassengerSecurityRules'][0]['FlightAdd']"
+								}
+							},
+							{
+								"source": {
+									"path": "['PassengerSecurityRules'][0]['FlightChange']"
+								}
+							},
+							{
+								"source": {
+									"path": "['PassengerSecurityRules'][0]['FlightCancel']"
+								}
+							},
+							{
+								"source": {
+									"path": "['PassengerSecurityRules'][0]['FlightPreDepartureCloseout']"
+								}
+							},
+							{
+								"source": {
+									"path": "['PassengerSecurityRules'][0]['FlightPostDepartureCloseout']"
+								}
+							},
+							{
+								"source": {
+									"path": "['PassengerSecurityRules'][0]['FlightPostDepartureCloseoutOnBoard']"
+								}
+							},
+							{
+								"source": {
+									"path": "['PassengerSecurityRules'][0]['HasFlightCloseoutRequirement']"
+								}
+							},
+							{
+								"source": {
+									"path": "['PassengerSecurityRules'][0]['PaxAdd']"
+								}
+							},
+							{
+								"source": {
+									"path": "['PassengerSecurityRules'][0]['PaxChange']"
+								}
+							},
+							{
+								"source": {
+									"path": "['PassengerSecurityRules'][0]['PaxCancel']"
+								}
+							},
+							{
+								"source": {
+									"path": "['PassengerSecurityRules'][0]['PaxTransfer']"
+								}
+							},
+							{
+								"source": {
+									"path": "['PassengerSecurityRules'][0]['PaxVerifiedID']"
+								}
+							},
+							{
+								"source": {
+									"path": "['PassengerSecurityRules'][0]['GatePass']"
+								}
+							},
+							{
+								"source": {
+									"path": "['PassengerSecurityRules'][0]['BatchPNR']"
+								}
+							},
+							{
+								"source": {
+									"path": "['PassengerSecurityRules'][0]['BatchResidence']"
+								}
+							},
+							{
+								"source": {
+									"path": "['PassengerSecurityRules'][0]['BatchOrigDest']"
+								}
+							},
+							{
+								"source": {
+									"path": "['PassengerSecurityRules'][0]['BatchClearance']"
+								}
+							},
+							{
+								"source": {
+									"path": "['PassengerSecurityRules'][0]['BatchDestinationAddress']"
+								}
+							},
+							{
+								"source": {
+									"path": "['PassengerSecurityRules'][0]['BatchDestinationAddressCondition']"
+								}
+							},
+							{
+								"source": {
+									"path": "['PassengerSecurityRules'][0]['CheckinPNR']"
+								}
+							},
+							{
+								"source": {
+									"path": "['PassengerSecurityRules'][0]['CheckinDOB']"
+								}
+							},
+							{
+								"source": {
+									"path": "['PassengerSecurityRules'][0]['CheckinGender']"
+								}
+							},
+							{
+								"source": {
+									"path": "['PassengerSecurityRules'][0]['CheckinNationality']"
+								}
+							},
+							{
+								"source": {
+									"path": "['PassengerSecurityRules'][0]['CheckinResidence']"
+								}
+							},
+							{
+								"source": {
+									"path": "['PassengerSecurityRules'][0]['CheckinOrigDest']"
+								}
+							},
+							{
+								"source": {
+									"path": "['PassengerSecurityRules'][0]['CheckinClearance']"
+								}
+							},
+							{
+								"source": {
+									"path": "['PassengerSecurityRules'][0]['CheckinTravelDoc']"
+								}
+							},
+							{
+								"source": {
+									"path": "['PassengerSecurityRules'][0]['CheckinDestinationAddress']"
+								}
+							},
+							{
+								"source": {
+									"path": "['PassengerSecurityRules'][0]['CheckinDestinationAddressCondition']"
+								}
+							},
+							{
+								"source": {
+									"path": "['BatchPassengerMask']"
+								}
+							},
+							{
+								"source": {
+									"path": "['BatchCrewMemberMask']"
+								}
+							},
+							{
+								"source": {
+									"path": "['PreDepartureCloseOutPassengerMask']"
+								}
+							},
+							{
+								"source": {
+									"path": "['PostDepartureCloseOutPassengerMask']"
+								}
+							},
+							{
+								"source": {
+									"path": "['PreDepartureCloseOutCrewMemberMask']"
+								}
+							},
+							{
+								"source": {
+									"path": "['PostDepartureCloseOutCrewMemberMask']"
+								}
+							},
+							{
+								"source": {
+									"path": "['PaxFlightPreDepartureCloseOutStatus']"
+								}
+							},
+							{
+								"source": {
+									"path": "['PaxFlightPostDepartureCloseOutStatus']"
+								}
+							},
+							{
+								"source": {
+									"path": "['CrewFlightPreDepartureCloseOutStatus']"
+								}
+							},
+							{
+								"source": {
+									"path": "['CrewFlightPostDepartureCloseOutStatus']"
+								}
+							},
+							{
+								"source": {
+									"path": "['PaxBatchPreVetStatus']"
+								}
+							},
+							{
+								"source": {
+									"path": "['HasPassengerSecurityTransactions']"
+								}
+							},
+							{
+								"source": {
+									"path": "['HealthCheckRule']['ID']"
+								}
+							},
+							{
+								"source": {
+									"path": "['HealthCheckRule']['CarrierCode']"
+								}
+							},
+							{
+								"source": {
+									"path": "['HealthCheckRule']['OriginCountryEntity']"
+								}
+							},
+							{
+								"source": {
+									"path": "['HealthCheckRule']['DestinationCountryEntity']"
+								}
+							},
+							{
+								"source": {
+									"path": "['HealthCheckRule']['OriginAirport']"
+								}
+							},
+							{
+								"source": {
+									"path": "['HealthCheckRule']['DestinationAirport']"
+								}
+							},
+							{
+								"source": {
+									"path": "['HealthCheckRule']['Instructions']"
+								}
+							},
+							{
+								"source": {
+									"path": "['HealthCheckRule']['IsClearToBoard']"
+								}
+							},
+							{
+								"source": {
+									"path": "['HealthCheckRule']['IsRequireProofForRemoteCheckIn']"
+								}
+							},
+							{
+								"source": {
+									"path": "['HealthCheckRule']['IsRequireRemarksForFailStatus']"
+								}
+							},
+							{
+								"source": {
+									"path": "['HealthCheckRule']['IsActive']"
+								}
+							},
+							{
+								"source": {
+									"path": "['HealthCheckRule']['CreatedBy']"
+								}
+							},
+							{
+								"source": {
+									"path": "['HealthCheckRule']['CreatedTimestampUTC']"
+								}
+							},
+							{
+								"source": {
+									"path": "['HealthCheckRule']['UpdatedBy']"
+								}
+							},
+							{
+								"source": {
+									"path": "['CustomData']['Properties']"
+								}
+							}
+						],
+						"collectionReference": "$['Flights']"
+					}
 				},
 				"inputs": [
 					{
-						"referenceName": "eal_ac_active_flights_alt",
+						"referenceName": "eal_ac_active_flights",
 						"type": "DatasetReference"
 					}
 				],
@@ -51,30 +1070,6 @@
 						"type": "DatasetReference"
 					}
 				]
-			},
-			{
-				"name": "dataflow2",
-				"type": "ExecuteDataFlow",
-				"dependsOn": [],
-				"policy": {
-					"timeout": "7.00:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"dataflow": {
-						"referenceName": "dataflow2",
-						"type": "DataFlowReference"
-					},
-					"compute": {
-						"coreCount": 8,
-						"computeType": "General"
-					},
-					"traceLevel": "Fine"
-				}
 			}
 		],
 		"annotations": []
