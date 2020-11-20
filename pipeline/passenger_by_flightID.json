@@ -129,7 +129,13 @@
 				"typeProperties": {
 					"dataflow": {
 						"referenceName": "get_passengers_dataflow",
-						"type": "DataFlowReference"
+						"type": "DataFlowReference",
+						"parameters": {
+							"adf_run_id": {
+								"value": "'@{pipeline().RunId}'",
+								"type": "Expression"
+							}
+						}
 					},
 					"compute": {
 						"coreCount": 8,
