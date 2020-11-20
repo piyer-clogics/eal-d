@@ -36,1026 +36,1035 @@
 						"mappings": [
 							{
 								"source": {
-									"path": "['ID']"
+									"path": "$['Flights'][0]['ID']"
 								}
 							},
 							{
 								"source": {
-									"path": "['SegmentNo']"
+									"path": "$['Flights'][0]['SegmentNo']"
 								}
 							},
 							{
 								"source": {
-									"path": "['ExternalID']"
+									"path": "$['Flights'][0]['ExternalID']"
 								}
 							},
 							{
 								"source": {
-									"path": "['CarrierCode']"
+									"path": "$['Flights'][0]['CarrierCode']"
 								}
 							},
 							{
 								"source": {
-									"path": "['FlightNo']"
+									"path": "$['Flights'][0]['FlightNo']"
 								}
 							},
 							{
 								"source": {
-									"path": "['MarketingCarrierCode']"
+									"path": "$['Flights'][0]['MarketingCarrierCode']"
 								}
 							},
 							{
 								"source": {
-									"path": "['MarketingFlightNo']"
+									"path": "$['Flights'][0]['MarketingFlightNo']"
 								}
 							},
 							{
 								"source": {
-									"path": "['Type']"
+									"path": "$['Flights'][0]['Type']"
 								}
 							},
 							{
 								"source": {
-									"path": "['TailNo']"
+									"path": "$['Flights'][0]['TailNo']"
 								}
 							},
 							{
 								"source": {
-									"path": "['OriginIATA']"
+									"path": "$['Flights'][0]['OriginIATA']"
 								}
 							},
 							{
 								"source": {
-									"path": "['OriginICAO']"
+									"path": "$['Flights'][0]['OriginICAO']"
 								}
 							},
 							{
 								"source": {
-									"path": "['OriginAirportName']"
+									"path": "$['Flights'][0]['OriginAirportName']"
 								}
 							},
 							{
 								"source": {
-									"path": "['OriginAirportCity']"
+									"path": "$['Flights'][0]['OriginAirportCity']"
 								}
 							},
 							{
 								"source": {
-									"path": "['OriginAirportCountryCode']"
+									"path": "$['Flights'][0]['OriginAirportCountryCode']"
 								}
 							},
 							{
 								"source": {
-									"path": "['DepartureTerminal']"
+									"path": "$['Flights'][0]['DepartureTerminal']"
 								}
 							},
 							{
 								"source": {
-									"path": "['DepartureGate']"
+									"path": "$['Flights'][0]['DepartureGate']"
 								}
 							},
 							{
 								"source": {
-									"path": "['DestinationIATA']"
+									"path": "$['Flights'][0]['DestinationIATA']"
 								}
 							},
 							{
 								"source": {
-									"path": "['DestinationICAO']"
+									"path": "$['Flights'][0]['DestinationICAO']"
 								}
 							},
 							{
 								"source": {
-									"path": "['DestinationAirportName']"
+									"path": "$['Flights'][0]['DestinationAirportName']"
 								}
 							},
 							{
 								"source": {
-									"path": "['DestinationAirportCity']"
+									"path": "$['Flights'][0]['DestinationAirportCity']"
 								}
 							},
 							{
 								"source": {
-									"path": "['DestinationAirportCountryCode']"
+									"path": "$['Flights'][0]['DestinationAirportCountryCode']"
 								}
 							},
 							{
 								"source": {
-									"path": "['ArrivalTerminal']"
+									"path": "$['Flights'][0]['ArrivalTerminal']"
 								}
 							},
 							{
 								"source": {
-									"path": "['ArrivalGate']"
+									"path": "$['Flights'][0]['ArrivalGate']"
 								}
 							},
 							{
 								"source": {
-									"path": "['ScheduledDepartureTime']"
+									"path": "$['Flights'][0]['ScheduledDepartureTime']"
 								}
 							},
 							{
 								"source": {
-									"path": "['ScheduledDepartureTimeUTC']"
+									"path": "$['Flights'][0]['ScheduledDepartureTimeUTC']"
 								}
 							},
 							{
 								"source": {
-									"path": "['OffBlocksTime']"
+									"path": "$['Flights'][0]['OffBlocksTime']"
 								}
 							},
 							{
 								"source": {
-									"path": "['TakeOffTime']"
+									"path": "$['Flights'][0]['TakeOffTime']"
 								}
 							},
 							{
 								"source": {
-									"path": "['ScheduledArrivalTime']"
+									"path": "$['Flights'][0]['ScheduledArrivalTime']"
 								}
 							},
 							{
 								"source": {
-									"path": "['EstimatedArrivalTime']"
+									"path": "$['Flights'][0]['EstimatedArrivalTime']"
 								}
 							},
 							{
 								"source": {
-									"path": "['TouchDownTime']"
+									"path": "$['Flights'][0]['TouchDownTime']"
 								}
 							},
 							{
 								"source": {
-									"path": "['OnBlocksTime']"
+									"path": "$['Flights'][0]['OnBlocksTime']"
 								}
 							},
 							{
 								"source": {
-									"path": "['FlightTimeMinutes']"
+									"path": "$['Flights'][0]['FlightTimeMinutes']"
 								}
 							},
 							{
 								"source": {
-									"path": "['BoardingTime']"
+									"path": "$['Flights'][0]['BoardingTime']"
 								}
 							},
 							{
 								"source": {
-									"path": "['Message']"
+									"path": "$['Flights'][0]['Message']"
 								}
 							},
 							{
 								"source": {
-									"path": "['Status']"
+									"path": "$['Flights'][0]['Status']"
 								}
 							},
 							{
 								"source": {
-									"path": "['EnablePassengerAPIS']"
+									"path": "$['Flights'][0]['EnablePassengerAPIS']"
 								}
 							},
 							{
 								"source": {
-									"path": "['EnableCrewAPIS']"
+									"path": "$['Flights'][0]['EnableCrewAPIS']"
 								}
 							},
 							{
 								"source": {
-									"path": "['EnableDCS']"
+									"path": "$['Flights'][0]['EnableDCS']"
 								}
 							},
 							{
 								"source": {
-									"path": "['WeightUnitsKgs']"
+									"path": "$['Flights'][0]['WeightUnitsKgs']"
 								}
 							},
 							{
 								"source": {
-									"path": "['IsOpenSeating']"
+									"path": "$['Flights'][0]['IsOpenSeating']"
 								}
 							},
 							{
 								"source": {
-									"path": "['IsProgressiveFlight']"
+									"path": "$['Flights'][0]['IsProgressiveFlight']"
 								}
 							},
 							{
 								"source": {
-									"path": "['EnableThroughCheckIn']"
+									"path": "$['Flights'][0]['EnableThroughCheckIn']"
 								}
 							},
 							{
 								"source": {
-									"path": "['EnableBoarding']"
+									"path": "$['Flights'][0]['EnableBoarding']"
 								}
 							},
 							{
 								"source": {
-									"path": "['UseAveragePaxWeight']"
+									"path": "$['Flights'][0]['UseAveragePaxWeight']"
 								}
 							},
 							{
 								"source": {
-									"path": "['UseAverageBagWeight']"
+									"path": "$['Flights'][0]['UseAverageBagWeight']"
 								}
 							},
 							{
 								"source": {
-									"path": "['PnlImported']"
+									"path": "$['Flights'][0]['PnlImported']"
 								}
 							},
 							{
 								"source": {
-									"path": "['IsCancelled']"
+									"path": "$['Flights'][0]['IsCancelled']"
 								}
 							},
 							{
 								"source": {
-									"path": "['CancelledBy']"
+									"path": "$['Flights'][0]['CancelledBy']"
 								}
 							},
 							{
 								"source": {
-									"path": "['CancelledReason']"
+									"path": "$['Flights'][0]['CancelledReason']"
 								}
 							},
 							{
 								"source": {
-									"path": "['AircraftCapacity']"
+									"path": "$['Flights'][0]['AircraftCapacity']"
 								}
 							},
 							{
 								"source": {
-									"path": "['BookedPassengersCount']"
+									"path": "$['Flights'][0]['BookedPassengersCount']"
 								}
 							},
 							{
 								"source": {
-									"path": "['TotalCargoLoad']"
+									"path": "$['Flights'][0]['TotalCargoLoad']"
 								}
 							},
 							{
 								"source": {
-									"path": "['UpliftFuelLoad']"
+									"path": "$['Flights'][0]['UpliftFuelLoad']"
 								}
 							},
 							{
 								"source": {
-									"path": "['TotalFuelLoad']"
+									"path": "$['Flights'][0]['TotalFuelLoad']"
 								}
 							},
 							{
 								"source": {
-									"path": "['RemainingFuelLoad']"
+									"path": "$['Flights'][0]['RemainingFuelLoad']"
 								}
 							},
 							{
 								"source": {
-									"path": "['Carrier']['CarrierName']"
+									"path": "$['Flights'][0]['Carrier']['CarrierName']"
 								}
 							},
 							{
 								"source": {
-									"path": "['Carrier']['Code']"
+									"path": "$['Flights'][0]['Carrier']['Code']"
 								}
 							},
 							{
 								"source": {
-									"path": "['Carrier']['IATA']"
+									"path": "$['Flights'][0]['Carrier']['IATA']"
 								}
 							},
 							{
 								"source": {
-									"path": "['Carrier']['ICAO']"
+									"path": "$['Flights'][0]['Carrier']['ICAO']"
 								}
 							},
 							{
 								"source": {
-									"path": "['Carrier']['ApisCarrierCode']"
+									"path": "$['Flights'][0]['Carrier']['ApisCarrierCode']"
 								}
 							},
 							{
 								"source": {
-									"path": "['Carrier']['Prefix']"
+									"path": "$['Flights'][0]['Carrier']['Prefix']"
 								}
 							},
 							{
 								"source": {
-									"path": "['Carrier']['Logo']"
+									"path": "$['Flights'][0]['Carrier']['Logo']"
 								}
 							},
 							{
 								"source": {
-									"path": "['Carrier']['Icon']"
+									"path": "$['Flights'][0]['Carrier']['Icon']"
 								}
 							},
 							{
 								"source": {
-									"path": "['Carrier']['Address']['ID']"
+									"path": "$['Flights'][0]['Carrier']['Address']['ID']"
 								}
 							},
 							{
 								"source": {
-									"path": "['Carrier']['Address']['Location']"
+									"path": "$['Flights'][0]['Carrier']['Address']['Location']"
 								}
 							},
 							{
 								"source": {
-									"path": "['Carrier']['Address']['Street1']"
+									"path": "$['Flights'][0]['Carrier']['Address']['Street1']"
 								}
 							},
 							{
 								"source": {
-									"path": "['Carrier']['Address']['Street2']"
+									"path": "$['Flights'][0]['Carrier']['Address']['Street2']"
 								}
 							},
 							{
 								"source": {
-									"path": "['Carrier']['Address']['City']"
+									"path": "$['Flights'][0]['Carrier']['Address']['City']"
 								}
 							},
 							{
 								"source": {
-									"path": "['Carrier']['Address']['StateCode']"
+									"path": "$['Flights'][0]['Carrier']['Address']['StateCode']"
 								}
 							},
 							{
 								"source": {
-									"path": "['Carrier']['Address']['PostalCode']"
+									"path": "$['Flights'][0]['Carrier']['Address']['PostalCode']"
 								}
 							},
 							{
 								"source": {
-									"path": "['Carrier']['Address']['CountryCode']"
+									"path": "$['Flights'][0]['Carrier']['Address']['CountryCode']"
 								}
 							},
 							{
 								"source": {
-									"path": "['Carrier']['Address']['CustomData']['Properties']"
+									"path": "$['Flights'][0]['Carrier']['Address']['CustomData']['Properties']"
 								}
 							},
 							{
 								"source": {
-									"path": "['Carrier']['ApisSenderID']"
+									"path": "$['Flights'][0]['Carrier']['ApisSenderID']"
 								}
 							},
 							{
 								"source": {
-									"path": "['Carrier']['ApisContactName']"
+									"path": "$['Flights'][0]['Carrier']['ApisContactName']"
 								}
 							},
 							{
 								"source": {
-									"path": "['Carrier']['ApisTelephone']"
+									"path": "$['Flights'][0]['Carrier']['ApisTelephone']"
 								}
 							},
 							{
 								"source": {
-									"path": "['Carrier']['ApisFax']"
+									"path": "$['Flights'][0]['Carrier']['ApisFax']"
 								}
 							},
 							{
 								"source": {
-									"path": "['Carrier']['Email']"
+									"path": "$['Flights'][0]['Carrier']['Email']"
 								}
 							},
 							{
 								"source": {
-									"path": "['Carrier']['Website']"
+									"path": "$['Flights'][0]['Carrier']['Website']"
 								}
 							},
 							{
 								"source": {
-									"path": "['Carrier']['TsaPreCheck']"
+									"path": "$['Flights'][0]['Carrier']['TsaPreCheck']"
 								}
 							},
 							{
 								"source": {
-									"path": "['Carrier']['MaximumPassengerBags']"
+									"path": "$['Flights'][0]['Carrier']['MaximumPassengerBags']"
 								}
 							},
 							{
 								"source": {
-									"path": "['Carrier']['DefaultChildAge']"
+									"path": "$['Flights'][0]['Carrier']['DefaultChildAge']"
 								}
 							},
 							{
 								"source": {
-									"path": "['Carrier']['DefaultAdultAge']"
+									"path": "$['Flights'][0]['Carrier']['DefaultAdultAge']"
 								}
 							},
 							{
 								"source": {
-									"path": "['Carrier']['PnlImportCloseTime']"
+									"path": "$['Flights'][0]['Carrier']['PnlImportCloseTime']"
 								}
 							},
 							{
 								"source": {
-									"path": "['Carrier']['IsPrintingBagTagWithoutCheckInAllowed']"
+									"path": "$['Flights'][0]['Carrier']['IsPrintingBagTagWithoutCheckInAllowed']"
 								}
 							},
 							{
 								"source": {
-									"path": "['Carrier']['WatchlistNoFlyMatchInstructions']"
+									"path": "$['Flights'][0]['Carrier']['WatchlistNoFlyMatchInstructions']"
 								}
 							},
 							{
 								"source": {
-									"path": "['Carrier']['WatchlistPreventMatchInstructions']"
+									"path": "$['Flights'][0]['Carrier']['WatchlistPreventMatchInstructions']"
 								}
 							},
 							{
 								"source": {
-									"path": "['Carrier']['WatchlistSelecteeMatchInstructions']"
+									"path": "$['Flights'][0]['Carrier']['WatchlistSelecteeMatchInstructions']"
 								}
 							},
 							{
 								"source": {
-									"path": "['Carrier']['SelecteeGateStopInstructions']"
+									"path": "$['Flights'][0]['Carrier']['SelecteeGateStopInstructions']"
 								}
 							},
 							{
 								"source": {
-									"path": "['Carrier']['EmergencySeatGateStopInstructions']"
+									"path": "$['Flights'][0]['Carrier']['EmergencySeatGateStopInstructions']"
 								}
 							},
 							{
 								"source": {
-									"path": "['Carrier']['UnverifiedDocumentsGateStopInstructions']"
+									"path": "$['Flights'][0]['Carrier']['UnverifiedDocumentsGateStopInstructions']"
 								}
 							},
 							{
 								"source": {
-									"path": "['Carrier']['EmailSenderAddress']"
+									"path": "$['Flights'][0]['Carrier']['EmailSenderAddress']"
 								}
 							},
 							{
 								"source": {
-									"path": "['Carrier']['CustomData']['Properties']"
+									"path": "$['Flights'][0]['Carrier']['CustomData']['Properties']"
 								}
 							},
 							{
 								"source": {
-									"path": "['Passengers']"
+									"path": "$['Flights'][0]['Passengers']"
 								}
 							},
 							{
 								"source": {
-									"path": "['FlightDelays']"
+									"path": "$['Flights'][0]['FlightDelays']"
 								}
 							},
 							{
 								"source": {
-									"path": "['AncillaryTemplateID']"
+									"path": "$['Flights'][0]['AncillaryTemplateID']"
 								}
 							},
 							{
 								"source": {
-									"path": "['CustomerID']"
+									"path": "$['Flights'][0]['CustomerID']"
 								}
 							},
 							{
 								"source": {
-									"path": "['CrewMemberSecurityRules'][0]['CountryEntity']"
+									"path": "$['Flights'][0]['CrewMemberSecurityRules'][0]['CountryEntity']"
 								}
 							},
 							{
 								"source": {
-									"path": "['CrewMemberSecurityRules'][0]['FlightType']"
+									"path": "$['Flights'][0]['CrewMemberSecurityRules'][0]['FlightType']"
 								}
 							},
 							{
 								"source": {
-									"path": "['CrewMemberSecurityRules'][0]['FlightRouting']"
+									"path": "$['Flights'][0]['CrewMemberSecurityRules'][0]['FlightRouting']"
 								}
 							},
 							{
 								"source": {
-									"path": "['CrewMemberSecurityRules'][0]['InterchangeRecipientID']"
+									"path": "$['Flights'][0]['CrewMemberSecurityRules'][0]['InterchangeRecipientID']"
 								}
 							},
 							{
 								"source": {
-									"path": "['CrewMemberSecurityRules'][0]['ApplicationRecipientID']"
+									"path": "$['Flights'][0]['CrewMemberSecurityRules'][0]['ApplicationRecipientID']"
 								}
 							},
 							{
 								"source": {
-									"path": "['CrewMemberSecurityRules'][0]['CommonAccessReference']"
+									"path": "$['Flights'][0]['CrewMemberSecurityRules'][0]['CommonAccessReference']"
 								}
 							},
 							{
 								"source": {
-									"path": "['CrewMemberSecurityRules'][0]['BuildFcmFromMclOnly']"
+									"path": "$['Flights'][0]['CrewMemberSecurityRules'][0]['BuildFcmFromMclOnly']"
 								}
 							},
 							{
 								"source": {
-									"path": "['CrewMemberSecurityRules'][0]['InteractiveComms']"
+									"path": "$['Flights'][0]['CrewMemberSecurityRules'][0]['InteractiveComms']"
 								}
 							},
 							{
 								"source": {
-									"path": "['CrewMemberSecurityRules'][0]['BatchSubmission']"
+									"path": "$['Flights'][0]['CrewMemberSecurityRules'][0]['BatchSubmission']"
 								}
 							},
 							{
 								"source": {
-									"path": "['CrewMemberSecurityRules'][0]['BatchTriggerHours']"
+									"path": "$['Flights'][0]['CrewMemberSecurityRules'][0]['BatchTriggerHours']"
 								}
 							},
 							{
 								"source": {
-									"path": "['CrewMemberSecurityRules'][0]['BatchValidation']"
+									"path": "$['Flights'][0]['CrewMemberSecurityRules'][0]['BatchValidation']"
 								}
 							},
 							{
 								"source": {
-									"path": "['CrewMemberSecurityRules'][0]['WatchlistVet']"
+									"path": "$['Flights'][0]['CrewMemberSecurityRules'][0]['WatchlistVet']"
 								}
 							},
 							{
 								"source": {
-									"path": "['CrewMemberSecurityRules'][0]['RequireSecurityClearance']"
+									"path": "$['Flights'][0]['CrewMemberSecurityRules'][0]['RequireSecurityClearance']"
 								}
 							},
 							{
 								"source": {
-									"path": "['CrewMemberSecurityRules'][0]['OutageVettingStatus']"
+									"path": "$['Flights'][0]['CrewMemberSecurityRules'][0]['OutageVettingStatus']"
 								}
 							},
 							{
 								"source": {
-									"path": "['CrewMemberSecurityRules'][0]['FlightAdd']"
+									"path": "$['Flights'][0]['CrewMemberSecurityRules'][0]['FlightAdd']"
 								}
 							},
 							{
 								"source": {
-									"path": "['CrewMemberSecurityRules'][0]['FlightChange']"
+									"path": "$['Flights'][0]['CrewMemberSecurityRules'][0]['FlightChange']"
 								}
 							},
 							{
 								"source": {
-									"path": "['CrewMemberSecurityRules'][0]['FlightCancel']"
+									"path": "$['Flights'][0]['CrewMemberSecurityRules'][0]['FlightCancel']"
 								}
 							},
 							{
 								"source": {
-									"path": "['CrewMemberSecurityRules'][0]['FlightPreDepartureCloseout']"
+									"path": "$['Flights'][0]['CrewMemberSecurityRules'][0]['FlightPreDepartureCloseout']"
 								}
 							},
 							{
 								"source": {
-									"path": "['CrewMemberSecurityRules'][0]['FlightPostDepartureCloseout']"
+									"path": "$['Flights'][0]['CrewMemberSecurityRules'][0]['FlightPostDepartureCloseout']"
 								}
 							},
 							{
 								"source": {
-									"path": "['CrewMemberSecurityRules'][0]['FlightPostDepartureCloseoutOnBoard']"
+									"path": "$['Flights'][0]['CrewMemberSecurityRules'][0]['FlightPostDepartureCloseoutOnBoard']"
 								}
 							},
 							{
 								"source": {
-									"path": "['CrewMemberSecurityRules'][0]['HasFlightCloseoutRequirement']"
+									"path": "$['Flights'][0]['CrewMemberSecurityRules'][0]['HasFlightCloseoutRequirement']"
 								}
 							},
 							{
 								"source": {
-									"path": "['CrewMemberSecurityRules'][0]['CrewAdd']"
+									"path": "$['Flights'][0]['CrewMemberSecurityRules'][0]['CrewAdd']"
 								}
 							},
 							{
 								"source": {
-									"path": "['CrewMemberSecurityRules'][0]['CrewChange']"
+									"path": "$['Flights'][0]['CrewMemberSecurityRules'][0]['CrewChange']"
 								}
 							},
 							{
 								"source": {
-									"path": "['CrewMemberSecurityRules'][0]['CrewCancel']"
+									"path": "$['Flights'][0]['CrewMemberSecurityRules'][0]['CrewCancel']"
 								}
 							},
 							{
 								"source": {
-									"path": "['CrewMemberSecurityRules'][0]['BatchDestinationAddressCondition']"
+									"path": "$['Flights'][0]['CrewMemberSecurityRules'][0]['BatchDestinationAddressCondition']"
 								}
 							},
 							{
 								"source": {
-									"path": "['CrewMemberSecurityRules'][0]['BatchContactDetails']"
+									"path": "$['Flights'][0]['CrewMemberSecurityRules'][0]['BatchContactDetails']"
 								}
 							},
 							{
 								"source": {
-									"path": "['CrewMemberSecurityRules'][0]['CheckinStatusOnBoard']"
+									"path": "$['Flights'][0]['CrewMemberSecurityRules'][0]['CheckinStatusOnBoard']"
 								}
 							},
 							{
 								"source": {
-									"path": "['CrewMemberSecurityRules'][0]['CheckinDOB']"
+									"path": "$['Flights'][0]['CrewMemberSecurityRules'][0]['CheckinDOB']"
 								}
 							},
 							{
 								"source": {
-									"path": "['CrewMemberSecurityRules'][0]['CheckinGender']"
+									"path": "$['Flights'][0]['CrewMemberSecurityRules'][0]['CheckinGender']"
 								}
 							},
 							{
 								"source": {
-									"path": "['CrewMemberSecurityRules'][0]['CheckinNationality']"
+									"path": "$['Flights'][0]['CrewMemberSecurityRules'][0]['CheckinNationality']"
 								}
 							},
 							{
 								"source": {
-									"path": "['CrewMemberSecurityRules'][0]['CheckinResidence']"
+									"path": "$['Flights'][0]['CrewMemberSecurityRules'][0]['CheckinResidence']"
 								}
 							},
 							{
 								"source": {
-									"path": "['CrewMemberSecurityRules'][0]['CheckinOrigDest']"
+									"path": "$['Flights'][0]['CrewMemberSecurityRules'][0]['CheckinOrigDest']"
 								}
 							},
 							{
 								"source": {
-									"path": "['CrewMemberSecurityRules'][0]['CheckinClearance']"
+									"path": "$['Flights'][0]['CrewMemberSecurityRules'][0]['CheckinClearance']"
 								}
 							},
 							{
 								"source": {
-									"path": "['CrewMemberSecurityRules'][0]['CheckinTravelDoc']"
+									"path": "$['Flights'][0]['CrewMemberSecurityRules'][0]['CheckinTravelDoc']"
 								}
 							},
 							{
 								"source": {
-									"path": "['CrewMemberSecurityRules'][0]['CheckinHomeAddress']"
+									"path": "$['Flights'][0]['CrewMemberSecurityRules'][0]['CheckinHomeAddress']"
 								}
 							},
 							{
 								"source": {
-									"path": "['CrewMemberSecurityRules'][0]['CheckinDestinationAddress']"
+									"path": "$['Flights'][0]['CrewMemberSecurityRules'][0]['CheckinDestinationAddress']"
 								}
 							},
 							{
 								"source": {
-									"path": "['CrewMemberSecurityRules'][0]['CheckinDestinationAddressCondition']"
+									"path": "$['Flights'][0]['CrewMemberSecurityRules'][0]['CheckinDestinationAddressCondition']"
 								}
 							},
 							{
 								"source": {
-									"path": "['CrewMemberSecurityRules'][0]['CheckinBirthPlace']"
+									"path": "$['Flights'][0]['CrewMemberSecurityRules'][0]['CheckinBirthPlace']"
 								}
 							},
 							{
 								"source": {
-									"path": "['CrewMemberSecurityRules'][0]['CheckinContactDetails']"
+									"path": "$['Flights'][0]['CrewMemberSecurityRules'][0]['CheckinContactDetails']"
 								}
 							},
 							{
 								"source": {
-									"path": "['PassengerSecurityRules'][0]['CountryEntity']"
+									"path": "$['Flights'][0]['PassengerSecurityRules'][0]['CountryEntity']"
 								}
 							},
 							{
 								"source": {
-									"path": "['PassengerSecurityRules'][0]['FlightType']"
+									"path": "$['Flights'][0]['PassengerSecurityRules'][0]['FlightType']"
 								}
 							},
 							{
 								"source": {
-									"path": "['PassengerSecurityRules'][0]['FlightRouting']"
+									"path": "$['Flights'][0]['PassengerSecurityRules'][0]['FlightRouting']"
 								}
 							},
 							{
 								"source": {
-									"path": "['PassengerSecurityRules'][0]['InterchangeRecipientID']"
+									"path": "$['Flights'][0]['PassengerSecurityRules'][0]['InterchangeRecipientID']"
 								}
 							},
 							{
 								"source": {
-									"path": "['PassengerSecurityRules'][0]['ApplicationRecipientID']"
+									"path": "$['Flights'][0]['PassengerSecurityRules'][0]['ApplicationRecipientID']"
 								}
 							},
 							{
 								"source": {
-									"path": "['PassengerSecurityRules'][0]['CommonAccessReference']"
+									"path": "$['Flights'][0]['PassengerSecurityRules'][0]['CommonAccessReference']"
 								}
 							},
 							{
 								"source": {
-									"path": "['PassengerSecurityRules'][0]['InteractiveComms']"
+									"path": "$['Flights'][0]['PassengerSecurityRules'][0]['InteractiveComms']"
 								}
 							},
 							{
 								"source": {
-									"path": "['PassengerSecurityRules'][0]['BatchSubmission']"
+									"path": "$['Flights'][0]['PassengerSecurityRules'][0]['BatchSubmission']"
 								}
 							},
 							{
 								"source": {
-									"path": "['PassengerSecurityRules'][0]['BatchTriggerHours']"
+									"path": "$['Flights'][0]['PassengerSecurityRules'][0]['BatchTriggerHours']"
 								}
 							},
 							{
 								"source": {
-									"path": "['PassengerSecurityRules'][0]['BatchValidation']"
+									"path": "$['Flights'][0]['PassengerSecurityRules'][0]['BatchValidation']"
 								}
 							},
 							{
 								"source": {
-									"path": "['PassengerSecurityRules'][0]['WatchlistVet']"
+									"path": "$['Flights'][0]['PassengerSecurityRules'][0]['WatchlistVet']"
 								}
 							},
 							{
 								"source": {
-									"path": "['PassengerSecurityRules'][0]['RequireSecurityClearance']"
+									"path": "$['Flights'][0]['PassengerSecurityRules'][0]['RequireSecurityClearance']"
 								}
 							},
 							{
 								"source": {
-									"path": "['PassengerSecurityRules'][0]['OutageVettingStatus']"
+									"path": "$['Flights'][0]['PassengerSecurityRules'][0]['OutageVettingStatus']"
 								}
 							},
 							{
 								"source": {
-									"path": "['PassengerSecurityRules'][0]['FlightAdd']"
+									"path": "$['Flights'][0]['PassengerSecurityRules'][0]['FlightAdd']"
 								}
 							},
 							{
 								"source": {
-									"path": "['PassengerSecurityRules'][0]['FlightChange']"
+									"path": "$['Flights'][0]['PassengerSecurityRules'][0]['FlightChange']"
 								}
 							},
 							{
 								"source": {
-									"path": "['PassengerSecurityRules'][0]['FlightCancel']"
+									"path": "$['Flights'][0]['PassengerSecurityRules'][0]['FlightCancel']"
 								}
 							},
 							{
 								"source": {
-									"path": "['PassengerSecurityRules'][0]['FlightPreDepartureCloseout']"
+									"path": "$['Flights'][0]['PassengerSecurityRules'][0]['FlightPreDepartureCloseout']"
 								}
 							},
 							{
 								"source": {
-									"path": "['PassengerSecurityRules'][0]['FlightPostDepartureCloseout']"
+									"path": "$['Flights'][0]['PassengerSecurityRules'][0]['FlightPostDepartureCloseout']"
 								}
 							},
 							{
 								"source": {
-									"path": "['PassengerSecurityRules'][0]['FlightPostDepartureCloseoutOnBoard']"
+									"path": "$['Flights'][0]['PassengerSecurityRules'][0]['FlightPostDepartureCloseoutOnBoard']"
 								}
 							},
 							{
 								"source": {
-									"path": "['PassengerSecurityRules'][0]['HasFlightCloseoutRequirement']"
+									"path": "$['Flights'][0]['PassengerSecurityRules'][0]['HasFlightCloseoutRequirement']"
 								}
 							},
 							{
 								"source": {
-									"path": "['PassengerSecurityRules'][0]['PaxAdd']"
+									"path": "$['Flights'][0]['PassengerSecurityRules'][0]['PaxAdd']"
 								}
 							},
 							{
 								"source": {
-									"path": "['PassengerSecurityRules'][0]['PaxChange']"
+									"path": "$['Flights'][0]['PassengerSecurityRules'][0]['PaxChange']"
 								}
 							},
 							{
 								"source": {
-									"path": "['PassengerSecurityRules'][0]['PaxCancel']"
+									"path": "$['Flights'][0]['PassengerSecurityRules'][0]['PaxCancel']"
 								}
 							},
 							{
 								"source": {
-									"path": "['PassengerSecurityRules'][0]['PaxTransfer']"
+									"path": "$['Flights'][0]['PassengerSecurityRules'][0]['PaxTransfer']"
 								}
 							},
 							{
 								"source": {
-									"path": "['PassengerSecurityRules'][0]['PaxVerifiedID']"
+									"path": "$['Flights'][0]['PassengerSecurityRules'][0]['PaxVerifiedID']"
 								}
 							},
 							{
 								"source": {
-									"path": "['PassengerSecurityRules'][0]['GatePass']"
+									"path": "$['Flights'][0]['PassengerSecurityRules'][0]['GatePass']"
 								}
 							},
 							{
 								"source": {
-									"path": "['PassengerSecurityRules'][0]['BatchPNR']"
+									"path": "$['Flights'][0]['PassengerSecurityRules'][0]['BatchPNR']"
 								}
 							},
 							{
 								"source": {
-									"path": "['PassengerSecurityRules'][0]['BatchResidence']"
+									"path": "$['Flights'][0]['PassengerSecurityRules'][0]['BatchResidence']"
 								}
 							},
 							{
 								"source": {
-									"path": "['PassengerSecurityRules'][0]['BatchOrigDest']"
+									"path": "$['Flights'][0]['PassengerSecurityRules'][0]['BatchOrigDest']"
 								}
 							},
 							{
 								"source": {
-									"path": "['PassengerSecurityRules'][0]['BatchClearance']"
+									"path": "$['Flights'][0]['PassengerSecurityRules'][0]['BatchClearance']"
 								}
 							},
 							{
 								"source": {
-									"path": "['PassengerSecurityRules'][0]['BatchDestinationAddress']"
+									"path": "$['Flights'][0]['PassengerSecurityRules'][0]['BatchDestinationAddress']"
 								}
 							},
 							{
 								"source": {
-									"path": "['PassengerSecurityRules'][0]['BatchDestinationAddressCondition']"
+									"path": "$['Flights'][0]['PassengerSecurityRules'][0]['BatchDestinationAddressCondition']"
 								}
 							},
 							{
 								"source": {
-									"path": "['PassengerSecurityRules'][0]['CheckinPNR']"
+									"path": "$['Flights'][0]['PassengerSecurityRules'][0]['CheckinPNR']"
 								}
 							},
 							{
 								"source": {
-									"path": "['PassengerSecurityRules'][0]['CheckinDOB']"
+									"path": "$['Flights'][0]['PassengerSecurityRules'][0]['CheckinDOB']"
 								}
 							},
 							{
 								"source": {
-									"path": "['PassengerSecurityRules'][0]['CheckinGender']"
+									"path": "$['Flights'][0]['PassengerSecurityRules'][0]['CheckinGender']"
 								}
 							},
 							{
 								"source": {
-									"path": "['PassengerSecurityRules'][0]['CheckinNationality']"
+									"path": "$['Flights'][0]['PassengerSecurityRules'][0]['CheckinNationality']"
 								}
 							},
 							{
 								"source": {
-									"path": "['PassengerSecurityRules'][0]['CheckinResidence']"
+									"path": "$['Flights'][0]['PassengerSecurityRules'][0]['CheckinResidence']"
 								}
 							},
 							{
 								"source": {
-									"path": "['PassengerSecurityRules'][0]['CheckinOrigDest']"
+									"path": "$['Flights'][0]['PassengerSecurityRules'][0]['CheckinOrigDest']"
 								}
 							},
 							{
 								"source": {
-									"path": "['PassengerSecurityRules'][0]['CheckinClearance']"
+									"path": "$['Flights'][0]['PassengerSecurityRules'][0]['CheckinClearance']"
 								}
 							},
 							{
 								"source": {
-									"path": "['PassengerSecurityRules'][0]['CheckinTravelDoc']"
+									"path": "$['Flights'][0]['PassengerSecurityRules'][0]['CheckinTravelDoc']"
 								}
 							},
 							{
 								"source": {
-									"path": "['PassengerSecurityRules'][0]['CheckinDestinationAddress']"
+									"path": "$['Flights'][0]['PassengerSecurityRules'][0]['CheckinDestinationAddress']"
 								}
 							},
 							{
 								"source": {
-									"path": "['PassengerSecurityRules'][0]['CheckinDestinationAddressCondition']"
+									"path": "$['Flights'][0]['PassengerSecurityRules'][0]['CheckinDestinationAddressCondition']"
 								}
 							},
 							{
 								"source": {
-									"path": "['BatchPassengerMask']"
+									"path": "$['Flights'][0]['BatchPassengerMask']"
 								}
 							},
 							{
 								"source": {
-									"path": "['BatchCrewMemberMask']"
+									"path": "$['Flights'][0]['BatchCrewMemberMask']"
 								}
 							},
 							{
 								"source": {
-									"path": "['PreDepartureCloseOutPassengerMask']"
+									"path": "$['Flights'][0]['PreDepartureCloseOutPassengerMask']"
 								}
 							},
 							{
 								"source": {
-									"path": "['PostDepartureCloseOutPassengerMask']"
+									"path": "$['Flights'][0]['PostDepartureCloseOutPassengerMask']"
 								}
 							},
 							{
 								"source": {
-									"path": "['PreDepartureCloseOutCrewMemberMask']"
+									"path": "$['Flights'][0]['PreDepartureCloseOutCrewMemberMask']"
 								}
 							},
 							{
 								"source": {
-									"path": "['PostDepartureCloseOutCrewMemberMask']"
+									"path": "$['Flights'][0]['PostDepartureCloseOutCrewMemberMask']"
 								}
 							},
 							{
 								"source": {
-									"path": "['PaxFlightPreDepartureCloseOutStatus']"
+									"path": "$['Flights'][0]['PaxFlightPreDepartureCloseOutStatus']"
 								}
 							},
 							{
 								"source": {
-									"path": "['PaxFlightPostDepartureCloseOutStatus']"
+									"path": "$['Flights'][0]['PaxFlightPostDepartureCloseOutStatus']"
 								}
 							},
 							{
 								"source": {
-									"path": "['CrewFlightPreDepartureCloseOutStatus']"
+									"path": "$['Flights'][0]['CrewFlightPreDepartureCloseOutStatus']"
 								}
 							},
 							{
 								"source": {
-									"path": "['CrewFlightPostDepartureCloseOutStatus']"
+									"path": "$['Flights'][0]['CrewFlightPostDepartureCloseOutStatus']"
 								}
 							},
 							{
 								"source": {
-									"path": "['PaxBatchPreVetStatus']"
+									"path": "$['Flights'][0]['PaxBatchPreVetStatus']"
 								}
 							},
 							{
 								"source": {
-									"path": "['HasPassengerSecurityTransactions']"
+									"path": "$['Flights'][0]['HasPassengerSecurityTransactions']"
 								}
 							},
 							{
 								"source": {
-									"path": "['HealthCheckRule']['ID']"
+									"path": "$['Flights'][0]['HealthCheckRule']['ID']"
 								}
 							},
 							{
 								"source": {
-									"path": "['HealthCheckRule']['CarrierCode']"
+									"path": "$['Flights'][0]['HealthCheckRule']['CarrierCode']"
 								}
 							},
 							{
 								"source": {
-									"path": "['HealthCheckRule']['OriginCountryEntity']"
+									"path": "$['Flights'][0]['HealthCheckRule']['OriginCountryEntity']"
 								}
 							},
 							{
 								"source": {
-									"path": "['HealthCheckRule']['DestinationCountryEntity']"
+									"path": "$['Flights'][0]['HealthCheckRule']['DestinationCountryEntity']"
 								}
 							},
 							{
 								"source": {
-									"path": "['HealthCheckRule']['OriginAirport']"
+									"path": "$['Flights'][0]['HealthCheckRule']['OriginAirport']"
 								}
 							},
 							{
 								"source": {
-									"path": "['HealthCheckRule']['DestinationAirport']"
+									"path": "$['Flights'][0]['HealthCheckRule']['DestinationAirport']"
 								}
 							},
 							{
 								"source": {
-									"path": "['HealthCheckRule']['Instructions']"
+									"path": "$['Flights'][0]['HealthCheckRule']['Instructions']"
 								}
 							},
 							{
 								"source": {
-									"path": "['HealthCheckRule']['IsClearToBoard']"
+									"path": "$['Flights'][0]['HealthCheckRule']['IsClearToBoard']"
 								}
 							},
 							{
 								"source": {
-									"path": "['HealthCheckRule']['IsRequireProofForRemoteCheckIn']"
+									"path": "$['Flights'][0]['HealthCheckRule']['IsRequireProofForRemoteCheckIn']"
 								}
 							},
 							{
 								"source": {
-									"path": "['HealthCheckRule']['IsRequireRemarksForFailStatus']"
+									"path": "$['Flights'][0]['HealthCheckRule']['IsRequireRemarksForFailStatus']"
 								}
 							},
 							{
 								"source": {
-									"path": "['HealthCheckRule']['IsActive']"
+									"path": "$['Flights'][0]['HealthCheckRule']['IsActive']"
 								}
 							},
 							{
 								"source": {
-									"path": "['HealthCheckRule']['CreatedBy']"
+									"path": "$['Flights'][0]['HealthCheckRule']['CreatedBy']"
 								}
 							},
 							{
 								"source": {
-									"path": "['HealthCheckRule']['CreatedTimestampUTC']"
+									"path": "$['Flights'][0]['HealthCheckRule']['CreatedTimestampUTC']"
 								}
 							},
 							{
 								"source": {
-									"path": "['HealthCheckRule']['UpdatedBy']"
+									"path": "$['Flights'][0]['HealthCheckRule']['UpdatedBy']"
 								}
 							},
 							{
 								"source": {
-									"path": "['CustomData']['Properties']"
+									"path": "$['Flights'][0]['CustomData']['Properties']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['Column_1']"
+								},
+								"sink": {
+									"name": "Flights",
+									"type": "String"
 								}
 							}
 						],
-						"collectionReference": "$['Flights']"
+						"collectionReference": ""
 					}
 				},
 				"inputs": [
