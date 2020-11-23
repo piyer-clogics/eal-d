@@ -1,5 +1,5 @@
 {
-	"name": "dataflow1",
+	"name": "active_flights_cosmos_dataflow",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
