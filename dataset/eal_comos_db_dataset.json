@@ -12,7 +12,7 @@
 		"type": "CosmosDbSqlApiCollection",
 		"schema": {},
 		"typeProperties": {
-			"collectionName": "eal_active_flights"
+			"collectionName": "eal_test"
 		}
 	}
 }
