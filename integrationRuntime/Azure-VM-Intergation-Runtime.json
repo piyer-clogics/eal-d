@@ -1,0 +1,6 @@
+{
+	"name": "Azure-VM-Intergation-Runtime",
+	"properties": {
+		"type": "SelfHosted"
+	}
+}
