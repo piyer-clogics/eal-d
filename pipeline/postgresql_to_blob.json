@@ -1,0 +1,6 @@
+{
+	"name": "postgresql_to_blob",
+	"properties": {
+		"annotations": []
+	}
+}
