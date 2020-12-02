@@ -1,5 +1,5 @@
 {
-	"name": "PostgreSqlTable1",
+	"name": "eal_postgresql_db",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AWSPostgreSql",
