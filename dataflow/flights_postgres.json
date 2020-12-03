@@ -6,7 +6,7 @@
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "eal_ac_active_flights",
+						"referenceName": "eal_flights_postgresql",
 						"type": "DatasetReference"
 					},
 					"name": "source1"
