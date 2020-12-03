@@ -1,5 +1,5 @@
 {
-	"name": "eal_ac_active_flights_alt",
+	"name": "eal_flights_postgresql",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ealblobdconnection",
@@ -13,7 +13,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "eal_ac_active_flights_alt.json",
+				"fileName": "eal_flights_postgres.json",
 				"container": "eal-src-stg"
 			}
 		},
