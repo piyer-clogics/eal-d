@@ -1,5 +1,5 @@
 {
-	"name": "PostgreSQL_to_AzureSQL",
+	"name": "postgresql_to_azuresql",
 	"properties": {
 		"activities": [
 			{
