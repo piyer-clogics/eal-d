@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Cpoy data from Postgres to Azure Blob",
+				"name": "Copy data from Postgres to Azure Blob",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
@@ -47,7 +47,7 @@
 				"type": "ExecuteDataFlow",
 				"dependsOn": [
 					{
-						"activity": "Cpoy data from Postgres to Azure Blob",
+						"activity": "Copy data from Postgres to Azure Blob",
 						"dependencyConditions": [
 							"Succeeded"
 						]
