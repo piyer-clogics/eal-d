@@ -1,0 +1,35 @@
+{
+	"name": "flights_delay_postgres_dataflow",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "eal_az_flights",
+						"type": "DatasetReference"
+					},
+					"name": "BlobStorage"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "sql_flights",
+						"type": "DatasetReference"
+					},
+					"name": "WriteToSQL"
+				}
+			],
+			"transformations": [
+				{
+					"name": "AddADFDetails"
+				},
+				{
+					"name": "RenameColumns"
+				}
+			],
+			"script": "parameters{\n\tadf_run_id as string ('')\n}\nsource(output(\n\t\tactual_arrival_airport as string,\n\t\tactual_departure_airport as string,\n\t\tactual_oooi_in as string,\n\t\tactual_oooi_off as string,\n\t\tactual_oooi_on as string,\n\t\tactual_oooi_out as string,\n\t\taircraft_registration_number as string,\n\t\taircraft_type as string,\n\t\tbase_airport as string,\n\t\tcargo_weight as string,\n\t\testimated_arrival as string,\n\t\testimated_departure as string,\n\t\tflight_date as string,\n\t\tflight_id as short,\n\t\tflight_number as string,\n\t\tflight_type as string,\n\t\tfuel_in as double,\n\t\tfuel_out as double,\n\t\tfuel_uplift as short,\n\t\tis_canceled as boolean,\n\t\tis_verified as boolean,\n\t\tmaint_log_page as integer,\n\t\tnotes as string,\n\t\tscheduled_arrival as string,\n\t\tscheduled_arrival_airport as string,\n\t\tscheduled_departure as string,\n\t\tscheduled_departure_airport as string,\n\t\tupdated_at as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tdocumentForm: 'documentPerLine') ~> BlobStorage\nRenameColumns derive(ADF_TIME_STMP = currentDate(),\n\t\tADF_RUN_ID = $adf_run_id) ~> AddADFDetails\nBlobStorage select(mapColumn(\n\t\tACTL_ARRVL_AIR_PORT = actual_arrival_airport,\n\t\tACTL_DPTR_AIR_PORT = actual_departure_airport,\n\t\tACTL_OOOI_IN = actual_oooi_in,\n\t\tACTL_OOOI_OFF = actual_oooi_off,\n\t\tACTL_OOOI_ON = actual_oooi_on,\n\t\tACTL_OOOI_OUT = actual_oooi_out,\n\t\tAIR_CRAFT_RGSTRN_NUM = aircraft_registration_number,\n\t\tAIR_CRAFT_TYPE = aircraft_type,\n\t\tBASE_AIR_PORT = base_airport,\n\t\tCRGO_WGT = cargo_weight,\n\t\tESTD_ARRVL = estimated_arrival,\n\t\tESTD_DPTR = estimated_departure,\n\t\tFLT_DT = flight_date,\n\t\tFLT_ID = flight_id,\n\t\tFLT_NUM = flight_number,\n\t\tFLT_TYPE = flight_type,\n\t\tFUEL_IN = fuel_in,\n\t\tFUEL_OUT = fuel_out,\n\t\tFUEL_UPLIFT = fuel_uplift,\n\t\tIS_CNCLD = is_canceled,\n\t\tIS_VERFD = is_verified,\n\t\tMAINT_LOG_PG = maint_log_page,\n\t\tNOTES = notes,\n\t\tSCHDD_ARRVL = scheduled_arrival,\n\t\tSCHDD_ARRVL_AIR_PORT = scheduled_arrival_airport,\n\t\tSCHDD_DPTR = scheduled_departure,\n\t\tSCHDD_DPTR_AIR_PORT = scheduled_departure_airport,\n\t\tUPDTD_AT = updated_at\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> RenameColumns\nAddADFDetails sink(input(\n\t\tAIR_CRAFT_CPTY as integer,\n\t\tANCLRY_TMPLT_ID as string,\n\t\tARRVL_GT as string,\n\t\tARRVL_TRMNL as string,\n\t\tBTCH_CREW_MBR_MASK as string,\n\t\tBTCH_PSNGR_MASK as string,\n\t\tBRDNG_TIME as string,\n\t\tBKD_PSNGR_CNT as integer,\n\t\tCNCLD_BY as string,\n\t\tCNCLD_RSN as string,\n\t\tCARR_CD as double,\n\t\tCREW_FLT_POST_DPTR_CLS_OUT_STS as string,\n\t\tCREW_FLT_PRE_DPTR_CLS_OUT_STS as string,\n\t\tCUST_ID as string,\n\t\tDPTR_GT as string,\n\t\tDPTR_TRMNL as string,\n\t\tDEST_AIRPORT_CITY as string,\n\t\tDEST_AIRPORT_CNTRY_CD as string,\n\t\tDEST_AIRPORT_NAME as string,\n\t\tDEST_IATA as string,\n\t\tDEST_ICAO as string,\n\t\tENABL_BRDNG as boolean,\n\t\tENABL_CREW_APIS as boolean,\n\t\tENABL_DCS as boolean,\n\t\tENABL_PSNGR_APIS as boolean,\n\t\tENABL_THRU_CHK_IN as boolean,\n\t\tESTD_ARRVL_TIME as string,\n\t\tESTD_DPTR_TIME as string,\n\t\tEXTRNL_ID as integer,\n\t\tFLT_DLAY as string,\n\t\tFLT_NO as integer,\n\t\tHAS_PSNGR_SCRTY_TRNS as boolean,\n\t\tHLTH_CHK_RULES_ID as string,\n\t\tPSNGRS as string,\n\t\tPAX_BTCH_PRE_VET_STS as string,\n\t\tFLT_ID as string,\n\t\tIS_CNCLD as boolean,\n\t\tIS_OPEN_STNG as boolean,\n\t\tIS_PRGRSV_FLT as boolean,\n\t\tMKTG_CARR_CD as string,\n\t\tMSG as string,\n\t\tORIG_AIRPORT_CITY as string,\n\t\tORIG_AIRPORT_CNTRY_CD as string,\n\t\tORIG_AIRPORT_NAME as string,\n\t\tORIG_IATA as string,\n\t\tORIG_ICAO as string,\n\t\tPSNGR_APP_RCPNT_ID as string,\n\t\tPAX_FLT_POST_DPTR_CLS_OUT_STS as string,\n\t\tPAX_FLT_PRE_DPTR_CLS_OUT_STS as string,\n\t\tPNL_IMPRTD as boolean,\n\t\tPOST_DPTR_CLS_OUT_CREW_MBR_MASK as string,\n\t\tPOST_DPTR_CLS_OUT_PSNGR_MASK as string,\n\t\tPRE_DPTR_CLS_OUT_CREW_MBR_MASK as string,\n\t\tPRE_DPTR_CLS_OUT_PSNGR_MASK as string,\n\t\tREMNG_FUEL_LOAD as boolean,\n\t\tSCHDD_ARRVL_TIME as string,\n\t\tSCHDD_DPTR_TIME as string,\n\t\tSCHDD_DPTR_TIME_UTC as timestamp,\n\t\tSEG_NO as integer,\n\t\tSTS as string,\n\t\tTAIL_NO as string,\n\t\tTOT_CRGO_LOAD as boolean,\n\t\tTOT_FUEL_LOAD as boolean,\n\t\tTYPE as string,\n\t\tUPLIFT_FUEL_LOAD as boolean,\n\t\tUSE_AVG_BAG_WGT as boolean,\n\t\tUSE_AVG_PAX_WGT as boolean,\n\t\tWGT_UNITS_KG as boolean,\n\t\tCREW_APP_RCPNT_ID as string,\n\t\tETL_CAPT_DT as timestamp,\n\t\tADF_RUN_ID as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> WriteToSQL"
+		}
+	}
+}
