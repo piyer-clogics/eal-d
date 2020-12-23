@@ -1,5 +1,5 @@
 {
-	"name": "eal_flights_delay",
+	"name": "eal_az_flights_delay",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ealblobdconnection",

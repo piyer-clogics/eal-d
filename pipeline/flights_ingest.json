@@ -37,7 +37,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "eal_flights_postgresql",
+						"referenceName": "eal_az_flights",
 						"type": "DatasetReference"
 					}
 				]

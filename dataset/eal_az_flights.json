@@ -1,5 +1,5 @@
 {
-	"name": "eal_flights_postgresql",
+	"name": "eal_az_flights",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ealblobdconnection",
