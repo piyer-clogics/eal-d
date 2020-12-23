@@ -18,11 +18,26 @@
 					"source": {
 						"type": "PostgreSqlSource"
 					},
+					"sink": {
+						"type": "JsonSink",
+						"storeSettings": {
+							"type": "AzureBlobStorageWriteSettings"
+						},
+						"formatSettings": {
+							"type": "JsonWriteSettings"
+						}
+					},
 					"enableStaging": false
 				},
 				"inputs": [
 					{
 						"referenceName": "eal_postgresql_delay_db",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "eal_az_flights_delay",
 						"type": "DatasetReference"
 					}
 				]
