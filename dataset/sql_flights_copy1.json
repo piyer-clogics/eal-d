@@ -1,0 +1,314 @@
+{
+	"name": "sql_flights_copy1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "eal_sqldb_piyer",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Destination Table"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "AIR_CRAFT_CPTY",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "ANCLRY_TMPLT_ID",
+				"type": "varchar"
+			},
+			{
+				"name": "ARRVL_GT",
+				"type": "varchar"
+			},
+			{
+				"name": "ARRVL_TRMNL",
+				"type": "varchar"
+			},
+			{
+				"name": "BTCH_CREW_MBR_MASK",
+				"type": "varchar"
+			},
+			{
+				"name": "BTCH_PSNGR_MASK",
+				"type": "varchar"
+			},
+			{
+				"name": "BRDNG_TIME",
+				"type": "varchar"
+			},
+			{
+				"name": "BKD_PSNGR_CNT",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "CNCLD_BY",
+				"type": "varchar"
+			},
+			{
+				"name": "CNCLD_RSN",
+				"type": "varchar"
+			},
+			{
+				"name": "CARR_CD",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "CREW_FLT_POST_DPTR_CLS_OUT_STS",
+				"type": "varchar"
+			},
+			{
+				"name": "CREW_FLT_PRE_DPTR_CLS_OUT_STS",
+				"type": "varchar"
+			},
+			{
+				"name": "CUST_ID",
+				"type": "varchar"
+			},
+			{
+				"name": "DPTR_GT",
+				"type": "varchar"
+			},
+			{
+				"name": "DPTR_TRMNL",
+				"type": "varchar"
+			},
+			{
+				"name": "DEST_AIRPORT_CITY",
+				"type": "varchar"
+			},
+			{
+				"name": "DEST_AIRPORT_CNTRY_CD",
+				"type": "varchar"
+			},
+			{
+				"name": "DEST_AIRPORT_NAME",
+				"type": "varchar"
+			},
+			{
+				"name": "DEST_IATA",
+				"type": "varchar"
+			},
+			{
+				"name": "DEST_ICAO",
+				"type": "varchar"
+			},
+			{
+				"name": "ENABL_BRDNG",
+				"type": "bit"
+			},
+			{
+				"name": "ENABL_CREW_APIS",
+				"type": "bit"
+			},
+			{
+				"name": "ENABL_DCS",
+				"type": "bit"
+			},
+			{
+				"name": "ENABL_PSNGR_APIS",
+				"type": "bit"
+			},
+			{
+				"name": "ENABL_THRU_CHK_IN",
+				"type": "bit"
+			},
+			{
+				"name": "ESTD_ARRVL_TIME",
+				"type": "varchar"
+			},
+			{
+				"name": "ESTD_DPTR_TIME",
+				"type": "varchar"
+			},
+			{
+				"name": "EXTRNL_ID",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "FLT_DLAY",
+				"type": "varchar"
+			},
+			{
+				"name": "FLT_NO",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "HAS_PSNGR_SCRTY_TRNS",
+				"type": "bit"
+			},
+			{
+				"name": "HLTH_CHK_RULES_ID",
+				"type": "varchar"
+			},
+			{
+				"name": "PSNGRS",
+				"type": "varchar"
+			},
+			{
+				"name": "PAX_BTCH_PRE_VET_STS",
+				"type": "varchar"
+			},
+			{
+				"name": "FLT_ID",
+				"type": "varchar"
+			},
+			{
+				"name": "IS_CNCLD",
+				"type": "bit"
+			},
+			{
+				"name": "IS_OPEN_STNG",
+				"type": "bit"
+			},
+			{
+				"name": "IS_PRGRSV_FLT",
+				"type": "bit"
+			},
+			{
+				"name": "MKTG_CARR_CD",
+				"type": "varchar"
+			},
+			{
+				"name": "MSG",
+				"type": "varchar"
+			},
+			{
+				"name": "ORIG_AIRPORT_CITY",
+				"type": "varchar"
+			},
+			{
+				"name": "ORIG_AIRPORT_CNTRY_CD",
+				"type": "varchar"
+			},
+			{
+				"name": "ORIG_AIRPORT_NAME",
+				"type": "varchar"
+			},
+			{
+				"name": "ORIG_IATA",
+				"type": "varchar"
+			},
+			{
+				"name": "ORIG_ICAO",
+				"type": "varchar"
+			},
+			{
+				"name": "PSNGR_APP_RCPNT_ID",
+				"type": "varchar"
+			},
+			{
+				"name": "PAX_FLT_POST_DPTR_CLS_OUT_STS",
+				"type": "varchar"
+			},
+			{
+				"name": "PAX_FLT_PRE_DPTR_CLS_OUT_STS",
+				"type": "varchar"
+			},
+			{
+				"name": "PNL_IMPRTD",
+				"type": "bit"
+			},
+			{
+				"name": "POST_DPTR_CLS_OUT_CREW_MBR_MASK",
+				"type": "varchar"
+			},
+			{
+				"name": "POST_DPTR_CLS_OUT_PSNGR_MASK",
+				"type": "varchar"
+			},
+			{
+				"name": "PRE_DPTR_CLS_OUT_CREW_MBR_MASK",
+				"type": "varchar"
+			},
+			{
+				"name": "PRE_DPTR_CLS_OUT_PSNGR_MASK",
+				"type": "varchar"
+			},
+			{
+				"name": "REMNG_FUEL_LOAD",
+				"type": "bit"
+			},
+			{
+				"name": "SCHDD_ARRVL_TIME",
+				"type": "varchar"
+			},
+			{
+				"name": "SCHDD_DPTR_TIME",
+				"type": "varchar"
+			},
+			{
+				"name": "SCHDD_DPTR_TIME_UTC",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "SEG_NO",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "STS",
+				"type": "varchar"
+			},
+			{
+				"name": "TAIL_NO",
+				"type": "varchar"
+			},
+			{
+				"name": "TOT_CRGO_LOAD",
+				"type": "bit"
+			},
+			{
+				"name": "TOT_FUEL_LOAD",
+				"type": "bit"
+			},
+			{
+				"name": "TYPE",
+				"type": "varchar"
+			},
+			{
+				"name": "UPLIFT_FUEL_LOAD",
+				"type": "bit"
+			},
+			{
+				"name": "USE_AVG_BAG_WGT",
+				"type": "bit"
+			},
+			{
+				"name": "USE_AVG_PAX_WGT",
+				"type": "bit"
+			},
+			{
+				"name": "WGT_UNITS_KG",
+				"type": "bit"
+			},
+			{
+				"name": "CREW_APP_RCPNT_ID",
+				"type": "varchar"
+			},
+			{
+				"name": "ETL_CAPT_DT",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "ADF_RUN_ID",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "S_FLIGHTS_DELAY"
+		}
+	}
+}
