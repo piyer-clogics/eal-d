@@ -1,0 +1,6 @@
+{
+	"name": "flights_delay_ingest",
+	"properties": {
+		"annotations": []
+	}
+}
