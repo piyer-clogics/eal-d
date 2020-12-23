@@ -1,5 +1,5 @@
 {
-	"name": "sql_flights_copy1",
+	"name": "sql_flights_deplay",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "eal_sqldb_piyer",
