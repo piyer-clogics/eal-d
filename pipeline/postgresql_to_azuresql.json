@@ -31,7 +31,7 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "eal_postgresql_db",
+						"referenceName": "eal_postgresql_flights_db",
 						"type": "DatasetReference"
 					}
 				],
@@ -66,7 +66,10 @@
 						"referenceName": "flights_postgres_dataflow",
 						"type": "DataFlowReference",
 						"parameters": {
-							"adf_run_id": "''"
+							"adf_run_id": {
+								"value": "'@{pipeline().RunId}'",
+								"type": "Expression"
+							}
 						}
 					},
 					"compute": {

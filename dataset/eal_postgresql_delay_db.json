@@ -1,5 +1,5 @@
 {
-	"name": "eal_postgresql_flights_db",
+	"name": "eal_postgresql_delay_db",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AWSPostgreSql",
