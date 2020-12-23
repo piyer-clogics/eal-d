@@ -1,5 +1,5 @@
 {
-	"name": "postgresql_to_azuresql",
+	"name": "flights_ingest",
 	"properties": {
 		"activities": [
 			{
