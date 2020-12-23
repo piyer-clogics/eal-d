@@ -15,7 +15,7 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "sql_flights",
+						"referenceName": "sql_flights_delay",
 						"type": "DatasetReference"
 					},
 					"name": "WriteToSQL"

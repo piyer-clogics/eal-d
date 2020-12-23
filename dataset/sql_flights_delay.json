@@ -1,5 +1,5 @@
 {
-	"name": "sql_flights_deplay",
+	"name": "sql_flights_delay",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "eal_sqldb_piyer",
