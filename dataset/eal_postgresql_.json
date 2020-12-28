@@ -1,0 +1,19 @@
+{
+	"name": "eal_postgresql_",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AWSPostgreSql",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Source API"
+		},
+		"annotations": [],
+		"type": "PostgreSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "bi",
+			"table": "equipment_sched"
+		}
+	}
+}
