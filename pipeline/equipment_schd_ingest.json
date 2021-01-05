@@ -31,53 +31,16 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "eal_postgresql_flights_db",
+						"referenceName": "eal_postgresql_equip_schd",
 						"type": "DatasetReference"
 					}
 				],
 				"outputs": [
 					{
-						"referenceName": "eal_az_flights",
+						"referenceName": "eal_az_equipment_schd",
 						"type": "DatasetReference"
 					}
 				]
-			},
-			{
-				"name": "flights_postgres_dataflow",
-				"type": "ExecuteDataFlow",
-				"dependsOn": [
-					{
-						"activity": "Copy data from Postgres to Azure Blob",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"policy": {
-					"timeout": "7.00:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"dataflow": {
-						"referenceName": "flights_postgres_dataflow",
-						"type": "DataFlowReference",
-						"parameters": {
-							"adf_run_id": {
-								"value": "'@{pipeline().RunId}'",
-								"type": "Expression"
-							}
-						}
-					},
-					"compute": {
-						"coreCount": 8,
-						"computeType": "General"
-					},
-					"traceLevel": "Fine"
-				}
 			}
 		],
 		"annotations": []

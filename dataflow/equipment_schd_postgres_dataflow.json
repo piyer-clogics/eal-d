@@ -3,10 +3,29 @@
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
-			"sources": [],
-			"sinks": [],
-			"transformations": [],
-			"script": ""
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "eal_az_equipment_schd",
+						"type": "DatasetReference"
+					},
+					"name": "AzureBlob"
+				}
+			],
+			"sinks": [
+				{
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "AddADFColumns"
+				},
+				{
+					"name": "RenameColumns"
+				}
+			],
+			"script": "source(output(\n\t\tac_registration as string,\n\t\tend_time as string,\n\t\teqp_sched_id as short,\n\t\tis_deleted as boolean,\n\t\tnotes as string,\n\t\tstart_time as string,\n\t\tstatus_code as string,\n\t\tstatus_description as string,\n\t\tstatus_name as string,\n\t\tupdated_at as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tdocumentForm: 'documentPerLine') ~> AzureBlob\nRenameColumns derive(ADF_TIME_STMP = currentTimestamp(),\n\t\tADF_RUN_ID = '') ~> AddADFColumns\nAzureBlob select(mapColumn(\n\t\tAC_RGSTRN = ac_registration,\n\t\tEND_TIME = end_time,\n\t\tEQP_SCHED_ID = eqp_sched_id,\n\t\tIS_DELD = is_deleted,\n\t\tNOTE = notes,\n\t\tSTRT_TIME = start_time,\n\t\tSTS_CD = status_code,\n\t\tSTS_DESC = status_description,\n\t\tSTS_NAME = status_name,\n\t\tUPDTD_AT = updated_at\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> RenameColumns\nAddADFColumns sink(skipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sink1"
 		}
 	}
 }

@@ -1,5 +1,5 @@
 {
-	"name": "sql_flights_delay",
+	"name": "sql_flights_delay_copy1",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "eal_sqldb_piyer",
@@ -12,42 +12,50 @@
 		"type": "AzureSqlTable",
 		"schema": [
 			{
-				"name": "DLAY_CD",
+				"name": "EQP_SCHED_ID",
 				"type": "smallint",
 				"precision": 5
 			},
 			{
-				"name": "DLAY_CD_NAME",
+				"name": "AC_RGSTRN",
 				"type": "varchar"
 			},
 			{
-				"name": "DLAY_TYP",
+				"name": "STS_CD",
 				"type": "varchar"
 			},
 			{
-				"name": "DURTN_MNT",
-				"type": "smallint",
-				"precision": 5
+				"name": "STS_NAME",
+				"type": "varchar"
 			},
 			{
-				"name": "FLT_ID",
-				"type": "smallint",
-				"precision": 5
+				"name": "STS_DESC",
+				"type": "varchar"
 			},
 			{
-				"name": "ADF_TIME_STMP",
-				"type": "datetime",
-				"precision": 23,
-				"scale": 3
+				"name": "STRT_TIME",
+				"type": "varchar"
 			},
 			{
-				"name": "ADF_RUN_ID",
+				"name": "END_TIME",
+				"type": "varchar"
+			},
+			{
+				"name": "NOTE",
+				"type": "varchar"
+			},
+			{
+				"name": "IS_DELD",
+				"type": "bit"
+			},
+			{
+				"name": "UPDTD_AT",
 				"type": "varchar"
 			}
 		],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "S_FLIGHTS_DELAY"
+			"table": "S_EQUIP_SCHD"
 		}
 	}
 }
