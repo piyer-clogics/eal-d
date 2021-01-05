@@ -51,6 +51,16 @@
 			{
 				"name": "UPDTD_AT",
 				"type": "varchar"
+			},
+			{
+				"name": "ADF_TIME_STMP",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "ADF_RUN_ID",
+				"type": "varchar"
 			}
 		],
 		"typeProperties": {
