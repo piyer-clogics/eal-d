@@ -1,5 +1,5 @@
 {
-	"name": "sql_flights_delay_copy1",
+	"name": "sql_eqip_schd",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "eal_sqldb_piyer",
