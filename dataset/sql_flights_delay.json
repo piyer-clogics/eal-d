@@ -13,7 +13,8 @@
 		"schema": [
 			{
 				"name": "FLT_ID",
-				"type": "char"
+				"type": "int",
+				"precision": 10
 			},
 			{
 				"name": "DLAY_TYP",
@@ -21,8 +22,8 @@
 			},
 			{
 				"name": "DURTN_MNT",
-				"type": "smallint",
-				"precision": 5
+				"type": "int",
+				"precision": 10
 			},
 			{
 				"name": "DLAY_CD",
