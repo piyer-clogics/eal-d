@@ -10,40 +10,7 @@
 		},
 		"annotations": [],
 		"type": "AzureSqlTable",
-		"schema": [
-			{
-				"name": "FLT_ID",
-				"type": "int",
-				"precision": 10
-			},
-			{
-				"name": "DLAY_TYP",
-				"type": "varchar"
-			},
-			{
-				"name": "DURTN_MNT",
-				"type": "int",
-				"precision": 10
-			},
-			{
-				"name": "DLAY_CD",
-				"type": "varchar"
-			},
-			{
-				"name": "DLAY_CD_NAME",
-				"type": "varchar"
-			},
-			{
-				"name": "ADF_TIME_STMP",
-				"type": "datetime",
-				"precision": 23,
-				"scale": 3
-			},
-			{
-				"name": "ADF_RUN_ID",
-				"type": "varchar"
-			}
-		],
+		"schema": [],
 		"typeProperties": {
 			"schema": "dbo",
 			"table": "S_FLIGHTS_DELAY"
