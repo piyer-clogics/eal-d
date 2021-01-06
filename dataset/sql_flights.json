@@ -65,8 +65,8 @@
 			},
 			{
 				"name": "FLT_ID",
-				"type": "smallint",
-				"precision": 5
+				"type": "int",
+				"precision": 10
 			},
 			{
 				"name": "FLT_NUM",
@@ -88,8 +88,8 @@
 			},
 			{
 				"name": "FUEL_UPLIFT",
-				"type": "smallint",
-				"precision": 5
+				"type": "int",
+				"precision": 10
 			},
 			{
 				"name": "IS_CNCLD",
