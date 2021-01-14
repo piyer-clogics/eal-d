@@ -12,77 +12,51 @@
 		"type": "AzureSqlTable",
 		"schema": [
 			{
-				"name": "APT_IATA_CODE",
+				"name": "Airport_Name",
 				"type": "nvarchar"
 			},
 			{
-				"name": "APT_ICAO_CODE",
+				"name": "City",
 				"type": "nvarchar"
 			},
 			{
-				"name": "APT_NAME",
+				"name": "Country",
 				"type": "nvarchar"
 			},
 			{
-				"name": "APT_LCI_ID",
+				"name": "IATA",
 				"type": "nvarchar"
 			},
 			{
-				"name": "LCI_ISO3_ID",
+				"name": "ICAO",
 				"type": "nvarchar"
 			},
 			{
-				"name": "APT_CATEGORY",
+				"name": "Latitude",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Longitude",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Altitude",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "UTC_offset",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "DST",
 				"type": "nvarchar"
 			},
 			{
-				"name": "APT_SYNC",
-				"type": "nvarchar"
-			},
-			{
-				"name": "APT_LAT_NS",
-				"type": "nvarchar"
-			},
-			{
-				"name": "APT_LAT_DEG",
-				"type": "tinyint",
-				"precision": 3
-			},
-			{
-				"name": "APT_LAT_MIN",
-				"type": "tinyint",
-				"precision": 3
-			},
-			{
-				"name": "APT_LAT_SEC",
-				"type": "tinyint",
-				"precision": 3
-			},
-			{
-				"name": "APT_LON_EW",
-				"type": "nvarchar"
-			},
-			{
-				"name": "APT_LON_DEG",
-				"type": "tinyint",
-				"precision": 3
-			},
-			{
-				"name": "APT_LON_MIN",
-				"type": "tinyint",
-				"precision": 3
-			},
-			{
-				"name": "APT_LON_SEC",
-				"type": "tinyint",
-				"precision": 3
-			},
-			{
-				"name": "APT_SECTOR",
-				"type": "nvarchar"
-			},
-			{
-				"name": "APT_TZ_ID",
+				"name": "Time_Zone",
 				"type": "nvarchar"
 			}
 		],
