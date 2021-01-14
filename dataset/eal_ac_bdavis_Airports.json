@@ -1,9 +1,12 @@
 {
-	"name": "az_sql_bdavis_Airports",
+	"name": "eal_ac_bdavis_Airports",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "eal_sqldb_bdavis",
 			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Azure blobs"
 		},
 		"annotations": [],
 		"type": "AzureSqlTable",
@@ -85,7 +88,7 @@
 		],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "BlueOne V_AIRPORTS"
+			"table": "Airports_with_UTC_offset"
 		}
 	}
 }
