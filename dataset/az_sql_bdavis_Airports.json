@@ -1,0 +1,91 @@
+{
+	"name": "az_sql_bdavis_Airports",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "eal_sqldb_bdavis",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "APT_IATA_CODE",
+				"type": "nvarchar"
+			},
+			{
+				"name": "APT_ICAO_CODE",
+				"type": "nvarchar"
+			},
+			{
+				"name": "APT_NAME",
+				"type": "nvarchar"
+			},
+			{
+				"name": "APT_LCI_ID",
+				"type": "nvarchar"
+			},
+			{
+				"name": "LCI_ISO3_ID",
+				"type": "nvarchar"
+			},
+			{
+				"name": "APT_CATEGORY",
+				"type": "nvarchar"
+			},
+			{
+				"name": "APT_SYNC",
+				"type": "nvarchar"
+			},
+			{
+				"name": "APT_LAT_NS",
+				"type": "nvarchar"
+			},
+			{
+				"name": "APT_LAT_DEG",
+				"type": "tinyint",
+				"precision": 3
+			},
+			{
+				"name": "APT_LAT_MIN",
+				"type": "tinyint",
+				"precision": 3
+			},
+			{
+				"name": "APT_LAT_SEC",
+				"type": "tinyint",
+				"precision": 3
+			},
+			{
+				"name": "APT_LON_EW",
+				"type": "nvarchar"
+			},
+			{
+				"name": "APT_LON_DEG",
+				"type": "tinyint",
+				"precision": 3
+			},
+			{
+				"name": "APT_LON_MIN",
+				"type": "tinyint",
+				"precision": 3
+			},
+			{
+				"name": "APT_LON_SEC",
+				"type": "tinyint",
+				"precision": 3
+			},
+			{
+				"name": "APT_SECTOR",
+				"type": "nvarchar"
+			},
+			{
+				"name": "APT_TZ_ID",
+				"type": "nvarchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "BlueOne V_AIRPORTS"
+		}
+	}
+}
