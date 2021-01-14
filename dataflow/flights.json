@@ -1,0 +1,15 @@
+{
+	"name": "flights",
+	"properties": {
+		"folder": {
+			"name": "Production"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [],
+			"sinks": [],
+			"transformations": [],
+			"script": ""
+		}
+	}
+}
