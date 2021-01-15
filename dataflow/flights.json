@@ -25,7 +25,7 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "sql_flights",
+						"referenceName": "sql_flights_Test",
 						"type": "DatasetReference"
 					},
 					"name": "Flights"
