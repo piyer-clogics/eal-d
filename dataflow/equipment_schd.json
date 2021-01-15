@@ -2,7 +2,7 @@
 	"name": "equipment_schd",
 	"properties": {
 		"folder": {
-			"name": "Production"
+			"name": "Rejections"
 		},
 		"type": "MappingDataFlow",
 		"typeProperties": {
