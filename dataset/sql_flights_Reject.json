@@ -1,0 +1,147 @@
+{
+	"name": "sql_flights_Reject",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "eal_sqldb_piyer",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Destination Table"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "ACTL_ARRVL_AIR_PORT",
+				"type": "varchar"
+			},
+			{
+				"name": "ACTL_DPTR_AIR_PORT",
+				"type": "varchar"
+			},
+			{
+				"name": "ACTL_OOOI_IN",
+				"type": "varchar"
+			},
+			{
+				"name": "ACTL_OOOI_OFF",
+				"type": "varchar"
+			},
+			{
+				"name": "ACTL_OOOI_ON",
+				"type": "varchar"
+			},
+			{
+				"name": "ACTL_OOOI_OUT",
+				"type": "varchar"
+			},
+			{
+				"name": "AIR_CRAFT_RGSTRN_NUM",
+				"type": "varchar"
+			},
+			{
+				"name": "AIR_CRAFT_TYPE",
+				"type": "varchar"
+			},
+			{
+				"name": "BASE_AIR_PORT",
+				"type": "varchar"
+			},
+			{
+				"name": "CRGO_WGT",
+				"type": "varchar"
+			},
+			{
+				"name": "ESTD_ARRVL",
+				"type": "varchar"
+			},
+			{
+				"name": "ESTD_DPTR",
+				"type": "varchar"
+			},
+			{
+				"name": "FLT_DT",
+				"type": "varchar"
+			},
+			{
+				"name": "FLT_ID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "FLT_NUM",
+				"type": "varchar"
+			},
+			{
+				"name": "FLT_TYPE",
+				"type": "varchar"
+			},
+			{
+				"name": "FUEL_IN",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "FUEL_OUT",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "FUEL_UPLIFT",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "IS_CNCLD",
+				"type": "bit"
+			},
+			{
+				"name": "IS_VERFD",
+				"type": "bit"
+			},
+			{
+				"name": "MAINT_LOG_PG",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "NOTES",
+				"type": "nvarchar"
+			},
+			{
+				"name": "SCHDD_ARRVL",
+				"type": "varchar"
+			},
+			{
+				"name": "SCHDD_ARRVL_AIR_PORT",
+				"type": "varchar"
+			},
+			{
+				"name": "SCHDD_DPTR",
+				"type": "varchar"
+			},
+			{
+				"name": "SCHDD_DPTR_AIR_PORT",
+				"type": "varchar"
+			},
+			{
+				"name": "UPDTD_AT",
+				"type": "varchar"
+			},
+			{
+				"name": "ADF_TIME_STMP",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "ADF_RUN_ID",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "S_FLIGHTS_REJECT"
+		}
+	}
+}
