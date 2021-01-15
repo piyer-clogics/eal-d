@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "flights",
+						"referenceName": "flights_copy1",
 						"type": "DataFlowReference"
 					},
 					"compute": {
