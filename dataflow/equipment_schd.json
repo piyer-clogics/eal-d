@@ -1,0 +1,27 @@
+{
+	"name": "equipment_schd",
+	"properties": {
+		"folder": {
+			"name": "Production"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "sql_eqip_schd",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [],
+			"transformations": [
+				{
+					"name": "ConditionalSplit1"
+				}
+			],
+			"script": "source(output(\n\t\tEQP_SCHED_ID as integer,\n\t\tAC_RGSTRN as string,\n\t\tSTS_CD as string,\n\t\tSTS_NAME as string,\n\t\tSTS_DESC as string,\n\t\tSTRT_TIME as string,\n\t\tEND_TIME as string,\n\t\tNOTE as string,\n\t\tIS_DELD as boolean,\n\t\tUPDTD_AT as string,\n\t\tADF_TIME_STMP as timestamp,\n\t\tADF_RUN_ID as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> source1\nsource1 split(isNull(AC_RGSTRN) || iif(isNull(END_TIME), false(), iif(isNull(STRT_TIME), false(), STRT_TIME>END_TIME)),\n\tdisjoint: false) ~> ConditionalSplit1@(Reject, FilteredData)"
+		}
+	}
+}
