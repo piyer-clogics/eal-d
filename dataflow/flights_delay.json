@@ -6,10 +6,22 @@
 		},
 		"type": "MappingDataFlow",
 		"typeProperties": {
-			"sources": [],
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "sql_flights_delay",
+						"type": "DatasetReference"
+					},
+					"name": "StgFlightsDelay"
+				}
+			],
 			"sinks": [],
-			"transformations": [],
-			"script": ""
+			"transformations": [
+				{
+					"name": "ConditionalSplit1"
+				}
+			],
+			"script": "source(output(\n\t\tFLT_ID as integer,\n\t\tDLAY_TYP as string,\n\t\tDURTN_MNT as integer,\n\t\tDLAY_CD as string,\n\t\tDLAY_CD_NAME as string,\n\t\tADF_TIME_STMP as timestamp,\n\t\tADF_RUN_ID as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> StgFlightsDelay\nStgFlightsDelay split(isNull(DLAY_CD) || isNull(DLAY_CD_NAME)\r\n,\n\tdisjoint: false) ~> ConditionalSplit1@(Reject, FilteredData)"
 		}
 	}
 }
