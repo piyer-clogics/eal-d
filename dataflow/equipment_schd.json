@@ -22,6 +22,13 @@
 						"type": "DatasetReference"
 					},
 					"name": "EquipReject"
+				},
+				{
+					"dataset": {
+						"referenceName": "sql_eqip_schd_test",
+						"type": "DatasetReference"
+					},
+					"name": "EquipTest"
 				}
 			],
 			"transformations": [
@@ -29,10 +36,16 @@
 					"name": "ConditionalSplit1"
 				},
 				{
-					"name": "DerivedColumn1"
+					"name": "RemoveADFColumns"
+				},
+				{
+					"name": "AddADFColumns"
+				},
+				{
+					"name": "AddADFColumns2"
 				}
 			],
-			"script": "parameters{\n\trun_id as string ('')\n}\nsource(output(\n\t\tEQP_SCHED_ID as integer,\n\t\tAC_RGSTRN as string,\n\t\tSTS_CD as string,\n\t\tSTS_NAME as string,\n\t\tSTS_DESC as string,\n\t\tSTRT_TIME as string,\n\t\tEND_TIME as string,\n\t\tNOTE as string,\n\t\tIS_DELD as boolean,\n\t\tUPDTD_AT as string,\n\t\tADF_TIME_STMP as timestamp,\n\t\tADF_RUN_ID as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> StgEquipSchd\nDerivedColumn1 split(isNull(AC_RGSTRN) || iif(isNull(END_TIME), false(), iif(isNull(STRT_TIME), false(), STRT_TIME>END_TIME)),\n\tdisjoint: false) ~> ConditionalSplit1@(Reject, FilteredData)\nStgEquipSchd derive(ADF_TIME_STMP = currentTimestamp(),\n\t\tADF_RUN_ID = $run_id) ~> DerivedColumn1\nConditionalSplit1@Reject sink(input(\n\t\tEQP_SCHED_ID as integer,\n\t\tAC_RGSTRN as string,\n\t\tSTS_CD as string,\n\t\tSTS_NAME as string,\n\t\tSTS_DESC as string,\n\t\tSTRT_TIME as timestamp,\n\t\tEND_TIME as timestamp,\n\t\tNOTE as string,\n\t\tIS_DELD as boolean,\n\t\tUPDTD_AT as timestamp,\n\t\tREJECT_REASON as string,\n\t\tADF_TIME_STMP as timestamp,\n\t\tADF_RUN_ID as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> EquipReject"
+			"script": "parameters{\n\trun_id as string ('')\n}\nsource(output(\n\t\tEQP_SCHED_ID as integer,\n\t\tAC_RGSTRN as string,\n\t\tSTS_CD as string,\n\t\tSTS_NAME as string,\n\t\tSTS_DESC as string,\n\t\tSTRT_TIME as string,\n\t\tEND_TIME as string,\n\t\tNOTE as string,\n\t\tIS_DELD as boolean,\n\t\tUPDTD_AT as string,\n\t\tADF_TIME_STMP as timestamp,\n\t\tADF_RUN_ID as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> StgEquipSchd\nRemoveADFColumns split(isNull(AC_RGSTRN) || iif(isNull(END_TIME), false(), iif(isNull(STRT_TIME), false(), STRT_TIME>END_TIME)),\n\tdisjoint: false) ~> ConditionalSplit1@(Reject, FilteredData)\nStgEquipSchd select(mapColumn(\n\t\tEQP_SCHED_ID,\n\t\tAC_RGSTRN,\n\t\tSTS_CD,\n\t\tSTS_NAME,\n\t\tSTS_DESC,\n\t\tSTRT_TIME,\n\t\tEND_TIME,\n\t\tNOTE,\n\t\tIS_DELD,\n\t\tUPDTD_AT\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> RemoveADFColumns\nConditionalSplit1@Reject derive(REJECT_REASON = \"Data Validation Error\",\n\t\tADF_TIME_STMP = currentTimestamp(),\n\t\tADF_RUN_ID = $run_id) ~> AddADFColumns\nConditionalSplit1@FilteredData derive(ADF_TIME_STMP = currentTimestamp(),\n\t\tADF_RUN_ID = $run_id) ~> AddADFColumns2\nAddADFColumns sink(input(\n\t\tEQP_SCHED_ID as integer,\n\t\tAC_RGSTRN as string,\n\t\tSTS_CD as string,\n\t\tSTS_NAME as string,\n\t\tSTS_DESC as string,\n\t\tSTRT_TIME as timestamp,\n\t\tEND_TIME as timestamp,\n\t\tNOTE as string,\n\t\tIS_DELD as boolean,\n\t\tUPDTD_AT as timestamp,\n\t\tREJECT_REASON as string,\n\t\tADF_TIME_STMP as timestamp,\n\t\tADF_RUN_ID as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> EquipReject\nAddADFColumns2 sink(input(\n\t\tEQP_SCHED_ID as integer,\n\t\tAC_RGSTRN as string,\n\t\tSTS_CD as string,\n\t\tSTS_NAME as string,\n\t\tSTS_DESC as string,\n\t\tSTRT_TIME as timestamp,\n\t\tEND_TIME as timestamp,\n\t\tNOTE as string,\n\t\tIS_DELD as boolean,\n\t\tUPDTD_AT as timestamp,\n\t\tADF_TIME_STMP as timestamp,\n\t\tADF_RUN_ID as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> EquipTest"
 		}
 	}
 }
