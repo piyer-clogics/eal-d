@@ -13,36 +13,40 @@
 		"schema": [
 			{
 				"name": "EQP_SCHED_ID",
-				"type": "smallint",
-				"precision": 5
+				"type": "int",
+				"precision": 10
 			},
 			{
 				"name": "AC_RGSTRN",
-				"type": "varchar"
+				"type": "text"
 			},
 			{
 				"name": "STS_CD",
-				"type": "varchar"
+				"type": "text"
 			},
 			{
 				"name": "STS_NAME",
-				"type": "varchar"
+				"type": "text"
 			},
 			{
 				"name": "STS_DESC",
-				"type": "varchar"
+				"type": "text"
 			},
 			{
 				"name": "STRT_TIME",
-				"type": "varchar"
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
 			},
 			{
 				"name": "END_TIME",
-				"type": "varchar"
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
 			},
 			{
 				"name": "NOTE",
-				"type": "varchar"
+				"type": "text"
 			},
 			{
 				"name": "IS_DELD",
@@ -50,7 +54,9 @@
 			},
 			{
 				"name": "UPDTD_AT",
-				"type": "varchar"
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
 			},
 			{
 				"name": "ADF_TIME_STMP",
@@ -60,7 +66,7 @@
 			},
 			{
 				"name": "ADF_RUN_ID",
-				"type": "varchar"
+				"type": "text"
 			}
 		],
 		"typeProperties": {
