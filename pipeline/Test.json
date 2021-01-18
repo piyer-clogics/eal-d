@@ -93,7 +93,10 @@
 						"referenceName": "equipment_schd",
 						"type": "DataFlowReference",
 						"parameters": {
-							"run_id": "''"
+							"run_id": {
+								"value": "'@{pipeline().RunId}'",
+								"type": "Expression"
+							}
 						}
 					},
 					"compute": {
