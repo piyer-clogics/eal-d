@@ -68,6 +68,40 @@
 					},
 					"traceLevel": "Fine"
 				}
+			},
+			{
+				"name": "equipment_schd",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [
+					{
+						"activity": "flights_delay",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "equipment_schd",
+						"type": "DataFlowReference",
+						"parameters": {
+							"run_id": "''"
+						}
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
 			}
 		],
 		"annotations": []
