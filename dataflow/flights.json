@@ -25,14 +25,14 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "sql_flights_Reject",
+						"referenceName": "sql_flights_rej",
 						"type": "DatasetReference"
 					},
 					"name": "Reject"
 				},
 				{
 					"dataset": {
-						"referenceName": "sql_flights_Test",
+						"referenceName": "sql_flights_acpt",
 						"type": "DatasetReference"
 					},
 					"name": "FlightsTest"

@@ -16,7 +16,7 @@
 				},
 				{
 					"dataset": {
-						"referenceName": "sql_flights_Test",
+						"referenceName": "sql_flights_acpt",
 						"type": "DatasetReference"
 					},
 					"name": "StgFlights"
@@ -25,14 +25,14 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "sql_flights_delay_reject",
+						"referenceName": "sql_flights_delay_rej",
 						"type": "DatasetReference"
 					},
 					"name": "RejectTable"
 				},
 				{
 					"dataset": {
-						"referenceName": "sql_flights_delay_test",
+						"referenceName": "sql_flights_delay_acpt",
 						"type": "DatasetReference"
 					},
 					"name": "FlightsDelay"

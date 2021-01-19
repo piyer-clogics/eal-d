@@ -1,5 +1,5 @@
 {
-	"name": "sql_flights_Test",
+	"name": "sql_flights_acpt",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "eal_sqldb_piyer",
@@ -141,7 +141,7 @@
 		],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "S_FLIGHTS_TEST"
+			"table": "S_FLIGHTS_ACPT"
 		}
 	}
 }

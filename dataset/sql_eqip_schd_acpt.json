@@ -1,5 +1,5 @@
 {
-	"name": "sql_eqip_schd_test",
+	"name": "sql_eqip_schd_acpt",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "eal_sqldb_piyer",
@@ -71,7 +71,7 @@
 		],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "S_EQUIP_SCHD_TEST"
+			"table": "S_EQUIP_SCHD_ACPT"
 		}
 	}
 }

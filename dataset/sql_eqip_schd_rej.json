@@ -1,5 +1,5 @@
 {
-	"name": "sql_eqip_schd_reject",
+	"name": "sql_eqip_schd_rej",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "eal_sqldb_piyer",
@@ -75,7 +75,7 @@
 		],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "S_EQUIP_SCHD_REJECT"
+			"table": "S_EQUIP_SCHD_REJ"
 		}
 	}
 }
