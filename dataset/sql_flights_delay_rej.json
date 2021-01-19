@@ -1,5 +1,5 @@
 {
-	"name": "sql_flights_delay_reject",
+	"name": "sql_flights_delay_rej",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "eal_sqldb_piyer",
@@ -50,7 +50,7 @@
 		],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "S_FLIGHTS_DELAY_REJECT"
+			"table": "S_FLIGHTS_DELAY_REJ"
 		}
 	}
 }
