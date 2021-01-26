@@ -1,0 +1,29 @@
+{
+	"name": "SampleBlob",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ealblobdconnection",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Azure blobs"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "sample.json",
+				"container": "eal-src-stg"
+			}
+		},
+		"schema": {
+			"type": "object",
+			"properties": {
+				"row": {
+					"type": "integer"
+				}
+			}
+		}
+	}
+}
