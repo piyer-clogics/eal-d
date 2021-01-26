@@ -1,0 +1,20 @@
+{
+	"name": "eal_arpt_az_blob",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ealblobdconnection",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Azure blobs"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation"
+			}
+		},
+		"schema": {}
+	}
+}
