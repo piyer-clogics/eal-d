@@ -1,5 +1,5 @@
 {
-	"name": "SampleBlob",
+	"name": "ADF_Control",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ealblobdconnection",
