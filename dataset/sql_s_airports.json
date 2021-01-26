@@ -12,52 +12,62 @@
 		"type": "AzureSqlTable",
 		"schema": [
 			{
-				"name": "Airport_Name",
+				"name": "ARPT_NAME",
 				"type": "nvarchar"
 			},
 			{
-				"name": "City",
+				"name": "ARPT_CITY",
 				"type": "nvarchar"
 			},
 			{
-				"name": "Country",
+				"name": "ARPT_CNTRY",
 				"type": "nvarchar"
 			},
 			{
-				"name": "IATA",
+				"name": "ARPT_IATA_CD",
 				"type": "nvarchar"
 			},
 			{
-				"name": "ICAO",
+				"name": "ARPT_ICAO_CD",
 				"type": "nvarchar"
 			},
 			{
-				"name": "Latitude",
+				"name": "ARPT_LAT",
 				"type": "float",
 				"precision": 15
 			},
 			{
-				"name": "Longitude",
+				"name": "ARPT_LONG",
 				"type": "float",
 				"precision": 15
 			},
 			{
-				"name": "Altitude",
+				"name": "ARPT_ALTD",
 				"type": "smallint",
 				"precision": 5
 			},
 			{
-				"name": "UTC_offset",
+				"name": "ARPT_UTC_OFSET",
 				"type": "float",
 				"precision": 15
 			},
 			{
-				"name": "DST",
+				"name": "ARPT_DST",
 				"type": "nvarchar"
 			},
 			{
-				"name": "Time_Zone",
+				"name": "ARPT_TZONE",
 				"type": "nvarchar"
+			},
+			{
+				"name": "ADF_RUN_ID",
+				"type": "text"
+			},
+			{
+				"name": "ADF_TIME_STMP",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
 			}
 		],
 		"typeProperties": {
