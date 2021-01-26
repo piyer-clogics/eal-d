@@ -12,7 +12,9 @@
 		"type": "Json",
 		"typeProperties": {
 			"location": {
-				"type": "AzureBlobStorageLocation"
+				"type": "AzureBlobStorageLocation",
+				"fileName": "eal_aprt.json",
+				"container": "eal-src-stg"
 			}
 		},
 		"schema": {}
