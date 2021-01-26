@@ -1,0 +1,23 @@
+{
+	"name": "dataflow1",
+	"properties": {
+		"folder": {
+			"name": "Airport"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "eal_arpt_az_blob",
+						"type": "DatasetReference"
+					},
+					"name": "ArptBlob"
+				}
+			],
+			"sinks": [],
+			"transformations": [],
+			"script": "source(output(\n\t\tAirport_Name as string,\n\t\tAltitude as short,\n\t\tCity as string,\n\t\tCountry as string,\n\t\tDST as string,\n\t\tIATA as string,\n\t\tICAO as string,\n\t\tLatitude as double,\n\t\tLongitude as double,\n\t\tTime_Zone as string,\n\t\tUTC_offset as double\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tdocumentForm: 'documentPerLine') ~> ArptBlob"
+		}
+	}
+}
