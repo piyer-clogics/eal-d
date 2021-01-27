@@ -60,6 +60,10 @@
 				"type": "nvarchar"
 			},
 			{
+				"name": "LAST_UPDT_DT",
+				"type": "date"
+			},
+			{
 				"name": "ADF_RUN_ID",
 				"type": "text"
 			},
