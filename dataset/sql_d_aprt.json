@@ -1,0 +1,19 @@
+{
+	"name": "sql_d_aprt",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "eal_sqldb_piyer",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Destination Table/Prod"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "D_ARPT"
+		}
+	}
+}
