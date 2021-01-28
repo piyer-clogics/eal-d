@@ -1,5 +1,5 @@
 {
-	"name": "eal_arpt_daily_load",
+	"name": "eal_stg_arpt_daily_load",
 	"properties": {
 		"activities": [
 			{
@@ -45,6 +45,9 @@
 				]
 			}
 		],
+		"folder": {
+			"name": "Airport"
+		},
 		"annotations": []
 	}
 }
