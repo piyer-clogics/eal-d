@@ -19,10 +19,7 @@
 						"referenceName": "d_daily_load",
 						"type": "DataFlowReference",
 						"parameters": {
-							"dt": {
-								"value": "'@{variables('dt')}'",
-								"type": "Expression"
-							}
+							"dt": "'2021-01-27'"
 						}
 					},
 					"compute": {
@@ -35,7 +32,8 @@
 		],
 		"variables": {
 			"dt": {
-				"type": "String"
+				"type": "String",
+				"defaultValue": "'2021-01-27'"
 			}
 		},
 		"folder": {
