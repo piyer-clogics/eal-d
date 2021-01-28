@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Call d_daily_load",
+				"name": "Call d_daily_load_Update",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [],
 				"policy": {
@@ -17,6 +17,40 @@
 				"typeProperties": {
 					"dataflow": {
 						"referenceName": "d_daily_load_update",
+						"type": "DataFlowReference",
+						"parameters": {
+							"dt": "'2021-01-27'"
+						}
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			},
+			{
+				"name": "Call d_daily_load_Insert",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [
+					{
+						"activity": "Call d_daily_load_Update",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "d_daily_load_insert",
 						"type": "DataFlowReference",
 						"parameters": {
 							"dt": "'2021-01-27'"
