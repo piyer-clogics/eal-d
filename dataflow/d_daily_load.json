@@ -1,0 +1,37 @@
+{
+	"name": "d_daily_load",
+	"properties": {
+		"folder": {
+			"name": "Airport"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "sql_s_airports",
+						"type": "DatasetReference"
+					},
+					"name": "StgArpt"
+				},
+				{
+					"dataset": {
+						"referenceName": "eal_adf_cntrl",
+						"type": "DatasetReference"
+					},
+					"name": "ADFControl"
+				}
+			],
+			"sinks": [],
+			"transformations": [
+				{
+					"name": "FilterJobName"
+				},
+				{
+					"name": "Lookup1"
+				}
+			],
+			"script": "source(output(\n\t\tARPT_NAME as string,\n\t\tARPT_CITY as string,\n\t\tARPT_CNTRY as string,\n\t\tARPT_IATA_CD as string,\n\t\tARPT_ICAO_CD as string,\n\t\tARPT_LAT as double,\n\t\tARPT_LONG as double,\n\t\tARPT_ALTD as integer,\n\t\tARPT_UTC_OFSET as double,\n\t\tARPT_DST as string,\n\t\tARPT_TZONE as string,\n\t\tLAST_UPDT_DT as date,\n\t\tADF_RUN_ID as string,\n\t\tADF_TIME_STMP as timestamp\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> StgArpt\nsource(output(\n\t\tADF_RUN_ID as string,\n\t\tADF_JOB_NAME as string,\n\t\tADF_SUC_TS as timestamp\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> ADFControl\nADFControl filter(ADF_JOB_NAME == 'eal_stg_arpt_history_load') ~> FilterJobName\nStgArpt, FilterJobName lookup(ERROR_FUNCTION('') == ERROR_FUNCTION(''),\n\tmultiple: false,\n\tpickup: 'any',\n\tbroadcast: 'auto')~> Lookup1"
+		}
+	}
+}
