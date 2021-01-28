@@ -1,0 +1,15 @@
+{
+	"name": "d_histiry_load",
+	"properties": {
+		"folder": {
+			"name": "Airport"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [],
+			"sinks": [],
+			"transformations": [],
+			"script": ""
+		}
+	}
+}

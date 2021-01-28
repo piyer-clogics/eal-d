@@ -1,5 +1,5 @@
 {
-	"name": "history_load",
+	"name": "stg_history_load",
 	"properties": {
 		"folder": {
 			"name": "Airport"
