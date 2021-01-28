@@ -62,7 +62,7 @@
 						"parameters": {
 							"dt": "'2021-01-27'",
 							"row_num": {
-								"value": "@variables('row_num')",
+								"value": "@int(variables('row_num'))",
 								"type": "Expression"
 							}
 						}
@@ -115,7 +115,7 @@
 				"typeProperties": {
 					"variableName": "row_num",
 					"value": {
-						"value": "@string(activity('Get Net Row Number').output['value']['row'])",
+						"value": "@string(activity('Get Net Row Number').output['value'][0]['row'])",
 						"type": "Expression"
 					}
 				}
