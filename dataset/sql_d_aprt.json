@@ -17,11 +17,15 @@
 				"precision": 10
 			},
 			{
-				"name": "ARPT_NAME",
+				"name": "ARPT_IATA_CD",
 				"type": "varchar"
 			},
 			{
-				"name": "ARPT_CITY",
+				"name": "ARPT_ICAO_CD",
+				"type": "varchar"
+			},
+			{
+				"name": "ARPT_NAME",
 				"type": "varchar"
 			},
 			{
@@ -29,11 +33,7 @@
 				"type": "varchar"
 			},
 			{
-				"name": "ARPT_IATA_CD",
-				"type": "varchar"
-			},
-			{
-				"name": "ARPT_ICAO_CD",
+				"name": "ARPT_CITY",
 				"type": "varchar"
 			},
 			{
@@ -61,7 +61,7 @@
 				"scale": 2
 			},
 			{
-				"name": "ARPT_DST",
+				"name": "ARPT_DST_CD",
 				"type": "varchar"
 			},
 			{
