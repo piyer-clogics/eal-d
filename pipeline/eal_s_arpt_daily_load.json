@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "d_daily_load",
+						"referenceName": "d_daily_load_update",
 						"type": "DataFlowReference",
 						"parameters": {
 							"dt": "'2021-01-27'"
