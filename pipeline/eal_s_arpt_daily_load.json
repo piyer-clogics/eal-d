@@ -7,7 +7,7 @@
 				"type": "ExecuteDataFlow",
 				"dependsOn": [
 					{
-						"activity": "Set variable Row Number",
+						"activity": "Set variable Last Updated Date",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -26,7 +26,10 @@
 						"referenceName": "d_daily_load_update",
 						"type": "DataFlowReference",
 						"parameters": {
-							"dt": "'2021-01-27'"
+							"dt": {
+								"value": "'@{variables('dt')}'",
+								"type": "Expression"
+							}
 						}
 					},
 					"compute": {
@@ -75,7 +78,7 @@
 				}
 			},
 			{
-				"name": "Get Net Row Number",
+				"name": "Get Last Row Number",
 				"type": "Lookup",
 				"dependsOn": [],
 				"policy": {
@@ -105,7 +108,7 @@
 				"type": "SetVariable",
 				"dependsOn": [
 					{
-						"activity": "Get Net Row Number",
+						"activity": "Get Last Row Number",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -115,7 +118,7 @@
 				"typeProperties": {
 					"variableName": "row_num",
 					"value": {
-						"value": "@string(activity('Get Net Row Number').output['value'][0]['row'])",
+						"value": "@string(activity('Get Last Row Number').output['value'][0]['row'])",
 						"type": "Expression"
 					}
 				}
@@ -123,7 +126,14 @@
 			{
 				"name": "Get Last Updated Date",
 				"type": "Lookup",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "Set variable Row Number",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"policy": {
 					"timeout": "7.00:00:00",
 					"retry": 0,
@@ -135,13 +145,15 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
+						"sqlReaderQuery": "SELECT \n [ADF_SUC_TS]\n  FROM [dbo].[S_ADF_CNTRL] where ADF_JOB_NAME = 'eal_s_arpt_load'",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
 					"dataset": {
 						"referenceName": "eal_adf_cntrl",
 						"type": "DatasetReference"
-					}
+					},
+					"firstRowOnly": false
 				}
 			},
 			{
@@ -180,6 +192,26 @@
 						"computeType": "General"
 					},
 					"traceLevel": "Fine"
+				}
+			},
+			{
+				"name": "Set variable Last Updated Date",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Get Last Updated Date",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "dt",
+					"value": {
+						"value": "@string(activity('Get Last Updated Date').output['value'][0]['ADF_SUC_TS'])",
+						"type": "Expression"
+					}
 				}
 			}
 		],
