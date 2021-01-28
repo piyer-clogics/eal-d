@@ -22,19 +22,30 @@
 					"name": "DARPT"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "sql_d_aprt",
+						"type": "DatasetReference"
+					},
+					"name": "WriteUpdates"
+				}
+			],
 			"transformations": [
 				{
 					"name": "GetLastestData"
 				},
 				{
-					"name": "Exists1"
+					"name": "GetUpdatedRows"
 				},
 				{
-					"name": "Exists2"
+					"name": "GetNewRows"
+				},
+				{
+					"name": "AlterRow1"
 				}
 			],
-			"script": "parameters{\n\tdt as string ('')\n}\nsource(output(\n\t\tARPT_NAME as string,\n\t\tARPT_CITY as string,\n\t\tARPT_CNTRY as string,\n\t\tARPT_IATA_CD as string,\n\t\tARPT_ICAO_CD as string,\n\t\tARPT_LAT as double,\n\t\tARPT_LONG as double,\n\t\tARPT_ALTD as integer,\n\t\tARPT_UTC_OFSET as double,\n\t\tARPT_DST as string,\n\t\tARPT_TZONE as string,\n\t\tLAST_UPDT_DT as date,\n\t\tADF_RUN_ID as string,\n\t\tADF_TIME_STMP as timestamp\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> StgArpt\nsource(output(\n\t\tARPT_ID as integer,\n\t\tARPT_IATA_CD as string,\n\t\tARPT_ICAO_CD as string,\n\t\tARPT_NAME as string,\n\t\tARPT_CNTRY as string,\n\t\tARPT_CITY as string,\n\t\tARPT_LAT as decimal(8,6),\n\t\tARPT_LONG as decimal(9,6),\n\t\tARPT_ALTD as decimal(6,2),\n\t\tARPT_UTC_OFSET as decimal(2,2),\n\t\tARPT_DST_CD as string,\n\t\tARPT_TZONE as string,\n\t\tEFF_STRT_DT as timestamp,\n\t\tEFF_END_DT as timestamp,\n\t\tACTV_IND as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> DARPT\nStgArpt filter(toTimestamp(LAST_UPDT_DT) > toTimestamp($dt) ) ~> GetLastestData\nExists2 exists(negate:false,\n\tbroadcast: 'auto')~> Exists1\nDARPT exists(negate:false,\n\tbroadcast: 'auto')~> Exists2"
+			"script": "parameters{\n\tdt as date (toDate('2021-01-27'))\n}\nsource(output(\n\t\tARPT_NAME as string,\n\t\tARPT_CITY as string,\n\t\tARPT_CNTRY as string,\n\t\tARPT_IATA_CD as string,\n\t\tARPT_ICAO_CD as string,\n\t\tARPT_LAT as double,\n\t\tARPT_LONG as double,\n\t\tARPT_ALTD as integer,\n\t\tARPT_UTC_OFSET as double,\n\t\tARPT_DST as string,\n\t\tARPT_TZONE as string,\n\t\tLAST_UPDT_DT as date,\n\t\tADF_RUN_ID as string,\n\t\tADF_TIME_STMP as timestamp\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> StgArpt\nsource(output(\n\t\tARPT_ID as integer,\n\t\tARPT_IATA_CD as string,\n\t\tARPT_ICAO_CD as string,\n\t\tARPT_NAME as string,\n\t\tARPT_CNTRY as string,\n\t\tARPT_CITY as string,\n\t\tARPT_LAT as decimal(8,6),\n\t\tARPT_LONG as decimal(9,6),\n\t\tARPT_ALTD as decimal(6,2),\n\t\tARPT_UTC_OFSET as decimal(2,2),\n\t\tARPT_DST_CD as string,\n\t\tARPT_TZONE as string,\n\t\tEFF_STRT_DT as timestamp,\n\t\tEFF_END_DT as timestamp,\n\t\tACTV_IND as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> DARPT\nStgArpt filter(LAST_UPDT_DT > $dt) ~> GetLastestData\nDARPT, GetLastestData exists(DARPT@ARPT_IATA_CD == StgArpt@ARPT_IATA_CD || DARPT@ARPT_ICAO_CD ==StgArpt@ARPT_ICAO_CD,\n\tnegate:false,\n\tbroadcast: 'auto')~> GetUpdatedRows\nGetLastestData, DARPT exists(DARPT@ARPT_IATA_CD == StgArpt@ARPT_IATA_CD || DARPT@ARPT_ICAO_CD ==StgArpt@ARPT_ICAO_CD,\n\tnegate:true,\n\tbroadcast: 'auto')~> GetNewRows\nGetUpdatedRows alterRow(updateIf(ACTV_IND == 'Y')) ~> AlterRow1\nAlterRow1 sink(input(\n\t\tARPT_ID as integer,\n\t\tARPT_IATA_CD as string,\n\t\tARPT_ICAO_CD as string,\n\t\tARPT_NAME as string,\n\t\tARPT_CNTRY as string,\n\t\tARPT_CITY as string,\n\t\tARPT_LAT as decimal(8,6),\n\t\tARPT_LONG as decimal(9,6),\n\t\tARPT_ALTD as decimal(6,2),\n\t\tARPT_UTC_OFSET as decimal(2,2),\n\t\tARPT_DST_CD as string,\n\t\tARPT_TZONE as string,\n\t\tEFF_STRT_DT as timestamp,\n\t\tEFF_END_DT as timestamp,\n\t\tACTV_IND as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:false,\n\tupdateable:false,\n\tupsertable:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> WriteUpdates"
 		}
 	}
 }
