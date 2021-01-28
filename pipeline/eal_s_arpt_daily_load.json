@@ -3,42 +3,9 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Lookup last updated date",
-				"type": "Lookup",
-				"dependsOn": [],
-				"policy": {
-					"timeout": "7.00:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"source": {
-						"type": "AzureSqlSource",
-						"sqlReaderQuery": "SELECT ADF_SUC_TS FROM [S_ADF_CNTRL] where ADF_JOB_NAME = 'eal_stg_arpt_history_load'",
-						"queryTimeout": "02:00:00",
-						"partitionOption": "None"
-					},
-					"dataset": {
-						"referenceName": "eal_adf_cntrl",
-						"type": "DatasetReference"
-					},
-					"firstRowOnly": true
-				}
-			},
-			{
 				"name": "Call d_daily_load",
 				"type": "ExecuteDataFlow",
-				"dependsOn": [
-					{
-						"activity": "Set variable dt",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
+				"dependsOn": [],
 				"policy": {
 					"timeout": "7.00:00:00",
 					"retry": 0,
@@ -63,26 +30,6 @@
 						"computeType": "General"
 					},
 					"traceLevel": "Fine"
-				}
-			},
-			{
-				"name": "Set variable dt",
-				"type": "SetVariable",
-				"dependsOn": [
-					{
-						"activity": "Lookup last updated date",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"userProperties": [],
-				"typeProperties": {
-					"variableName": "dt",
-					"value": {
-						"value": "@activity('Lookup1').output",
-						"type": "Expression"
-					}
 				}
 			}
 		],
