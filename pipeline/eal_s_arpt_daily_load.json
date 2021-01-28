@@ -89,14 +89,15 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "select max(ARPT_ID) FROM [dbo].[D_ARPT]",
+						"sqlReaderQuery": "select max(ARPT_ID) as row FROM [dbo].[D_ARPT]",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
 					"dataset": {
 						"referenceName": "sql_d_aprt",
 						"type": "DatasetReference"
-					}
+					},
+					"firstRowOnly": false
 				}
 			},
 			{
@@ -114,7 +115,7 @@
 				"typeProperties": {
 					"variableName": "row_num",
 					"value": {
-						"value": "@activity('Get Net Row Number').output",
+						"value": "@string(activity('Get Net Row Number').output['row'])",
 						"type": "Expression"
 					}
 				}
