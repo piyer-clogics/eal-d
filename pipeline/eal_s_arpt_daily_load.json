@@ -115,7 +115,7 @@
 				"typeProperties": {
 					"variableName": "row_num",
 					"value": {
-						"value": "@string(activity('Get Net Row Number').output['row'])",
+						"value": "@string(activity('Get Net Row Number').output['value']['row'])",
 						"type": "Expression"
 					}
 				}
