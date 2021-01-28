@@ -7,7 +7,7 @@
 				"type": "ExecuteDataFlow",
 				"dependsOn": [
 					{
-						"activity": "Set variable1",
+						"activity": "Set variable Row Number",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -100,7 +100,7 @@
 				}
 			},
 			{
-				"name": "Set variable1",
+				"name": "Set variable Row Number",
 				"type": "SetVariable",
 				"dependsOn": [
 					{
