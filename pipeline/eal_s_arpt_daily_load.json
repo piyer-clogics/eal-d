@@ -119,6 +119,68 @@
 						"type": "Expression"
 					}
 				}
+			},
+			{
+				"name": "Get Last Updated Date",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "eal_adf_cntrl",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "Update Control Table",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [
+					{
+						"activity": "Call d_daily_load_Insert",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "adf_control",
+						"type": "DataFlowReference",
+						"parameters": {
+							"run_id": {
+								"value": "'@{pipeline().RunId}'",
+								"type": "Expression"
+							},
+							"adf_name": "'eal_s_arpt_load'"
+						}
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
 			}
 		],
 		"variables": {
