@@ -1,5 +1,5 @@
 {
-	"name": "eal_arpt_history_load",
+	"name": "eal_stg_arpt_history_load",
 	"properties": {
 		"activities": [
 			{
@@ -65,7 +65,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "history_load",
+						"referenceName": "stg_history_load",
 						"type": "DataFlowReference",
 						"parameters": {
 							"run_id": {
@@ -127,6 +127,9 @@
 				}
 			}
 		],
+		"folder": {
+			"name": "Airport"
+		},
 		"annotations": []
 	}
 }
