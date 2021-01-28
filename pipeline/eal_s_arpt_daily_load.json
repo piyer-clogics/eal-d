@@ -26,10 +26,7 @@
 						"referenceName": "d_daily_load_update",
 						"type": "DataFlowReference",
 						"parameters": {
-							"dt": {
-								"value": "'@{variables('row_num')}'",
-								"type": "Expression"
-							}
+							"dt": "'2021-01-27'"
 						}
 					},
 					"compute": {
@@ -63,7 +60,11 @@
 						"referenceName": "d_daily_load_insert",
 						"type": "DataFlowReference",
 						"parameters": {
-							"dt": "'2021-01-27'"
+							"dt": "'2021-01-27'",
+							"row_num": {
+								"value": "@variables('row_num')",
+								"type": "Expression"
+							}
 						}
 					},
 					"compute": {
