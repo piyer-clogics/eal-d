@@ -9,7 +9,7 @@
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "eal_arpt_az_blob",
+						"referenceName": "sql_bdavis_test_arpt",
 						"type": "DatasetReference"
 					},
 					"name": "Blob"
@@ -28,7 +28,7 @@
 					"name": "Lookup1"
 				}
 			],
-			"script": "source(output(\n\t\tAirport_Name as string,\n\t\tAltitude as short,\n\t\tCity as string,\n\t\tCountry as string,\n\t\tDST as string,\n\t\tIATA as string,\n\t\tICAO as string,\n\t\tLatitude as double,\n\t\tLongitude as double,\n\t\tTime_Zone as string,\n\t\tUTC_offset as double\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tdocumentForm: 'documentPerLine') ~> Blob\nsource(output(\n\t\tADF_RUN_ID as string,\n\t\tADF_JOB_NAME as string,\n\t\tADF_SUC_TS as timestamp\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> ADFControl\nBlob, ADFControl lookup(ERROR_FUNCTION('') > ERROR_FUNCTION(''),\n\tmultiple: false,\n\tpickup: 'any',\n\tbroadcast: 'auto')~> Lookup1"
+			"script": "source(output(\n\t\tARPT_NAME as string,\n\t\tARPT_CITY as string,\n\t\tARPT_CNTRY as string,\n\t\tARPT_IATA_CD as string,\n\t\tARPT_ICAO_CD as string,\n\t\tARPT_LAT as double,\n\t\tARPT_LONG as double,\n\t\tARPT_ALTD as short,\n\t\tARPT_UTC_OFSET as double,\n\t\tARPT_DST as string,\n\t\tARPT_TZONE as string,\n\t\tLAST_UPDT_DT as date\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> Blob\nsource(output(\n\t\tADF_RUN_ID as string,\n\t\tADF_JOB_NAME as string,\n\t\tADF_SUC_TS as timestamp\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> ADFControl\nBlob, ADFControl lookup(ERROR_FUNCTION('') > ERROR_FUNCTION(''),\n\tmultiple: false,\n\tpickup: 'any',\n\tbroadcast: 'auto')~> Lookup1"
 		}
 	}
 }
