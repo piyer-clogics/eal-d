@@ -1,0 +1,9 @@
+{
+	"name": "eal_s_arpt_history_load",
+	"properties": {
+		"folder": {
+			"name": "Airport"
+		},
+		"annotations": []
+	}
+}
