@@ -1,5 +1,5 @@
 {
-	"name": "daily_load",
+	"name": "stg_daily_load",
 	"properties": {
 		"folder": {
 			"name": "Airport"
