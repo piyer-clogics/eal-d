@@ -1,0 +1,197 @@
+{
+	"name": "eal_stg_flights_load",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy data from postgresql to blob",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "JsonSink",
+						"storeSettings": {
+							"type": "AzureBlobStorageWriteSettings"
+						},
+						"formatSettings": {
+							"type": "JsonWriteSettings"
+						}
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "sql_bdavis_test_arpt",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "eal_arpt_az_blob",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "Write Data to Staging",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [
+					{
+						"activity": "Set variable date",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "stg_history_load",
+						"type": "DataFlowReference",
+						"parameters": {
+							"run_id": {
+								"value": "'@{pipeline().RunId}'",
+								"type": "Expression"
+							},
+							"adf_name": {
+								"value": "'@{pipeline().Pipeline}'",
+								"type": "Expression"
+							},
+							"date": {
+								"value": "'@{variables('date')}'",
+								"type": "Expression"
+							}
+						}
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			},
+			{
+				"name": "Update Control Table",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [
+					{
+						"activity": "Write Data to Staging",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "adf_control",
+						"type": "DataFlowReference",
+						"parameters": {
+							"run_id": {
+								"value": "'@{pipeline().RunId}'",
+								"type": "Expression"
+							},
+							"adf_name": {
+								"value": "'@{pipeline().Pipeline}'",
+								"type": "Expression"
+							}
+						}
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			},
+			{
+				"name": "Get Last Updated Date",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Copy data from postgresql to blob",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "SELECT [ADF_SUC_TS]\n  FROM [dbo].[S_ADF_CNTRL] where ADF_JOB_NAME = 'eal_stg_arpt_load'",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "eal_adf_cntrl",
+						"type": "DatasetReference"
+					},
+					"firstRowOnly": false
+				}
+			},
+			{
+				"name": "Set variable date",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Get Last Updated Date",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "date",
+					"value": {
+						"value": "@string(activity('Get Last Updated Date').output['value'][0]['ADF_SUC_TS'])",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"variables": {
+			"date": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "Flights"
+		},
+		"annotations": []
+	}
+}
