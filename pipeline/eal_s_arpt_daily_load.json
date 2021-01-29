@@ -63,7 +63,10 @@
 						"referenceName": "d_daily_load_insert",
 						"type": "DataFlowReference",
 						"parameters": {
-							"dt": "'2021-01-27'",
+							"dt": {
+								"value": "'@{variables('dt')}'",
+								"type": "Expression"
+							},
 							"row_num": {
 								"value": "@int(variables('row_num'))",
 								"type": "Expression"
