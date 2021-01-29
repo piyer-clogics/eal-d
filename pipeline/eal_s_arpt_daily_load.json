@@ -216,12 +216,12 @@
 					},
 					"ifFalseActivities": [
 						{
-							"name": "Set date",
+							"name": "Set Row Count",
 							"type": "SetVariable",
 							"dependsOn": [],
 							"userProperties": [],
 							"typeProperties": {
-								"variableName": "dt",
+								"variableName": "row_num",
 								"value": {
 									"value": "@string(activity('Get Last Row Number').output['value'][0]['row'])",
 									"type": "Expression"
@@ -231,12 +231,12 @@
 					],
 					"ifTrueActivities": [
 						{
-							"name": "Set Date",
+							"name": "Set Row Count as 0",
 							"type": "SetVariable",
 							"dependsOn": [],
 							"userProperties": [],
 							"typeProperties": {
-								"variableName": "dt",
+								"variableName": "row_num",
 								"value": {
 									"value": "@string('0')",
 									"type": "Expression"
