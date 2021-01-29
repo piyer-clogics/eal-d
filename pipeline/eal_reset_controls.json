@@ -15,6 +15,13 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
+					"dataflow": {
+						"referenceName": "adf_reset_dataflow",
+						"type": "DataFlowReference",
+						"parameters": {
+							"job_name": "''"
+						}
+					},
 					"compute": {
 						"coreCount": 8,
 						"computeType": "General"
