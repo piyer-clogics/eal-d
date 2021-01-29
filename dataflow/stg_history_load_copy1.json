@@ -1,0 +1,48 @@
+{
+	"name": "stg_history_load_copy1",
+	"properties": {
+		"folder": {
+			"name": "Flights"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "eal_az_flights",
+						"type": "DatasetReference"
+					},
+					"name": "FlightsBlob"
+				},
+				{
+					"dataset": {
+						"referenceName": "eal_az_flights_delay",
+						"type": "DatasetReference"
+					},
+					"name": "FlightsDelayBlob"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "sql_s_airports",
+						"type": "DatasetReference"
+					},
+					"name": "StgAirports"
+				}
+			],
+			"transformations": [
+				{
+					"name": "AddADFColumns"
+				},
+				{
+					"name": "FilterByDate"
+				},
+				{
+					"name": "JoinTables"
+				}
+			],
+			"script": "parameters{\n\trun_id as string (''),\n\tdate as string ('1899-01-01 00:00:00.000')\n}\nsource(output(\n\t\tflight_id as string,\n\t\tflight_number as string,\n\t\tflight_date as string,\n\t\taircraft_registration_number as string,\n\t\taircraft_type as string,\n\t\tscheduled_departure as string,\n\t\tscheduled_arrival as string,\n\t\testimated_departure as string,\n\t\testimated_arrival as string,\n\t\tactual_oooi_out as string,\n\t\tactual_oooi_off as string,\n\t\tactual_oooi_on as string,\n\t\tactual_oooi_in as string,\n\t\tbase_airport as string,\n\t\tscheduled_departure_airport as string,\n\t\tscheduled_arrival_airport as string,\n\t\tactual_departure_airport as string,\n\t\tactual_arrival_airport as string,\n\t\tis_verified as boolean,\n\t\tnotes as string,\n\t\tis_canceled as boolean,\n\t\tflight_type as string,\n\t\tcargo_weight as string,\n\t\tfuel_out as string,\n\t\tfuel_in as string,\n\t\tfuel_uplift as string,\n\t\tmaint_log_page as string,\n\t\tupdated_at as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tdocumentForm: 'documentPerLine') ~> FlightsBlob\nsource(output(\n\t\tdelay_code as string,\n\t\tdelay_code_name as string,\n\t\tdelay_type as string,\n\t\tduration_mins as short,\n\t\tflight_id as short\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tdocumentForm: 'documentPerLine') ~> FlightsDelayBlob\nFilterByDate derive(ADF_RUN_ID = $run_id,\n\t\tADF_TIME_STMP = currentTimestamp()) ~> AddADFColumns\nJoinTables filter(toDate(updated_at)  > toDate($date)) ~> FilterByDate\nFlightsBlob, FlightsDelayBlob join(FlightsBlob@flight_id == toString(FlightsDelayBlob@flight_id) ,\n\tjoinType:'left',\n\tbroadcast: 'auto')~> JoinTables\nAddADFColumns sink(input(\n\t\tARPT_NAME as string,\n\t\tARPT_CITY as string,\n\t\tARPT_CNTRY as string,\n\t\tARPT_IATA_CD as string,\n\t\tARPT_ICAO_CD as string,\n\t\tARPT_LAT as double,\n\t\tARPT_LONG as double,\n\t\tARPT_ALTD as integer,\n\t\tARPT_UTC_OFSET as double,\n\t\tARPT_DST as string,\n\t\tARPT_TZONE as string,\n\t\tLAST_UPDT_DT as date,\n\t\tADF_RUN_ID as string,\n\t\tADF_TIME_STMP as timestamp\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\ttruncate:true,\n\tformat: 'table',\n\tmapColumn(\n\t\tARPT_NAME,\n\t\tARPT_CITY,\n\t\tARPT_CNTRY,\n\t\tARPT_IATA_CD,\n\t\tARPT_ICAO_CD,\n\t\tARPT_LAT,\n\t\tARPT_LONG,\n\t\tARPT_ALTD,\n\t\tARPT_UTC_OFSET,\n\t\tARPT_DST,\n\t\tARPT_TZONE,\n\t\tLAST_UPDT_DT,\n\t\tADF_RUN_ID,\n\t\tADF_TIME_STMP\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> StgAirports"
+		}
+	}
+}
