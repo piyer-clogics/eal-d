@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Copy data from postgresql to blob",
+				"name": "Copy flights table from postgresql to blob",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
@@ -16,9 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"source": {
-						"type": "AzureSqlSource",
-						"queryTimeout": "02:00:00",
-						"partitionOption": "None"
+						"type": "PostgreSqlSource"
 					},
 					"sink": {
 						"type": "JsonSink",
@@ -33,7 +31,7 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "sql_bdavis_test_arpt",
+						"referenceName": "eal_postgresql_flights_db",
 						"type": "DatasetReference"
 					}
 				],
@@ -70,10 +68,6 @@
 						"parameters": {
 							"run_id": {
 								"value": "'@{pipeline().RunId}'",
-								"type": "Expression"
-							},
-							"adf_name": {
-								"value": "'@{pipeline().Pipeline}'",
 								"type": "Expression"
 							},
 							"date": {
@@ -135,7 +129,7 @@
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "Copy data from postgresql to blob",
+						"activity": "Copy flights delay table from postgresql to blob",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -152,7 +146,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "SELECT [ADF_SUC_TS]\n  FROM [dbo].[S_ADF_CNTRL] where ADF_JOB_NAME = 'eal_stg_arpt_load'",
+						"sqlReaderQuery": "SELECT [ADF_SUC_TS]\n  FROM [dbo].[S_ADF_CNTRL] where ADF_JOB_NAME = 'eal_stg_flights_load'",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
@@ -181,6 +175,29 @@
 						"value": "@string(activity('Get Last Updated Date').output['value'][0]['ADF_SUC_TS'])",
 						"type": "Expression"
 					}
+				}
+			},
+			{
+				"name": "Copy flights delay table from postgresql to blob",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Copy flights table from postgresql to blob",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"enableStaging": false
 				}
 			}
 		],
