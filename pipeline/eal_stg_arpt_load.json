@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Copy data from postgresql to blob",
+				"name": "Copy data from BDAVIS to blob",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
@@ -72,10 +72,6 @@
 								"value": "'@{pipeline().RunId}'",
 								"type": "Expression"
 							},
-							"adf_name": {
-								"value": "'@{pipeline().Pipeline}'",
-								"type": "Expression"
-							},
 							"date": {
 								"value": "'@{variables('date')}'",
 								"type": "Expression"
@@ -135,7 +131,7 @@
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "Copy data from postgresql to blob",
+						"activity": "Copy data from BDAVIS to blob",
 						"dependencyConditions": [
 							"Succeeded"
 						]
