@@ -45,11 +45,11 @@
 				]
 			},
 			{
-				"name": "Write Data",
+				"name": "Write Data to Staging",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [
 					{
-						"activity": "Set variable1",
+						"activity": "Set variable date",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -94,7 +94,7 @@
 				"type": "ExecuteDataFlow",
 				"dependsOn": [
 					{
-						"activity": "Write Data",
+						"activity": "Write Data to Staging",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -164,7 +164,7 @@
 				}
 			},
 			{
-				"name": "Set variable1",
+				"name": "Set variable date",
 				"type": "SetVariable",
 				"dependsOn": [
 					{
