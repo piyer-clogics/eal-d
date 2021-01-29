@@ -211,7 +211,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"expression": {
-						"value": "@empty(activity('Get Last Row Number').output['value'][0]['row'])",
+						"value": "@equals(activity('Get Last Row Number').output['value'][0]['row'],NULL)",
 						"type": "Expression"
 					},
 					"ifFalseActivities": [
