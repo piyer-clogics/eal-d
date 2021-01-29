@@ -1,0 +1,38 @@
+{
+	"name": "dataflow1",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "eal_adf_cntrl",
+						"type": "DatasetReference"
+					},
+					"name": "GetControls"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "eal_adf_cntrl",
+						"type": "DatasetReference"
+					},
+					"name": "WriteResetDate"
+				}
+			],
+			"transformations": [
+				{
+					"name": "AlterRow"
+				},
+				{
+					"name": "FilterJob"
+				},
+				{
+					"name": "ResetDate"
+				}
+			],
+			"script": "parameters{\n\tjob_name as string ('')\n}\nsource(output(\n\t\tADF_RUN_ID as string,\n\t\tADF_JOB_NAME as string,\n\t\tADF_SUC_TS as timestamp\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> GetControls\nResetDate alterRow(updateIf(ADF_JOB_NAME == $job_name)) ~> AlterRow\nGetControls filter(ADF_JOB_NAME == $job_name) ~> FilterJob\nFilterJob derive(Date = '1899-01-01 00:00:00.000',\n\t\tid = '') ~> ResetDate\nAlterRow sink(input(\n\t\tADF_RUN_ID as string,\n\t\tADF_JOB_NAME as string,\n\t\tADF_SUC_TS as timestamp\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:false,\n\tupdateable:true,\n\tupsertable:false,\n\tkeys:['ADF_JOB_NAME'],\n\tformat: 'table',\n\tmapColumn(\n\t\tADF_RUN_ID = id,\n\t\tADF_JOB_NAME,\n\t\tADF_SUC_TS = Date\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> WriteResetDate"
+		}
+	}
+}
