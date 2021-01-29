@@ -1,9 +1,0 @@
-{
-	"name": "eal_stg_flights_load",
-	"properties": {
-		"folder": {
-			"name": "Flights"
-		},
-		"annotations": []
-	}
-}
