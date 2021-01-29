@@ -107,31 +107,11 @@
 				}
 			},
 			{
-				"name": "Set variable Row Number",
-				"type": "SetVariable",
-				"dependsOn": [
-					{
-						"activity": "Get Last Row Number",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"userProperties": [],
-				"typeProperties": {
-					"variableName": "row_num",
-					"value": {
-						"value": "@string(activity('Get Last Row Number').output['value'][0]['row'])",
-						"type": "Expression"
-					}
-				}
-			},
-			{
 				"name": "Get Last Updated Date",
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "Set variable Row Number",
+						"activity": "If Condition1",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -215,6 +195,55 @@
 						"value": "@string(activity('Get Last Updated Date').output['value'][0]['ADF_SUC_TS'])",
 						"type": "Expression"
 					}
+				}
+			},
+			{
+				"name": "If Condition1",
+				"type": "IfCondition",
+				"dependsOn": [
+					{
+						"activity": "Get Last Row Number",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@empty(activity('Get Last Row Number').output['value'][0]['row'])",
+						"type": "Expression"
+					},
+					"ifFalseActivities": [
+						{
+							"name": "Set date",
+							"type": "SetVariable",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "dt",
+								"value": {
+									"value": "@string(activity('Get Last Row Number').output['value'][0]['row'])",
+									"type": "Expression"
+								}
+							}
+						}
+					],
+					"ifTrueActivities": [
+						{
+							"name": "Set Date",
+							"type": "SetVariable",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "dt",
+								"value": {
+									"value": "@string('0')",
+									"type": "Expression"
+								}
+							}
+						}
+					]
 				}
 			}
 		],
