@@ -23,7 +23,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "d_daily_load_update",
+						"referenceName": "d_arpt_daily_load_update",
 						"type": "DataFlowReference",
 						"parameters": {
 							"dt": {
@@ -60,7 +60,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "d_daily_load_insert",
+						"referenceName": "d_arpt_daily_load_insert",
 						"type": "DataFlowReference",
 						"parameters": {
 							"dt": {

@@ -53,7 +53,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "flights",
+						"referenceName": "stg_flights_load",
 						"type": "DataFlowReference",
 						"parameters": {
 							"run_id": {

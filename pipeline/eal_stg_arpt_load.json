@@ -65,7 +65,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "stg_history_load",
+						"referenceName": "s_arpt_load",
 						"type": "DataFlowReference",
 						"parameters": {
 							"run_id": {

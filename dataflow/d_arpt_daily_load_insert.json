@@ -1,5 +1,5 @@
 {
-	"name": "d_daily_load_insert",
+	"name": "d_arpt_daily_load_insert",
 	"properties": {
 		"folder": {
 			"name": "Airport"
