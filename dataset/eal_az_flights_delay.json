@@ -17,6 +17,25 @@
 				"container": "eal-src-stg"
 			}
 		},
-		"schema": {}
+		"schema": {
+			"type": "object",
+			"properties": {
+				"flight_id": {
+					"type": "integer"
+				},
+				"delay_type": {
+					"type": "string"
+				},
+				"duration_mins": {
+					"type": "integer"
+				},
+				"delay_code": {
+					"type": "string"
+				},
+				"delay_code_name": {
+					"type": "string"
+				}
+			}
+		}
 	}
 }
