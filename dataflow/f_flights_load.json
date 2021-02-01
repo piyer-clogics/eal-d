@@ -6,10 +6,18 @@
 		},
 		"type": "MappingDataFlow",
 		"typeProperties": {
-			"sources": [],
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "sql_flights",
+						"type": "DatasetReference"
+					},
+					"name": "StagingFlights"
+				}
+			],
 			"sinks": [],
 			"transformations": [],
-			"script": ""
+			"script": "source(output(\n\t\tACTL_ARRVL_AIR_PORT as string,\n\t\tACTL_DPTR_AIR_PORT as string,\n\t\tACTL_OOOI_IN as timestamp,\n\t\tACTL_OOOI_OFF as timestamp,\n\t\tACTL_OOOI_ON as timestamp,\n\t\tACTL_OOOI_OUT as timestamp,\n\t\tAIR_CRAFT_RGSTRN_NUM as string,\n\t\tAIR_CRAFT_TYPE as string,\n\t\tBASE_AIR_PORT as string,\n\t\tCRGO_WGT as integer,\n\t\tESTD_ARRVL as timestamp,\n\t\tESTD_DPTR as timestamp,\n\t\tFLT_DT as date,\n\t\tFLT_ID as long,\n\t\tFLT_NUM as string,\n\t\tFLT_TYPE as string,\n\t\tFUEL_IN as double,\n\t\tFUEL_OUT as double,\n\t\tFUEL_UPLIFT as integer,\n\t\tIS_CNCLD as boolean,\n\t\tIS_VERFD as boolean,\n\t\tMAINT_LOG_PG as string,\n\t\tNOTES as string,\n\t\tSCHDD_ARRVL as timestamp,\n\t\tSCHDD_ARRVL_AIR_PORT as string,\n\t\tSCHDD_DPTR as timestamp,\n\t\tSCHDD_DPTR_AIR_PORT as string,\n\t\tUPDTD_AT as timestamp,\n\t\tDLAY_TYP as string,\n\t\tDURTN_MNT as integer,\n\t\tDLAY_CD as string,\n\t\tDLAY_CD_NAME as string,\n\t\tADF_TIME_STMP as timestamp,\n\t\tADF_RUN_ID as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> StagingFlights"
 		}
 	}
 }
