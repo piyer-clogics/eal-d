@@ -63,7 +63,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "s_arpt_load",
+						"referenceName": "s_flights_load",
 						"type": "DataFlowReference",
 						"parameters": {
 							"run_id": {
