@@ -1,5 +1,5 @@
 {
-	"name": "stg_flights_load",
+	"name": "s_flights_load",
 	"properties": {
 		"folder": {
 			"name": "Flights"
