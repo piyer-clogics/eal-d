@@ -13,68 +13,81 @@
 		"schema": [
 			{
 				"name": "ACTL_ARRVL_AIR_PORT",
-				"type": "varchar"
+				"type": "text"
 			},
 			{
 				"name": "ACTL_DPTR_AIR_PORT",
-				"type": "varchar"
+				"type": "text"
 			},
 			{
 				"name": "ACTL_OOOI_IN",
-				"type": "varchar"
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
 			},
 			{
 				"name": "ACTL_OOOI_OFF",
-				"type": "varchar"
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
 			},
 			{
 				"name": "ACTL_OOOI_ON",
-				"type": "varchar"
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
 			},
 			{
 				"name": "ACTL_OOOI_OUT",
-				"type": "varchar"
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
 			},
 			{
 				"name": "AIR_CRAFT_RGSTRN_NUM",
-				"type": "varchar"
+				"type": "text"
 			},
 			{
 				"name": "AIR_CRAFT_TYPE",
-				"type": "varchar"
+				"type": "text"
 			},
 			{
 				"name": "BASE_AIR_PORT",
-				"type": "varchar"
+				"type": "text"
 			},
 			{
 				"name": "CRGO_WGT",
-				"type": "varchar"
-			},
-			{
-				"name": "ESTD_ARRVL",
-				"type": "varchar"
-			},
-			{
-				"name": "ESTD_DPTR",
-				"type": "varchar"
-			},
-			{
-				"name": "FLT_DT",
-				"type": "varchar"
-			},
-			{
-				"name": "FLT_ID",
 				"type": "int",
 				"precision": 10
 			},
 			{
+				"name": "ESTD_ARRVL",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "ESTD_DPTR",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "FLT_DT",
+				"type": "date"
+			},
+			{
+				"name": "FLT_ID",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
 				"name": "FLT_NUM",
-				"type": "varchar"
+				"type": "text"
 			},
 			{
 				"name": "FLT_TYPE",
-				"type": "varchar"
+				"type": "text"
 			},
 			{
 				"name": "FUEL_IN",
@@ -101,32 +114,54 @@
 			},
 			{
 				"name": "MAINT_LOG_PG",
+				"type": "text"
+			},
+			{
+				"name": "NOTES",
+				"type": "text"
+			},
+			{
+				"name": "SCHDD_ARRVL",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "SCHDD_ARRVL_AIR_PORT",
+				"type": "text"
+			},
+			{
+				"name": "SCHDD_DPTR",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "SCHDD_DPTR_AIR_PORT",
+				"type": "text"
+			},
+			{
+				"name": "UPDTD_AT",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "DLAY_TYP",
+				"type": "text"
+			},
+			{
+				"name": "DURTN_MNT",
 				"type": "int",
 				"precision": 10
 			},
 			{
-				"name": "NOTES",
-				"type": "nvarchar"
+				"name": "DLAY_CD",
+				"type": "text"
 			},
 			{
-				"name": "SCHDD_ARRVL",
-				"type": "varchar"
-			},
-			{
-				"name": "SCHDD_ARRVL_AIR_PORT",
-				"type": "varchar"
-			},
-			{
-				"name": "SCHDD_DPTR",
-				"type": "varchar"
-			},
-			{
-				"name": "SCHDD_DPTR_AIR_PORT",
-				"type": "varchar"
-			},
-			{
-				"name": "UPDTD_AT",
-				"type": "varchar"
+				"name": "DLAY_CD_NAME",
+				"type": "text"
 			},
 			{
 				"name": "ADF_TIME_STMP",
@@ -136,7 +171,7 @@
 			},
 			{
 				"name": "ADF_RUN_ID",
-				"type": "varchar"
+				"type": "text"
 			}
 		],
 		"typeProperties": {
