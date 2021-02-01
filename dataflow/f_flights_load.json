@@ -1,0 +1,15 @@
+{
+	"name": "f_flights_load",
+	"properties": {
+		"folder": {
+			"name": "Flights"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [],
+			"sinks": [],
+			"transformations": [],
+			"script": ""
+		}
+	}
+}
