@@ -1,9 +1,9 @@
 {
-	"name": "eal_f_flights_daily_load",
+	"name": "eal_f_flights_load",
 	"properties": {
 		"activities": [
 			{
-				"name": "Call d_daily_load_Update",
+				"name": "Call f_flights_load",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [
 					{
@@ -23,52 +23,11 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "d_arpt_daily_load_update",
+						"referenceName": "f_flights_load",
 						"type": "DataFlowReference",
 						"parameters": {
-							"dt": {
-								"value": "'@{variables('dt')}'",
-								"type": "Expression"
-							}
-						}
-					},
-					"compute": {
-						"coreCount": 8,
-						"computeType": "General"
-					},
-					"traceLevel": "Fine"
-				}
-			},
-			{
-				"name": "Call d_daily_load_Insert",
-				"type": "ExecuteDataFlow",
-				"dependsOn": [
-					{
-						"activity": "Call d_daily_load_Update",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"policy": {
-					"timeout": "7.00:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"dataflow": {
-						"referenceName": "d_arpt_daily_load_insert",
-						"type": "DataFlowReference",
-						"parameters": {
-							"dt": {
-								"value": "'@{variables('dt')}'",
-								"type": "Expression"
-							},
 							"row_num": {
-								"value": "@int(variables('row_num'))",
+								"value": "@variables('row_num')",
 								"type": "Expression"
 							}
 						}
@@ -95,7 +54,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "select max(ARPT_ID) as row FROM [dbo].[D_ARPT]",
+						"sqlReaderQuery": "select max(FLGHT_ID) as row FROM [dbo].[F_FLGHT_OPS]",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
@@ -128,7 +87,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "SELECT \n [ADF_SUC_TS]\n  FROM [dbo].[S_ADF_CNTRL] where ADF_JOB_NAME = 'eal_s_arpt_load'",
+						"sqlReaderQuery": "SELECT \n [ADF_SUC_TS]\n  FROM [dbo].[S_ADF_CNTRL] where ADF_JOB_NAME = 'eal_f_flights_load'",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
@@ -144,7 +103,7 @@
 				"type": "ExecuteDataFlow",
 				"dependsOn": [
 					{
-						"activity": "Call d_daily_load_Insert",
+						"activity": "Call f_flights_load",
 						"dependencyConditions": [
 							"Succeeded"
 						]
