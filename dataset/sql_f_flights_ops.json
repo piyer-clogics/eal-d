@@ -160,13 +160,11 @@
 			},
 			{
 				"name": "IS_CNCLD",
-				"type": "int",
-				"precision": 10
+				"type": "bit"
 			},
 			{
 				"name": "IS_VERFD",
-				"type": "int",
-				"precision": 10
+				"type": "bit"
 			},
 			{
 				"name": "DEP_VAR",
