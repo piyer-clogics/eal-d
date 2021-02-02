@@ -29,6 +29,10 @@
 							"row_num": {
 								"value": "@variables('row_num')",
 								"type": "Expression"
+							},
+							"date": {
+								"value": "'@{variables('dt')}'",
+								"type": "Expression"
 							}
 						}
 					},
