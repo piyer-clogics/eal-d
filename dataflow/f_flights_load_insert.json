@@ -1,5 +1,5 @@
 {
-	"name": "f_flights_load",
+	"name": "f_flights_load_insert",
 	"properties": {
 		"folder": {
 			"name": "Flights"

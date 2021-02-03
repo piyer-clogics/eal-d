@@ -23,7 +23,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "f_flights_load",
+						"referenceName": "f_flights_load_insert",
 						"type": "DataFlowReference",
 						"parameters": {
 							"row_num": {
