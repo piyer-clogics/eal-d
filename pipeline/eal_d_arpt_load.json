@@ -1,5 +1,5 @@
 {
-	"name": "eal_s_arpt_daily_load",
+	"name": "eal_d_arpt_load",
 	"properties": {
 		"activities": [
 			{
