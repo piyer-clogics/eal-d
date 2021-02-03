@@ -128,7 +128,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "SELECT \n [ADF_SUC_TS]\n  FROM [dbo].[S_ADF_CNTRL] where ADF_JOB_NAME = 'eal_s_arpt_load'",
+						"sqlReaderQuery": "SELECT \n [ADF_SUC_TS]\n  FROM [dbo].[S_ADF_CNTRL] where ADF_JOB_NAME = 'eal_d_arpt_load'",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
