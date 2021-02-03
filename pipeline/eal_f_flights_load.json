@@ -100,7 +100,7 @@
 				"type": "ExecuteDataFlow",
 				"dependsOn": [
 					{
-						"activity": "Data flow1",
+						"activity": "Call f_flights_insert",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -206,7 +206,7 @@
 				}
 			},
 			{
-				"name": "Data flow1",
+				"name": "Call f_flights_insert",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [
 					{
