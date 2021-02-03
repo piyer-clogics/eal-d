@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Call f_flights_load",
+				"name": "Call f_flights_update",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [
 					{
@@ -23,17 +23,10 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "f_flights_load_insert",
+						"referenceName": "f_flights_load_update",
 						"type": "DataFlowReference",
 						"parameters": {
-							"row_num": {
-								"value": "@variables('row_num')",
-								"type": "Expression"
-							},
-							"date": {
-								"value": "'@{variables('dt')}'",
-								"type": "Expression"
-							}
+							"date": "'1899-01-01'"
 						}
 					},
 					"compute": {
@@ -107,7 +100,7 @@
 				"type": "ExecuteDataFlow",
 				"dependsOn": [
 					{
-						"activity": "Call f_flights_load",
+						"activity": "Call f_flights_insert",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -210,6 +203,47 @@
 							}
 						}
 					]
+				}
+			},
+			{
+				"name": "Call f_flights_insert",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [
+					{
+						"activity": "Call f_flights_update",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "f_flights_load_insert",
+						"type": "DataFlowReference",
+						"parameters": {
+							"row_num": {
+								"value": "@variables('row_num')",
+								"type": "Expression"
+							},
+							"date": {
+								"value": "'@{variables('dt')}'",
+								"type": "Expression"
+							}
+						}
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
 				}
 			}
 		],
