@@ -167,7 +167,10 @@
 								"value": "'@{pipeline().RunId}'",
 								"type": "Expression"
 							},
-							"adf_name": "'eal_s_arpt_load'"
+							"adf_name": {
+								"value": "'@{pipeline().Pipeline}'",
+								"type": "Expression"
+							}
 						}
 					},
 					"compute": {
