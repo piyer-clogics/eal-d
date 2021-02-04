@@ -87,7 +87,7 @@
 		],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "D_ARPT"
+			"table": "F_EQUIP_SCHD"
 		}
 	}
 }

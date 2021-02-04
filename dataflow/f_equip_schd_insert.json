@@ -15,13 +15,23 @@
 					"name": "StgEquipSchd"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"name": "sink1"
+				}
+			],
 			"transformations": [
 				{
 					"name": "DistinctRows"
+				},
+				{
+					"name": "AddRowCount"
+				},
+				{
+					"name": "SetEquipID"
 				}
 			],
-			"script": "source(output(\n\t\tEQP_SCHED_ID as integer,\n\t\tAC_RGSTRN as string,\n\t\tSTS_CD as string,\n\t\tSTS_NAME as string,\n\t\tSTS_DESC as string,\n\t\tSTRT_TIME as string,\n\t\tEND_TIME as string,\n\t\tNOTE as string,\n\t\tIS_DELD as boolean,\n\t\tUPDTD_AT as string,\n\t\tADF_TIME_STMP as timestamp,\n\t\tADF_RUN_ID as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> StgEquipSchd\nStgEquipSchd aggregate(groupBy(AC_RGSTRN,\n\t\tSTS_CD,\n\t\tSTRT_TIME),\n\teach(match(name!='AC_RGSTRN'&&name!='STS_CD'&&name!='STRT_TIME'), $$ = iif(first(UPDTD_AT)>last(UPDTD_AT),first($$),last($$)))) ~> DistinctRows"
+			"script": "parameters{\n\tdate as string ('1899-01-01'),\n\trow_num as integer (0)\n}\nsource(output(\n\t\tEQP_SCHED_ID as integer,\n\t\tAC_RGSTRN as string,\n\t\tSTS_CD as string,\n\t\tSTS_NAME as string,\n\t\tSTS_DESC as string,\n\t\tSTRT_TIME as timestamp,\n\t\tEND_TIME as timestamp,\n\t\tNOTE as string,\n\t\tIS_DELD as boolean,\n\t\tUPDTD_AT as timestamp,\n\t\tADF_TIME_STMP as timestamp,\n\t\tADF_RUN_ID as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tquery: (\"SELECT * FROM [dbo].[S_EQUIP_SCHD] where  UPDTD_AT > '\"+$date+\"'\"),\n\tformat: 'query') ~> StgEquipSchd\nStgEquipSchd aggregate(groupBy(AC_RGSTRN,\n\t\tSTS_CD,\n\t\tSTRT_TIME),\n\teach(match(name!='AC_RGSTRN'&&name!='STS_CD'&&name!='STRT_TIME'), $$ = iif(first(UPDTD_AT)>last(UPDTD_AT),first($$),last($$)))) ~> DistinctRows\nDistinctRows derive(row_num = $row_num +1) ~> AddRowCount\nAddRowCount window(over(row_num),\n\tasc(row_num, true),\n\tEQUIP_ID = row_num + rowNumber()) ~> SetEquipID\nSetEquipID sink(skipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sink1"
 		}
 	}
 }
