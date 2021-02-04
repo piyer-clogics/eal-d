@@ -62,16 +62,6 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"dataflow": {
-						"referenceName": "equipment_schd_postgres_dataflow",
-						"type": "DataFlowReference",
-						"parameters": {
-							"ADF_RUN_ID": {
-								"value": "'@{pipeline().RunId}'",
-								"type": "Expression"
-							}
-						}
-					},
 					"compute": {
 						"coreCount": 8,
 						"computeType": "General"

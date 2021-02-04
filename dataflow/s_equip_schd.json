@@ -1,8 +1,8 @@
 {
-	"name": "equipment_schd",
+	"name": "s_equip_schd",
 	"properties": {
 		"folder": {
-			"name": "Rejections"
+			"name": "Equip Schd"
 		},
 		"type": "MappingDataFlow",
 		"typeProperties": {
