@@ -6,7 +6,7 @@
 			"type": "LinkedServiceReference"
 		},
 		"folder": {
-			"name": "Source API"
+			"name": "Source"
 		},
 		"annotations": [],
 		"type": "PostgreSqlTable",

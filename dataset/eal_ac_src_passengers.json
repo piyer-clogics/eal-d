@@ -26,7 +26,7 @@
 			}
 		},
 		"folder": {
-			"name": "Source API"
+			"name": "Source"
 		},
 		"annotations": [],
 		"type": "RestResource",
