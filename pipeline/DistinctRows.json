@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "DistinctRows",
+						"referenceName": "f_equip_schd_insert",
 						"type": "DataFlowReference"
 					},
 					"compute": {
