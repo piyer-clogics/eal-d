@@ -112,7 +112,8 @@
 					"dataset": {
 						"referenceName": "eal_adf_cntrl",
 						"type": "DatasetReference"
-					}
+					},
+					"firstRowOnly": false
 				}
 			},
 			{
