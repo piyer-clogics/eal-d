@@ -47,7 +47,7 @@
 				"type": "ExecuteDataFlow",
 				"dependsOn": [
 					{
-						"activity": "Get Last Updated Date",
+						"activity": "Set variable date",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -110,8 +110,33 @@
 						"type": "DatasetReference"
 					}
 				}
+			},
+			{
+				"name": "Set variable date",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Get Last Updated Date",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "date",
+					"value": {
+						"value": "@string(activity('Get Last Updated Date').output['value'][0]['ADF_SUC_TS'])",
+						"type": "Expression"
+					}
+				}
 			}
 		],
+		"variables": {
+			"date": {
+				"type": "String"
+			}
+		},
 		"folder": {
 			"name": "Equip Schedule"
 		},
