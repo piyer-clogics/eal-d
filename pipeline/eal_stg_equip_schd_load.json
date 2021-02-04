@@ -63,7 +63,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "s_equip_schd",
+						"referenceName": "s_equip_schd_load",
 						"type": "DataFlowReference",
 						"parameters": {
 							"run_id": {
