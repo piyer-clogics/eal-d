@@ -47,7 +47,7 @@
 				"type": "ExecuteDataFlow",
 				"dependsOn": [
 					{
-						"activity": "Copy data from Postgres to Azure Blob",
+						"activity": "Get Last Updated Date",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -77,6 +77,38 @@
 						"computeType": "General"
 					},
 					"traceLevel": "Fine"
+				}
+			},
+			{
+				"name": "Get Last Updated Date",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Copy data from Postgres to Azure Blob",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "SELECT [ADF_SUC_TS]\n  FROM [dbo].[S_ADF_CNTRL] where ADF_JOB_NAME = 'eal_stg_equip_schd_load'",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "eal_adf_cntrl",
+						"type": "DatasetReference"
+					}
 				}
 			}
 		],
