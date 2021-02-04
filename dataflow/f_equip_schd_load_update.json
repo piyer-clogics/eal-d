@@ -1,5 +1,5 @@
 {
-	"name": "f_equip_schd_update",
+	"name": "f_equip_schd_load_update",
 	"properties": {
 		"folder": {
 			"name": "Equip Schd"

@@ -23,7 +23,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "f_equip_schd_update",
+						"referenceName": "f_equip_schd_load_update",
 						"type": "DataFlowReference",
 						"parameters": {
 							"date": {
@@ -60,7 +60,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "f_equip_schd_insert",
+						"referenceName": "f_equip_schd_load_insert",
 						"type": "DataFlowReference",
 						"parameters": {
 							"date": {
