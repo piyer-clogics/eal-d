@@ -1,5 +1,5 @@
 {
-	"name": "equipment_schd_ingest",
+	"name": "eal_stg_equip_schd_load",
 	"properties": {
 		"activities": [
 			{
@@ -80,6 +80,9 @@
 				}
 			}
 		],
+		"folder": {
+			"name": "Equip Schedule"
+		},
 		"annotations": []
 	}
 }
