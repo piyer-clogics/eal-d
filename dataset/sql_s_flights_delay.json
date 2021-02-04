@@ -1,12 +1,12 @@
 {
-	"name": "sql_flights_delay",
+	"name": "sql_s_flights_delay",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "eal_sqldb_piyer",
 			"type": "LinkedServiceReference"
 		},
 		"folder": {
-			"name": "Destination Table"
+			"name": "Destination Table/Staging"
 		},
 		"annotations": [],
 		"type": "AzureSqlTable",

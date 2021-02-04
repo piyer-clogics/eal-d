@@ -9,7 +9,7 @@
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "sql_flights_delay",
+						"referenceName": "sql_s_flights_delay",
 						"type": "DatasetReference"
 					},
 					"name": "StgFlightsDelay"
