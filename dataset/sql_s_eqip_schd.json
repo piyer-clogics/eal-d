@@ -1,12 +1,12 @@
 {
-	"name": "sql_eqip_schd",
+	"name": "sql_s_eqip_schd",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "eal_sqldb_piyer",
 			"type": "LinkedServiceReference"
 		},
 		"folder": {
-			"name": "Destination Table"
+			"name": "Destination Table/Staging"
 		},
 		"annotations": [],
 		"type": "AzureSqlTable",

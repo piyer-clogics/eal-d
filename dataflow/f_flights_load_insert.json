@@ -9,7 +9,7 @@
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "sql_flights",
+						"referenceName": "sql_s_flights",
 						"type": "DatasetReference"
 					},
 					"name": "StagingFlights"

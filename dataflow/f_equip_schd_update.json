@@ -9,7 +9,7 @@
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "sql_eqip_schd",
+						"referenceName": "sql_s_eqip_schd",
 						"type": "DatasetReference"
 					},
 					"name": "StgEquipSchd"

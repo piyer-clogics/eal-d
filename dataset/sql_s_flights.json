@@ -1,5 +1,5 @@
 {
-	"name": "sql_flights",
+	"name": "sql_s_flights",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "eal_sqldb_piyer",
