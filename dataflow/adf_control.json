@@ -1,6 +1,9 @@
 {
 	"name": "adf_control",
 	"properties": {
+		"folder": {
+			"name": "ADF Control Table"
+		},
 		"type": "MappingDataFlow",
 		"typeProperties": {
 			"sources": [
@@ -29,7 +32,7 @@
 					"name": "AlterRow"
 				}
 			],
-			"script": "parameters{\n\trun_id as string (''),\n\tadf_name as string ('')\n}\nsource(output(\n\t\trow as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tdocumentForm: 'documentPerLine') ~> ADFCONTROL\nADFCONTROL derive(ADF_RUN_ID = $run_id,\n\t\tADF_TIME_STMP = currentTimestamp(),\n\t\tADF_JOB_NAME = $adf_name) ~> AddADFDetails\nAddADFDetails alterRow(updateIf(ADF_JOB_NAME == $adf_name)) ~> AlterRow\nAlterRow sink(input(\n\t\tADF_RUN_ID as string,\n\t\tADF_JOB_NAME as string,\n\t\tADF_SUC_TS as timestamp\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:true,\n\tupsertable:false,\n\tkeys:['ADF_JOB_NAME'],\n\tformat: 'table',\n\tmapColumn(\n\t\tADF_RUN_ID,\n\t\tADF_JOB_NAME,\n\t\tADF_SUC_TS = ADF_TIME_STMP\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> Write"
+			"script": "parameters{\n\trun_id as string (''),\n\tadf_name as string ('')\n}\nsource(output(\n\t\trow as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tdocumentForm: 'documentPerLine') ~> ADFCONTROL\nADFCONTROL derive(ADF_RUN_ID = $run_id,\n\t\tADF_TIME_STMP = currentTimestamp(),\n\t\tADF_JOB_NAME = $adf_name) ~> AddADFDetails\nAddADFDetails alterRow(updateIf(ADF_JOB_NAME==$adf_name)) ~> AlterRow\nAlterRow sink(input(\n\t\tADF_RUN_ID as string,\n\t\tADF_JOB_NAME as string,\n\t\tADF_SUC_TS as timestamp\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:true,\n\tupsertable:false,\n\tkeys:['ADF_JOB_NAME'],\n\tformat: 'table',\n\tmapColumn(\n\t\tADF_RUN_ID,\n\t\tADF_JOB_NAME,\n\t\tADF_SUC_TS = ADF_TIME_STMP\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> Write"
 		}
 	}
 }
