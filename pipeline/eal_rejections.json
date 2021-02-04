@@ -23,7 +23,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "flights_delay",
+						"referenceName": "flights_delay_rejection",
 						"type": "DataFlowReference",
 						"parameters": {
 							"run_id": {
