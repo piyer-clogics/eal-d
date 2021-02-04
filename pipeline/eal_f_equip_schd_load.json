@@ -1,0 +1,9 @@
+{
+	"name": "eal_f_equip_schd_load",
+	"properties": {
+		"folder": {
+			"name": "Equip Schedule"
+		},
+		"annotations": []
+	}
+}
