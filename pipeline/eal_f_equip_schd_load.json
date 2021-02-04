@@ -26,8 +26,10 @@
 						"referenceName": "f_equip_schd_update",
 						"type": "DataFlowReference",
 						"parameters": {
-							"date": "'1899-01-01'",
-							"row_num": "0"
+							"date": {
+								"value": "'@{variables('dt')}'",
+								"type": "Expression"
+							}
 						}
 					},
 					"compute": {
@@ -61,8 +63,14 @@
 						"referenceName": "f_equip_schd_insert",
 						"type": "DataFlowReference",
 						"parameters": {
-							"date": "'1899-01-01'",
-							"row_num": "0"
+							"date": {
+								"value": "'@{variables('dt')}'",
+								"type": "Expression"
+							},
+							"row_num": {
+								"value": "@variables('row_num')",
+								"type": "Expression"
+							}
 						}
 					},
 					"compute": {
