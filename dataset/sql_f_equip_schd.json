@@ -2,7 +2,7 @@
 	"name": "sql_f_equip_schd",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "eal_sqldb_piyer",
+			"referenceName": "eal_sqldb_EDW",
 			"type": "LinkedServiceReference"
 		},
 		"folder": {
