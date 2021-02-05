@@ -2,7 +2,7 @@
 	"name": "sql_s_flights",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "eal_sqldb_EDW",
+			"referenceName": "eal_sqldb_STG",
 			"type": "LinkedServiceReference"
 		},
 		"folder": {
@@ -176,7 +176,7 @@
 		],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "F_FLGHT_OPS"
+			"table": "S_FLIGHTS"
 		}
 	}
 }
