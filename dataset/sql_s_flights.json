@@ -176,7 +176,7 @@
 		],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "S_FLIGHTS"
+			"table": "F_FLGHT_OPS"
 		}
 	}
 }

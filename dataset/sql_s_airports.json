@@ -2,7 +2,7 @@
 	"name": "sql_s_airports",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "eal_sqldb_EDW",
+			"referenceName": "eal_sqldb_STG",
 			"type": "LinkedServiceReference"
 		},
 		"folder": {
