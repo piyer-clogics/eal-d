@@ -1,0 +1,1271 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "eal-adf-d"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/eal_adf_cntrl')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "eal_sqldb_STG",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Destination Table"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "ADF_RUN_ID",
+						"type": "varchar"
+					},
+					{
+						"name": "ADF_JOB_NAME",
+						"type": "varchar"
+					},
+					{
+						"name": "ADF_SUC_TS",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "S_ADF_CNTRL"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/sql_d_aprt')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "eal_sqldb_EDW",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Destination Table/Prod"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "ARPT_ID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "ARPT_IATA_CD",
+						"type": "varchar"
+					},
+					{
+						"name": "ARPT_ICAO_CD",
+						"type": "varchar"
+					},
+					{
+						"name": "ARPT_NAME",
+						"type": "varchar"
+					},
+					{
+						"name": "ARPT_CNTRY",
+						"type": "varchar"
+					},
+					{
+						"name": "ARPT_CITY",
+						"type": "varchar"
+					},
+					{
+						"name": "ARPT_LAT",
+						"type": "decimal",
+						"precision": 8,
+						"scale": 6
+					},
+					{
+						"name": "ARPT_LONG",
+						"type": "decimal",
+						"precision": 9,
+						"scale": 6
+					},
+					{
+						"name": "ARPT_ALTD",
+						"type": "decimal",
+						"precision": 6,
+						"scale": 2
+					},
+					{
+						"name": "ARPT_UTC_OFSET",
+						"type": "decimal",
+						"precision": 2,
+						"scale": 2
+					},
+					{
+						"name": "ARPT_DST_CD",
+						"type": "varchar"
+					},
+					{
+						"name": "ARPT_TZONE",
+						"type": "varchar"
+					},
+					{
+						"name": "EFF_STRT_DT",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "EFF_END_DT",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "ACTV_IND",
+						"type": "char"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "D_ARPT"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/sql_d_clndr')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "eal_sqldb_EDW",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Destination Table/Prod"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "CLNDR_ID",
+						"type": "char"
+					},
+					{
+						"name": "TheDate",
+						"type": "date"
+					},
+					{
+						"name": "TheDay",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "TheDaySuffix",
+						"type": "char"
+					},
+					{
+						"name": "TheDayName",
+						"type": "nvarchar"
+					},
+					{
+						"name": "TheDayOfWeek",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "TheDayOfWeekInMonth",
+						"type": "tinyint",
+						"precision": 3
+					},
+					{
+						"name": "TheDayOfYear",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "IsWeekend",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "TheWeek",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "TheISOweek",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "TheFirstOfWeek",
+						"type": "date"
+					},
+					{
+						"name": "TheLastOfWeek",
+						"type": "date"
+					},
+					{
+						"name": "TheWeekOfMonth",
+						"type": "tinyint",
+						"precision": 3
+					},
+					{
+						"name": "TheMonth",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "TheMonthName",
+						"type": "nvarchar"
+					},
+					{
+						"name": "TheFirstOfMonth",
+						"type": "date"
+					},
+					{
+						"name": "TheLastOfMonth",
+						"type": "date"
+					},
+					{
+						"name": "TheFirstOfNextMonth",
+						"type": "date"
+					},
+					{
+						"name": "TheLastOfNextMonth",
+						"type": "date"
+					},
+					{
+						"name": "TheQuarter",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "TheFirstOfQuarter",
+						"type": "date"
+					},
+					{
+						"name": "TheLastOfQuarter",
+						"type": "date"
+					},
+					{
+						"name": "TheYear",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "TheISOYear",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "TheFirstOfYear",
+						"type": "date"
+					},
+					{
+						"name": "TheLastOfYear",
+						"type": "date"
+					},
+					{
+						"name": "IsLeapYear",
+						"type": "bit"
+					},
+					{
+						"name": "Has53Weeks",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Has53ISOWeeks",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "MMYYYY",
+						"type": "char"
+					},
+					{
+						"name": "Style101",
+						"type": "char"
+					},
+					{
+						"name": "Style103",
+						"type": "char"
+					},
+					{
+						"name": "Style112",
+						"type": "char"
+					},
+					{
+						"name": "Style120",
+						"type": "char"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "D_CLNDR"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/sql_eqip_schd_rej')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "eal_sqldb_STG",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Destination Table/Rejections"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "EQP_SCHED_ID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "AC_RGSTRN",
+						"type": "text"
+					},
+					{
+						"name": "STS_CD",
+						"type": "text"
+					},
+					{
+						"name": "STS_NAME",
+						"type": "text"
+					},
+					{
+						"name": "STS_DESC",
+						"type": "text"
+					},
+					{
+						"name": "STRT_TIME",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "END_TIME",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "NOTE",
+						"type": "text"
+					},
+					{
+						"name": "IS_DELD",
+						"type": "bit"
+					},
+					{
+						"name": "UPDTD_AT",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "REJECT_REASON",
+						"type": "varchar"
+					},
+					{
+						"name": "ADF_TIME_STMP",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "ADF_RUN_ID",
+						"type": "text"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "S_EQUIP_SCHD_REJ"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/sql_f_equip_schd')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "eal_sqldb_EDW",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Destination Table/Prod"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "ARPT_ID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "ARPT_IATA_CD",
+						"type": "varchar"
+					},
+					{
+						"name": "ARPT_ICAO_CD",
+						"type": "varchar"
+					},
+					{
+						"name": "ARPT_NAME",
+						"type": "varchar"
+					},
+					{
+						"name": "ARPT_CNTRY",
+						"type": "varchar"
+					},
+					{
+						"name": "ARPT_CITY",
+						"type": "varchar"
+					},
+					{
+						"name": "ARPT_LAT",
+						"type": "decimal",
+						"precision": 8,
+						"scale": 6
+					},
+					{
+						"name": "ARPT_LONG",
+						"type": "decimal",
+						"precision": 9,
+						"scale": 6
+					},
+					{
+						"name": "ARPT_ALTD",
+						"type": "decimal",
+						"precision": 6,
+						"scale": 2
+					},
+					{
+						"name": "ARPT_UTC_OFSET",
+						"type": "decimal",
+						"precision": 2,
+						"scale": 2
+					},
+					{
+						"name": "ARPT_DST_CD",
+						"type": "varchar"
+					},
+					{
+						"name": "ARPT_TZONE",
+						"type": "varchar"
+					},
+					{
+						"name": "EFF_STRT_DT",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "EFF_END_DT",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "ACTV_IND",
+						"type": "char"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "F_EQUIP_SCHD"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/sql_f_flights_ops')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "eal_sqldb_EDW",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Destination Table/Prod"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "FLGHT_ID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "FLGHT_DT_ID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "FLGHT_NUM",
+						"type": "varchar"
+					},
+					{
+						"name": "FLGHT_TYP",
+						"type": "varchar"
+					},
+					{
+						"name": "AIR_CRAFT_RGSTRN_NUM",
+						"type": "varchar"
+					},
+					{
+						"name": "AIR_CRAFT_TYP",
+						"type": "varchar"
+					},
+					{
+						"name": "SCHDD_DPRT_TS_UTC",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "SCHDD_ARRVL_TS_UTC",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "ESTD_DPRT_TS_UTC",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "ESTD_ARRVL_TS_UTC",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "ACTL_OOOI_OUT_TS_UTC",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "ACTL_OOOI_OFF_TS_UTC",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "ACTL_OOOI_ON_TS_UTC",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "ACTL_OOOI_IN_TS_UTC",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "BASE_ARPT_CD",
+						"type": "varchar"
+					},
+					{
+						"name": "BASE_ARPT_ID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "SCHDD_DRPT_ARPT_CD",
+						"type": "varchar"
+					},
+					{
+						"name": "SCHDD_DRPT_ARPT_ID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "SCHDD_ARRVL_ARPT_CD",
+						"type": "varchar"
+					},
+					{
+						"name": "SCHDD_ARRVL_ARPT_ID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "ACTL_ARRVL_ARPT_CD",
+						"type": "varchar"
+					},
+					{
+						"name": "ACTL_ARRVL_ARPT_ID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "ACTL_DPTR_ARPT_CD",
+						"type": "varchar"
+					},
+					{
+						"name": "ACTL_DPTR_ARPT_ID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "FUEL_IN",
+						"type": "char"
+					},
+					{
+						"name": "FUEL_OUT",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "FUEL_UPLIFT",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "CRGO_WT",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "MAINT_LOG",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "NOTES",
+						"type": "varchar"
+					},
+					{
+						"name": "IS_CNCLD",
+						"type": "bit"
+					},
+					{
+						"name": "IS_VERFD",
+						"type": "bit"
+					},
+					{
+						"name": "DEP_VAR",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "ARRVL_VAR",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "SCHDD_BLK_DUR",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "ACTL_BLK_DUR",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "ACTL_FLGHT_DUR",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "DPRT_DELAY_DUR_D0_IND",
+						"type": "smallint",
+						"precision": 5
+					},
+					{
+						"name": "DPRT_DELAY_DUR_D15_IND",
+						"type": "smallint",
+						"precision": 5
+					},
+					{
+						"name": "ARRVL_DELAY_DUR_A0_IND",
+						"type": "smallint",
+						"precision": 5
+					},
+					{
+						"name": "ARRVL_DELAY_DUR_A14_IND",
+						"type": "smallint",
+						"precision": 5
+					},
+					{
+						"name": "BLK_DUR_B0_IND",
+						"type": "smallint",
+						"precision": 5
+					},
+					{
+						"name": "SCHDD_FLT_DUR",
+						"type": "varchar"
+					},
+					{
+						"name": "DELAY_TYP",
+						"type": "varchar"
+					},
+					{
+						"name": "DELAY_DUR",
+						"type": "smallint",
+						"precision": 5
+					},
+					{
+						"name": "DELAY_CD",
+						"type": "varchar"
+					},
+					{
+						"name": "DELAY_DESC",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "F_FLGHT_OPS"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/sql_flights_rej')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "eal_sqldb_STG",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Destination Table/Rejections"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "ACTL_ARRVL_AIR_PORT",
+						"type": "text"
+					},
+					{
+						"name": "ACTL_DPTR_AIR_PORT",
+						"type": "text"
+					},
+					{
+						"name": "ACTL_OOOI_IN",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "ACTL_OOOI_OFF",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "ACTL_OOOI_ON",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "ACTL_OOOI_OUT",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "AIR_CRAFT_RGSTRN_NUM",
+						"type": "text"
+					},
+					{
+						"name": "AIR_CRAFT_TYPE",
+						"type": "text"
+					},
+					{
+						"name": "BASE_AIR_PORT",
+						"type": "text"
+					},
+					{
+						"name": "CRGO_WGT",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "ESTD_ARRVL",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "ESTD_DPTR",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "FLT_DT",
+						"type": "date"
+					},
+					{
+						"name": "FLT_ID",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "FLT_NUM",
+						"type": "text"
+					},
+					{
+						"name": "FLT_TYPE",
+						"type": "text"
+					},
+					{
+						"name": "FUEL_IN",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "FUEL_OUT",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "FUEL_UPLIFT",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "IS_CNCLD",
+						"type": "bit"
+					},
+					{
+						"name": "IS_VERFD",
+						"type": "bit"
+					},
+					{
+						"name": "MAINT_LOG_PG",
+						"type": "text"
+					},
+					{
+						"name": "NOTES",
+						"type": "text"
+					},
+					{
+						"name": "SCHDD_ARRVL",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "SCHDD_ARRVL_AIR_PORT",
+						"type": "text"
+					},
+					{
+						"name": "SCHDD_DPTR",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "SCHDD_DPTR_AIR_PORT",
+						"type": "text"
+					},
+					{
+						"name": "UPDTD_AT",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "REJECT_REASON",
+						"type": "varchar"
+					},
+					{
+						"name": "ADF_TIME_STMP",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "ADF_RUN_ID",
+						"type": "text"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "S_FLIGHTS_REJ"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/sql_s_airports')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "eal_sqldb_STG",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Destination Table/Staging"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "ARPT_NAME",
+						"type": "nvarchar"
+					},
+					{
+						"name": "ARPT_CITY",
+						"type": "nvarchar"
+					},
+					{
+						"name": "ARPT_CNTRY",
+						"type": "nvarchar"
+					},
+					{
+						"name": "ARPT_IATA_CD",
+						"type": "nvarchar"
+					},
+					{
+						"name": "ARPT_ICAO_CD",
+						"type": "nvarchar"
+					},
+					{
+						"name": "ARPT_LAT",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "ARPT_LONG",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "ARPT_ALTD",
+						"type": "smallint",
+						"precision": 5
+					},
+					{
+						"name": "ARPT_UTC_OFSET",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "ARPT_DST",
+						"type": "nvarchar"
+					},
+					{
+						"name": "ARPT_TZONE",
+						"type": "nvarchar"
+					},
+					{
+						"name": "LAST_UPDT_DT",
+						"type": "date"
+					},
+					{
+						"name": "ADF_RUN_ID",
+						"type": "text"
+					},
+					{
+						"name": "ADF_TIME_STMP",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "S_AIRPORTS"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/sql_s_eqip_schd')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "eal_sqldb_STG",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Destination Table/Staging"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "EQP_SCHED_ID",
+						"type": "smallint",
+						"precision": 5
+					},
+					{
+						"name": "AC_RGSTRN",
+						"type": "varchar"
+					},
+					{
+						"name": "STS_CD",
+						"type": "varchar"
+					},
+					{
+						"name": "STS_NAME",
+						"type": "varchar"
+					},
+					{
+						"name": "STS_DESC",
+						"type": "varchar"
+					},
+					{
+						"name": "STRT_TIME",
+						"type": "varchar"
+					},
+					{
+						"name": "END_TIME",
+						"type": "varchar"
+					},
+					{
+						"name": "NOTE",
+						"type": "varchar"
+					},
+					{
+						"name": "IS_DELD",
+						"type": "bit"
+					},
+					{
+						"name": "UPDTD_AT",
+						"type": "varchar"
+					},
+					{
+						"name": "ADF_TIME_STMP",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "ADF_RUN_ID",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "S_EQUIP_SCHD"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/sql_s_flights')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "eal_sqldb_EDW",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Destination Table/Staging"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "ACTL_ARRVL_AIR_PORT",
+						"type": "text"
+					},
+					{
+						"name": "ACTL_DPTR_AIR_PORT",
+						"type": "text"
+					},
+					{
+						"name": "ACTL_OOOI_IN",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "ACTL_OOOI_OFF",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "ACTL_OOOI_ON",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "ACTL_OOOI_OUT",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "AIR_CRAFT_RGSTRN_NUM",
+						"type": "text"
+					},
+					{
+						"name": "AIR_CRAFT_TYPE",
+						"type": "text"
+					},
+					{
+						"name": "BASE_AIR_PORT",
+						"type": "text"
+					},
+					{
+						"name": "CRGO_WGT",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "ESTD_ARRVL",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "ESTD_DPTR",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "FLT_DT",
+						"type": "date"
+					},
+					{
+						"name": "FLT_ID",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "FLT_NUM",
+						"type": "text"
+					},
+					{
+						"name": "FLT_TYPE",
+						"type": "text"
+					},
+					{
+						"name": "FUEL_IN",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "FUEL_OUT",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "FUEL_UPLIFT",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "IS_CNCLD",
+						"type": "bit"
+					},
+					{
+						"name": "IS_VERFD",
+						"type": "bit"
+					},
+					{
+						"name": "MAINT_LOG_PG",
+						"type": "text"
+					},
+					{
+						"name": "NOTES",
+						"type": "text"
+					},
+					{
+						"name": "SCHDD_ARRVL",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "SCHDD_ARRVL_AIR_PORT",
+						"type": "text"
+					},
+					{
+						"name": "SCHDD_DPTR",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "SCHDD_DPTR_AIR_PORT",
+						"type": "text"
+					},
+					{
+						"name": "UPDTD_AT",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "DLAY_TYP",
+						"type": "text"
+					},
+					{
+						"name": "DURTN_MNT",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "DLAY_CD",
+						"type": "text"
+					},
+					{
+						"name": "DLAY_CD_NAME",
+						"type": "text"
+					},
+					{
+						"name": "ADF_TIME_STMP",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "ADF_RUN_ID",
+						"type": "text"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "F_FLGHT_OPS"
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}

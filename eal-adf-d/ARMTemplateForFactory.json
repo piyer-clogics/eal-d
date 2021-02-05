@@ -43,6 +43,14 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'ealblobdconnection'"
 		},
+		"eal_sqldb_EDW_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'eal_sqldb_EDW'"
+		},
+		"eal_sqldb_STG_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'eal_sqldb_STG'"
+		},
 		"Swagger Connection_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://api.airline-choice.com/rest/"
@@ -64,183 +72,6 @@
 		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
 	},
 	"resources": [
-		{
-			"name": "[concat(parameters('factoryName'), '/active_flights_ingest')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Copy data from API to blob",
-						"type": "Copy",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "RestSource",
-								"httpRequestTimeout": "00:01:40",
-								"requestInterval": "00.00:00:00.010",
-								"requestMethod": "GET"
-							},
-							"sink": {
-								"type": "JsonSink",
-								"storeSettings": {
-									"type": "AzureBlobStorageWriteSettings"
-								},
-								"formatSettings": {
-									"type": "JsonWriteSettings"
-								}
-							},
-							"enableStaging": false
-						},
-						"inputs": [
-							{
-								"referenceName": "eal_ac_src_active_flights",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "eal_ac_active_flights",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
-					},
-					{
-						"name": "Data Flow Active Flights",
-						"type": "ExecuteDataFlow",
-						"dependsOn": [
-							{
-								"activity": "Copy data from API to blob",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataflow": {
-								"referenceName": "active_flight_dataflow",
-								"type": "DataFlowReference",
-								"parameters": {
-									"run_id": {
-										"value": "'@{pipeline().RunId}'",
-										"type": "Expression"
-									}
-								},
-								"datasetParameters": {
-									"ActiveFlights": {},
-									"WriteFlightToSQL": {},
-									"WriteCarrierToSQL": {},
-									"WriteCarrierAddressToSQL": {},
-									"WriteCrewMemberSecurityRulesToSQL": {},
-									"WriteHealthCheckRulesToSQL": {},
-									"WritePassengerSecurityRules": {}
-								}
-							},
-							"staging": {},
-							"compute": {
-								"coreCount": 8,
-								"computeType": "General"
-							},
-							"traceLevel": "Fine"
-						}
-					}
-				],
-				"parameters": {
-					"run_id": {
-						"type": "string",
-						"defaultValue": "@pipeline().RunId"
-					}
-				},
-				"variables": {
-					"ADF_run_ID": {
-						"type": "String"
-					}
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/eal_ac_src_active_flights')]",
-				"[concat(variables('factoryId'), '/datasets/eal_ac_active_flights')]",
-				"[concat(variables('factoryId'), '/dataflows/active_flight_dataflow')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/airport_ingest')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "eal_ac_airport",
-						"type": "Copy",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "RestSource",
-								"httpRequestTimeout": "00:01:40",
-								"requestInterval": "00.00:00:00.010",
-								"requestMethod": "GET"
-							},
-							"sink": {
-								"type": "JsonSink",
-								"storeSettings": {
-									"type": "AzureBlobStorageWriteSettings"
-								},
-								"formatSettings": {
-									"type": "JsonWriteSettings"
-								}
-							},
-							"enableStaging": false
-						},
-						"inputs": [
-							{
-								"referenceName": "eal_ac_src_airports",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "eal_ac_airport",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
-					}
-				],
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/eal_ac_src_airports')]",
-				"[concat(variables('factoryId'), '/datasets/eal_ac_airport')]"
-			]
-		},
 		{
 			"name": "[concat(parameters('factoryName'), '/eal_d_arpt_load')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
@@ -2802,7 +2633,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "eal_sqldb_piyer",
+					"referenceName": "eal_sqldb_STG",
 					"type": "LinkedServiceReference"
 				},
 				"folder": {
@@ -2832,7 +2663,7 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/eal_sqldb_piyer')]"
+				"[concat(variables('factoryId'), '/linkedServices/eal_sqldb_STG')]"
 			]
 		},
 		{
@@ -3980,7 +3811,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "eal_sqldb_piyer",
+					"referenceName": "eal_sqldb_EDW",
 					"type": "LinkedServiceReference"
 				},
 				"folder": {
@@ -4069,7 +3900,7 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/eal_sqldb_piyer')]"
+				"[concat(variables('factoryId'), '/linkedServices/eal_sqldb_EDW')]"
 			]
 		},
 		{
@@ -4078,7 +3909,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "eal_sqldb_piyer",
+					"referenceName": "eal_sqldb_EDW",
 					"type": "LinkedServiceReference"
 				},
 				"folder": {
@@ -4248,89 +4079,7 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/eal_sqldb_piyer')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/sql_eqip_schd_acpt')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "eal_sqldb_piyer",
-					"type": "LinkedServiceReference"
-				},
-				"folder": {
-					"name": "Destination Table/Rejections"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "EQP_SCHED_ID",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "AC_RGSTRN",
-						"type": "text"
-					},
-					{
-						"name": "STS_CD",
-						"type": "text"
-					},
-					{
-						"name": "STS_NAME",
-						"type": "text"
-					},
-					{
-						"name": "STS_DESC",
-						"type": "text"
-					},
-					{
-						"name": "STRT_TIME",
-						"type": "datetime",
-						"precision": 23,
-						"scale": 3
-					},
-					{
-						"name": "END_TIME",
-						"type": "datetime",
-						"precision": 23,
-						"scale": 3
-					},
-					{
-						"name": "NOTE",
-						"type": "text"
-					},
-					{
-						"name": "IS_DELD",
-						"type": "bit"
-					},
-					{
-						"name": "UPDTD_AT",
-						"type": "datetime",
-						"precision": 23,
-						"scale": 3
-					},
-					{
-						"name": "ADF_TIME_STMP",
-						"type": "datetime",
-						"precision": 23,
-						"scale": 3
-					},
-					{
-						"name": "ADF_RUN_ID",
-						"type": "text"
-					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "S_EQUIP_SCHD_ACPT"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/eal_sqldb_piyer')]"
+				"[concat(variables('factoryId'), '/linkedServices/eal_sqldb_EDW')]"
 			]
 		},
 		{
@@ -4339,7 +4088,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "eal_sqldb_piyer",
+					"referenceName": "eal_sqldb_STG",
 					"type": "LinkedServiceReference"
 				},
 				"folder": {
@@ -4416,7 +4165,7 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/eal_sqldb_piyer')]"
+				"[concat(variables('factoryId'), '/linkedServices/eal_sqldb_STG')]"
 			]
 		},
 		{
@@ -4425,7 +4174,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "eal_sqldb_piyer",
+					"referenceName": "eal_sqldb_EDW",
 					"type": "LinkedServiceReference"
 				},
 				"folder": {
@@ -4514,7 +4263,7 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/eal_sqldb_piyer')]"
+				"[concat(variables('factoryId'), '/linkedServices/eal_sqldb_EDW')]"
 			]
 		},
 		{
@@ -4523,7 +4272,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "eal_sqldb_piyer",
+					"referenceName": "eal_sqldb_EDW",
 					"type": "LinkedServiceReference"
 				},
 				"folder": {
@@ -4765,277 +4514,7 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/eal_sqldb_piyer')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/sql_flights_acpt')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "eal_sqldb_piyer",
-					"type": "LinkedServiceReference"
-				},
-				"folder": {
-					"name": "Destination Table/Rejections"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "ACTL_ARRVL_AIR_PORT",
-						"type": "varchar"
-					},
-					{
-						"name": "ACTL_DPTR_AIR_PORT",
-						"type": "varchar"
-					},
-					{
-						"name": "ACTL_OOOI_IN",
-						"type": "varchar"
-					},
-					{
-						"name": "ACTL_OOOI_OFF",
-						"type": "varchar"
-					},
-					{
-						"name": "ACTL_OOOI_ON",
-						"type": "varchar"
-					},
-					{
-						"name": "ACTL_OOOI_OUT",
-						"type": "varchar"
-					},
-					{
-						"name": "AIR_CRAFT_RGSTRN_NUM",
-						"type": "varchar"
-					},
-					{
-						"name": "AIR_CRAFT_TYPE",
-						"type": "varchar"
-					},
-					{
-						"name": "BASE_AIR_PORT",
-						"type": "varchar"
-					},
-					{
-						"name": "CRGO_WGT",
-						"type": "varchar"
-					},
-					{
-						"name": "ESTD_ARRVL",
-						"type": "varchar"
-					},
-					{
-						"name": "ESTD_DPTR",
-						"type": "varchar"
-					},
-					{
-						"name": "FLT_DT",
-						"type": "varchar"
-					},
-					{
-						"name": "FLT_ID",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "FLT_NUM",
-						"type": "varchar"
-					},
-					{
-						"name": "FLT_TYPE",
-						"type": "varchar"
-					},
-					{
-						"name": "FUEL_IN",
-						"type": "float",
-						"precision": 15
-					},
-					{
-						"name": "FUEL_OUT",
-						"type": "float",
-						"precision": 15
-					},
-					{
-						"name": "FUEL_UPLIFT",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "IS_CNCLD",
-						"type": "bit"
-					},
-					{
-						"name": "IS_VERFD",
-						"type": "bit"
-					},
-					{
-						"name": "MAINT_LOG_PG",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "NOTES",
-						"type": "nvarchar"
-					},
-					{
-						"name": "SCHDD_ARRVL",
-						"type": "varchar"
-					},
-					{
-						"name": "SCHDD_ARRVL_AIR_PORT",
-						"type": "varchar"
-					},
-					{
-						"name": "SCHDD_DPTR",
-						"type": "varchar"
-					},
-					{
-						"name": "SCHDD_DPTR_AIR_PORT",
-						"type": "varchar"
-					},
-					{
-						"name": "UPDTD_AT",
-						"type": "varchar"
-					},
-					{
-						"name": "ADF_TIME_STMP",
-						"type": "datetime",
-						"precision": 23,
-						"scale": 3
-					},
-					{
-						"name": "ADF_RUN_ID",
-						"type": "varchar"
-					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "S_FLIGHTS_ACPT"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/eal_sqldb_piyer')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/sql_flights_delay_acpt')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "eal_sqldb_piyer",
-					"type": "LinkedServiceReference"
-				},
-				"folder": {
-					"name": "Destination Table/Rejections"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "FLT_ID",
-						"type": "bigint",
-						"precision": 19
-					},
-					{
-						"name": "DLAY_TYP",
-						"type": "text"
-					},
-					{
-						"name": "DURTN_MNT",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "DLAY_CD",
-						"type": "text"
-					},
-					{
-						"name": "DLAY_CD_NAME",
-						"type": "text"
-					},
-					{
-						"name": "ADF_TIME_STMP",
-						"type": "datetime",
-						"precision": 23,
-						"scale": 3
-					},
-					{
-						"name": "ADF_RUN_ID",
-						"type": "text"
-					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "S_FLIGHTS_DELAY_ACPT"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/eal_sqldb_piyer')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/sql_flights_delay_rej')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "eal_sqldb_piyer",
-					"type": "LinkedServiceReference"
-				},
-				"folder": {
-					"name": "Destination Table/Rejections"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "FLT_ID",
-						"type": "bigint",
-						"precision": 19
-					},
-					{
-						"name": "DLAY_TYP",
-						"type": "text"
-					},
-					{
-						"name": "DURTN_MNT",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "DLAY_CD",
-						"type": "text"
-					},
-					{
-						"name": "DLAY_CD_NAME",
-						"type": "text"
-					},
-					{
-						"name": "REJECT_REASON",
-						"type": "varchar"
-					},
-					{
-						"name": "ADF_TIME_STMP",
-						"type": "datetime",
-						"precision": 23,
-						"scale": 3
-					},
-					{
-						"name": "ADF_RUN_ID",
-						"type": "text"
-					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "S_FLIGHTS_DELAY_REJ"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/eal_sqldb_piyer')]"
+				"[concat(variables('factoryId'), '/linkedServices/eal_sqldb_EDW')]"
 			]
 		},
 		{
@@ -5044,7 +4523,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "eal_sqldb_piyer",
+					"referenceName": "eal_sqldb_STG",
 					"type": "LinkedServiceReference"
 				},
 				"folder": {
@@ -5209,7 +4688,7 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/eal_sqldb_piyer')]"
+				"[concat(variables('factoryId'), '/linkedServices/eal_sqldb_STG')]"
 			]
 		},
 		{
@@ -5521,7 +5000,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "eal_sqldb_piyer",
+					"referenceName": "eal_sqldb_STG",
 					"type": "LinkedServiceReference"
 				},
 				"folder": {
@@ -5599,7 +5078,7 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/eal_sqldb_piyer')]"
+				"[concat(variables('factoryId'), '/linkedServices/eal_sqldb_STG')]"
 			]
 		},
 		{
@@ -5608,7 +5087,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "eal_sqldb_piyer",
+					"referenceName": "eal_sqldb_STG",
 					"type": "LinkedServiceReference"
 				},
 				"folder": {
@@ -5675,7 +5154,7 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/eal_sqldb_piyer')]"
+				"[concat(variables('factoryId'), '/linkedServices/eal_sqldb_STG')]"
 			]
 		},
 		{
@@ -5684,7 +5163,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "eal_sqldb_piyer",
+					"referenceName": "eal_sqldb_EDW",
 					"type": "LinkedServiceReference"
 				},
 				"folder": {
@@ -5858,68 +5337,11 @@
 				],
 				"typeProperties": {
 					"schema": "dbo",
-					"table": "S_FLIGHTS"
+					"table": "F_FLGHT_OPS"
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/eal_sqldb_piyer')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/sql_s_flights_delay')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "eal_sqldb_piyer",
-					"type": "LinkedServiceReference"
-				},
-				"folder": {
-					"name": "Destination Table/Staging"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "FLT_ID",
-						"type": "smallint",
-						"precision": 5
-					},
-					{
-						"name": "DLAY_TYP",
-						"type": "varchar"
-					},
-					{
-						"name": "DURTN_MNT",
-						"type": "smallint",
-						"precision": 5
-					},
-					{
-						"name": "DLAY_CD",
-						"type": "varchar"
-					},
-					{
-						"name": "DLAY_CD_NAME",
-						"type": "varchar"
-					},
-					{
-						"name": "ADF_TIME_STMP",
-						"type": "datetime",
-						"precision": 23,
-						"scale": 3
-					},
-					{
-						"name": "ADF_RUN_ID",
-						"type": "varchar"
-					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "S_FLIGHTS_DELAY"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/eal_sqldb_piyer')]"
+				"[concat(variables('factoryId'), '/linkedServices/eal_sqldb_EDW')]"
 			]
 		},
 		{
@@ -6883,87 +6305,6 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/flights_delay_rejection')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"folder": {
-					"name": "Rejections"
-				},
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "sql_s_flights_delay",
-								"type": "DatasetReference"
-							},
-							"name": "StgFlightsDelay"
-						},
-						{
-							"dataset": {
-								"referenceName": "sql_flights_acpt",
-								"type": "DatasetReference"
-							},
-							"name": "StgFlights"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "sql_flights_delay_rej",
-								"type": "DatasetReference"
-							},
-							"name": "RejectTable"
-						},
-						{
-							"dataset": {
-								"referenceName": "sql_flights_delay_acpt",
-								"type": "DatasetReference"
-							},
-							"name": "FlightsDelayAcpt"
-						}
-					],
-					"transformations": [
-						{
-							"name": "ConditionalSplit1"
-						},
-						{
-							"name": "FlightsIdExists"
-						},
-						{
-							"name": "FlightsIdDoesntExists"
-						},
-						{
-							"name": "AddRejectReasonNull"
-						},
-						{
-							"name": "AddRejectReasonNoId"
-						},
-						{
-							"name": "RemoveADFColumns"
-						},
-						{
-							"name": "AddADFColumns"
-						},
-						{
-							"name": "AddADFColumns2"
-						},
-						{
-							"name": "UnionRejections"
-						}
-					],
-					"script": "parameters{\n\trun_id as string ('')\n}\nsource(output(\n\t\tFLT_ID as integer,\n\t\tDLAY_TYP as string,\n\t\tDURTN_MNT as integer,\n\t\tDLAY_CD as string,\n\t\tDLAY_CD_NAME as string,\n\t\tADF_TIME_STMP as timestamp,\n\t\tADF_RUN_ID as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> StgFlightsDelay\nsource(output(\n\t\tACTL_ARRVL_AIR_PORT as string,\n\t\tACTL_DPTR_AIR_PORT as string,\n\t\tACTL_OOOI_IN as string,\n\t\tACTL_OOOI_OFF as string,\n\t\tACTL_OOOI_ON as string,\n\t\tACTL_OOOI_OUT as string,\n\t\tAIR_CRAFT_RGSTRN_NUM as string,\n\t\tAIR_CRAFT_TYPE as string,\n\t\tBASE_AIR_PORT as string,\n\t\tCRGO_WGT as string,\n\t\tESTD_ARRVL as string,\n\t\tESTD_DPTR as string,\n\t\tFLT_DT as string,\n\t\tFLT_ID as integer,\n\t\tFLT_NUM as string,\n\t\tFLT_TYPE as string,\n\t\tFUEL_IN as double,\n\t\tFUEL_OUT as double,\n\t\tFUEL_UPLIFT as integer,\n\t\tIS_CNCLD as boolean,\n\t\tIS_VERFD as boolean,\n\t\tMAINT_LOG_PG as integer,\n\t\tNOTES as string,\n\t\tSCHDD_ARRVL as string,\n\t\tSCHDD_ARRVL_AIR_PORT as string,\n\t\tSCHDD_DPTR as string,\n\t\tSCHDD_DPTR_AIR_PORT as string,\n\t\tUPDTD_AT as string,\n\t\tADF_TIME_STMP as timestamp,\n\t\tADF_RUN_ID as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> StgFlights\nRemoveADFColumns split(isNull(DLAY_CD) || isNull(DLAY_CD_NAME) || isNull(FLT_ID) || isNull(DLAY_TYP),\n\tdisjoint: false) ~> ConditionalSplit1@(Reject, FilteredData)\nConditionalSplit1@FilteredData, StgFlights exists(ConditionalSplit1@FilteredData@FLT_ID == StgFlights@FLT_ID,\n\tnegate:false,\n\tbroadcast: 'auto')~> FlightsIdExists\nConditionalSplit1@FilteredData, StgFlights exists(ConditionalSplit1@FilteredData@FLT_ID == StgFlights@FLT_ID,\n\tnegate:true,\n\tbroadcast: 'auto')~> FlightsIdDoesntExists\nConditionalSplit1@Reject derive(Reject_Reason = \"Validation Error: NULLS Found\") ~> AddRejectReasonNull\nFlightsIdDoesntExists derive(Reject_Reason = \"Flight ID not found in Flights Table\") ~> AddRejectReasonNoId\nStgFlightsDelay select(mapColumn(\n\t\tFLT_ID,\n\t\tDLAY_TYP,\n\t\tDURTN_MNT,\n\t\tDLAY_CD,\n\t\tDLAY_CD_NAME\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> RemoveADFColumns\nUnionRejections derive(ADF_TIME_STMP = currentTimestamp(),\n\t\tADF_RUN_ID = $run_id) ~> AddADFColumns\nFlightsIdExists derive(ADF_TIME_STMP = currentTimestamp(),\n\t\tADF_RUN_ID = $run_id) ~> AddADFColumns2\nAddRejectReasonNoId, AddRejectReasonNull union(byName: true)~> UnionRejections\nAddADFColumns sink(input(\n\t\tFLT_ID as long,\n\t\tDLAY_TYP as string,\n\t\tDURTN_MNT as integer,\n\t\tDLAY_CD as string,\n\t\tDLAY_CD_NAME as string,\n\t\tREJECT_REASON as string,\n\t\tADF_TIME_STMP as timestamp,\n\t\tADF_RUN_ID as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\ttruncate:true,\n\tformat: 'table',\n\tmapColumn(\n\t\tFLT_ID,\n\t\tDLAY_TYP,\n\t\tDURTN_MNT,\n\t\tDLAY_CD,\n\t\tDLAY_CD_NAME,\n\t\tREJECT_REASON = Reject_Reason,\n\t\tADF_TIME_STMP,\n\t\tADF_RUN_ID\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> RejectTable\nAddADFColumns2 sink(input(\n\t\tFLT_ID as long,\n\t\tDLAY_TYP as string,\n\t\tDURTN_MNT as integer,\n\t\tDLAY_CD as string,\n\t\tDLAY_CD_NAME as string,\n\t\tADF_TIME_STMP as timestamp,\n\t\tADF_RUN_ID as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\ttruncate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> FlightsDelayAcpt"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/sql_s_flights_delay')]",
-				"[concat(variables('factoryId'), '/datasets/sql_flights_acpt')]",
-				"[concat(variables('factoryId'), '/datasets/sql_flights_delay_rej')]",
-				"[concat(variables('factoryId'), '/datasets/sql_flights_delay_acpt')]"
-			]
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/s_arpt_load')]",
 			"type": "Microsoft.DataFactory/factories/dataflows",
 			"apiVersion": "2018-06-01",
@@ -7312,6 +6653,44 @@
 				"preventDataExfiltration": false
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/eal_sqldb_EDW')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"connectionString": "[parameters('eal_sqldb_EDW_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/eal_sqldb_STG')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"connectionString": "[parameters('eal_sqldb_STG_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
 		}
 	]
 }

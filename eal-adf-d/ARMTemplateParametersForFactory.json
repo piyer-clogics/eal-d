@@ -32,6 +32,12 @@
 		"ealblobdconnection_connectionString": {
 			"value": ""
 		},
+		"eal_sqldb_EDW_connectionString": {
+			"value": ""
+		},
+		"eal_sqldb_STG_connectionString": {
+			"value": ""
+		},
 		"Swagger Connection_properties_typeProperties_url": {
 			"value": "https://api.airline-choice.com/rest/"
 		},

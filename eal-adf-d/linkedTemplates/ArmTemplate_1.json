@@ -13,6 +13,689 @@
 	},
 	"resources": [
 		{
+			"name": "[concat(parameters('factoryName'), '/ADF_Control')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ealblobdconnection",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Azure blobs"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "sample.json",
+						"container": "eal-src-stg"
+					}
+				},
+				"schema": {
+					"type": "object",
+					"properties": {
+						"row": {
+							"type": "integer"
+						}
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/eal_ac_active_flights')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ealblobdconnection",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Azure blobs"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "eal_ac_active_flights.json",
+						"container": "eal-src-stg"
+					}
+				},
+				"schema": {
+					"type": "object",
+					"properties": {
+						"Success": {
+							"type": "boolean"
+						},
+						"Flights": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"ID": {
+										"type": "string"
+									},
+									"SegmentNo": {
+										"type": "integer"
+									},
+									"ExternalID": {
+										"type": "string"
+									},
+									"CarrierCode": {
+										"type": "string"
+									},
+									"FlightNo": {
+										"type": "string"
+									},
+									"MarketingCarrierCode": {
+										"type": "string"
+									},
+									"MarketingFlightNo": {
+										"type": "string"
+									},
+									"Type": {
+										"type": "string"
+									},
+									"TailNo": {
+										"type": "string"
+									},
+									"OriginIATA": {
+										"type": "string"
+									},
+									"OriginICAO": {
+										"type": "string"
+									},
+									"OriginAirportName": {
+										"type": "string"
+									},
+									"OriginAirportCity": {
+										"type": "string"
+									},
+									"OriginAirportCountryCode": {
+										"type": "string"
+									},
+									"DepartureTerminal": {
+										"type": "string"
+									},
+									"DepartureGate": {
+										"type": "string"
+									},
+									"DestinationIATA": {
+										"type": "string"
+									},
+									"DestinationICAO": {
+										"type": "string"
+									},
+									"DestinationAirportName": {
+										"type": "string"
+									},
+									"DestinationAirportCity": {
+										"type": "string"
+									},
+									"DestinationAirportCountryCode": {
+										"type": "string"
+									},
+									"ArrivalTerminal": {
+										"type": "string"
+									},
+									"ArrivalGate": {
+										"type": "string"
+									},
+									"ScheduledDepartureTime": {
+										"type": "string"
+									},
+									"ScheduledDepartureTimeUTC": {
+										"type": "string"
+									},
+									"OffBlocksTime": {
+										"type": "string"
+									},
+									"TakeOffTime": {
+										"type": "string"
+									},
+									"ScheduledArrivalTime": {
+										"type": "string"
+									},
+									"EstimatedArrivalTime": {
+										"type": "string"
+									},
+									"TouchDownTime": {
+										"type": "string"
+									},
+									"OnBlocksTime": {
+										"type": "string"
+									},
+									"FlightTimeMinutes": {
+										"type": "integer"
+									},
+									"BoardingTime": {
+										"type": "string"
+									},
+									"Message": {
+										"type": "string"
+									},
+									"Status": {
+										"type": "string"
+									},
+									"EnablePassengerAPIS": {
+										"type": "boolean"
+									},
+									"EnableCrewAPIS": {
+										"type": "boolean"
+									},
+									"EnableDCS": {
+										"type": "boolean"
+									},
+									"WeightUnitsKgs": {
+										"type": "boolean"
+									},
+									"IsOpenSeating": {
+										"type": "boolean"
+									},
+									"IsProgressiveFlight": {
+										"type": "boolean"
+									},
+									"EnableThroughCheckIn": {
+										"type": "boolean"
+									},
+									"EnableBoarding": {
+										"type": "boolean"
+									},
+									"UseAveragePaxWeight": {
+										"type": "boolean"
+									},
+									"UseAverageBagWeight": {
+										"type": "boolean"
+									},
+									"PnlImported": {
+										"type": "boolean"
+									},
+									"IsCancelled": {
+										"type": "boolean"
+									},
+									"CancelledBy": {
+										"type": "string"
+									},
+									"CancelledReason": {
+										"type": "string"
+									},
+									"AircraftCapacity": {
+										"type": "integer"
+									},
+									"BookedPassengersCount": {
+										"type": "integer"
+									},
+									"TotalCargoLoad": {
+										"type": "integer"
+									},
+									"UpliftFuelLoad": {
+										"type": "integer"
+									},
+									"TotalFuelLoad": {
+										"type": "integer"
+									},
+									"RemainingFuelLoad": {
+										"type": "integer"
+									},
+									"Carrier": {
+										"type": "object",
+										"properties": {
+											"CarrierName": {
+												"type": "string"
+											},
+											"Code": {
+												"type": "string"
+											},
+											"IATA": {
+												"type": "string"
+											},
+											"ICAO": {
+												"type": "string"
+											},
+											"ApisCarrierCode": {
+												"type": "string"
+											},
+											"Prefix": {
+												"type": "string"
+											},
+											"Logo": {
+												"type": "string"
+											},
+											"Icon": {
+												"type": "string"
+											},
+											"Address": {
+												"type": "object",
+												"properties": {
+													"ID": {
+														"type": "string"
+													},
+													"Location": {
+														"type": "string"
+													},
+													"Street1": {
+														"type": "string"
+													},
+													"Street2": {
+														"type": "string"
+													},
+													"City": {
+														"type": "string"
+													},
+													"StateCode": {
+														"type": "string"
+													},
+													"PostalCode": {
+														"type": "string"
+													},
+													"CountryCode": {
+														"type": "string"
+													},
+													"CustomData": {
+														"type": "object",
+														"properties": {
+															"Properties": {
+																"type": "object"
+															}
+														}
+													}
+												}
+											},
+											"ApisSenderID": {
+												"type": "string"
+											},
+											"ApisContactName": {
+												"type": "string"
+											},
+											"ApisTelephone": {
+												"type": "string"
+											},
+											"ApisFax": {
+												"type": "string"
+											},
+											"Email": {
+												"type": "string"
+											},
+											"Website": {
+												"type": "string"
+											},
+											"TsaPreCheck": {
+												"type": "boolean"
+											},
+											"MaximumPassengerBags": {
+												"type": "integer"
+											},
+											"DefaultChildAge": {
+												"type": "integer"
+											},
+											"DefaultAdultAge": {
+												"type": "integer"
+											},
+											"PnlImportCloseTime": {
+												"type": "integer"
+											},
+											"IsPrintingBagTagWithoutCheckInAllowed": {
+												"type": "boolean"
+											},
+											"WatchlistNoFlyMatchInstructions": {
+												"type": "string"
+											},
+											"WatchlistPreventMatchInstructions": {
+												"type": "string"
+											},
+											"WatchlistSelecteeMatchInstructions": {
+												"type": "string"
+											},
+											"SelecteeGateStopInstructions": {
+												"type": "string"
+											},
+											"EmergencySeatGateStopInstructions": {
+												"type": "string"
+											},
+											"UnverifiedDocumentsGateStopInstructions": {
+												"type": "string"
+											},
+											"EmailSenderAddress": {
+												"type": "string"
+											},
+											"CustomData": {
+												"type": "object",
+												"properties": {
+													"Properties": {
+														"type": "object"
+													}
+												}
+											}
+										}
+									},
+									"Passengers": {
+										"type": "array"
+									},
+									"FlightDelays": {
+										"type": "array"
+									},
+									"AncillaryTemplateID": {
+										"type": "string"
+									},
+									"CustomerID": {
+										"type": "string"
+									},
+									"CrewMemberSecurityRules": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"properties": {
+												"CountryEntity": {
+													"type": "string"
+												},
+												"FlightType": {
+													"type": "integer"
+												},
+												"FlightRouting": {
+													"type": "integer"
+												},
+												"InterchangeRecipientID": {
+													"type": "string"
+												},
+												"ApplicationRecipientID": {
+													"type": "string"
+												},
+												"CommonAccessReference": {
+													"type": "string"
+												},
+												"BuildFcmFromMclOnly": {
+													"type": "boolean"
+												},
+												"InteractiveComms": {
+													"type": "boolean"
+												},
+												"BatchSubmission": {
+													"type": "boolean"
+												},
+												"BatchTriggerHours": {
+													"type": "integer"
+												},
+												"BatchValidation": {
+													"type": "boolean"
+												},
+												"WatchlistVet": {
+													"type": "integer"
+												},
+												"RequireSecurityClearance": {
+													"type": "boolean"
+												},
+												"OutageVettingStatus": {
+													"type": "integer"
+												},
+												"FlightAdd": {
+													"type": "boolean"
+												},
+												"FlightChange": {
+													"type": "boolean"
+												},
+												"FlightCancel": {
+													"type": "boolean"
+												},
+												"FlightPreDepartureCloseout": {
+													"type": "boolean"
+												},
+												"FlightPostDepartureCloseout": {
+													"type": "boolean"
+												},
+												"FlightPostDepartureCloseoutOnBoard": {
+													"type": "boolean"
+												},
+												"HasFlightCloseoutRequirement": {
+													"type": "boolean"
+												},
+												"CrewAdd": {
+													"type": "boolean"
+												},
+												"CrewChange": {
+													"type": "boolean"
+												},
+												"CrewCancel": {
+													"type": "boolean"
+												},
+												"BatchDestinationAddressCondition": {
+													"type": "integer"
+												},
+												"BatchContactDetails": {
+													"type": "boolean"
+												},
+												"CheckinStatusOnBoard": {
+													"type": "boolean"
+												},
+												"CheckinDOB": {
+													"type": "boolean"
+												},
+												"CheckinGender": {
+													"type": "boolean"
+												},
+												"CheckinNationality": {
+													"type": "boolean"
+												},
+												"CheckinResidence": {
+													"type": "boolean"
+												},
+												"CheckinOrigDest": {
+													"type": "boolean"
+												},
+												"CheckinClearance": {
+													"type": "boolean"
+												},
+												"CheckinTravelDoc": {
+													"type": "boolean"
+												},
+												"CheckinHomeAddress": {
+													"type": "boolean"
+												},
+												"CheckinDestinationAddress": {
+													"type": "boolean"
+												},
+												"CheckinDestinationAddressCondition": {
+													"type": "integer"
+												},
+												"CheckinBirthPlace": {
+													"type": "boolean"
+												},
+												"CheckinContactDetails": {
+													"type": "boolean"
+												}
+											}
+										}
+									},
+									"PassengerSecurityRules": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"properties": {
+												"CountryEntity": {
+													"type": "string"
+												},
+												"FlightType": {
+													"type": "integer"
+												},
+												"FlightRouting": {
+													"type": "integer"
+												},
+												"InterchangeRecipientID": {
+													"type": "string"
+												},
+												"ApplicationRecipientID": {
+													"type": "string"
+												},
+												"CommonAccessReference": {
+													"type": "string"
+												},
+												"InteractiveComms": {
+													"type": "boolean"
+												},
+												"BatchSubmission": {
+													"type": "boolean"
+												},
+												"BatchTriggerHours": {
+													"type": "integer"
+												},
+												"BatchValidation": {
+													"type": "boolean"
+												},
+												"WatchlistVet": {
+													"type": "integer"
+												},
+												"RequireSecurityClearance": {
+													"type": "boolean"
+												},
+												"OutageVettingStatus": {
+													"type": "integer"
+												},
+												"FlightAdd": {
+													"type": "boolean"
+												},
+												"FlightChange": {
+													"type": "boolean"
+												},
+												"FlightCancel": {
+													"type": "boolean"
+												},
+												"FlightPreDepartureCloseout": {
+													"type": "boolean"
+												},
+												"FlightPostDepartureCloseout": {
+													"type": "boolean"
+												},
+												"FlightPostDepartureCloseoutOnBoard": {
+													"type": "boolean"
+												},
+												"HasFlightCloseoutRequirement": {
+													"type": "boolean"
+												},
+												"PaxAdd": {
+													"type": "boolean"
+												},
+												"PaxChange": {
+													"type": "boolean"
+												},
+												"PaxCancel": {
+													"type": "boolean"
+												},
+												"PaxTransfer": {
+													"type": "boolean"
+												},
+												"PaxVerifiedID": {
+													"type": "boolean"
+												},
+												"GatePass": {
+													"type": "boolean"
+												},
+												"BatchPNR": {
+													"type": "boolean"
+												},
+												"BatchResidence": {
+													"type": "boolean"
+												},
+												"BatchOrigDest": {
+													"type": "boolean"
+												},
+												"BatchClearance": {
+													"type": "boolean"
+												},
+												"BatchDestinationAddress": {
+													"type": "boolean"
+												},
+												"BatchDestinationAddressCondition": {
+													"type": "integer"
+												},
+												"CheckinPNR": {
+													"type": "boolean"
+												},
+												"CheckinDOB": {
+													"type": "boolean"
+												},
+												"CheckinGender": {
+													"type": "boolean"
+												},
+												"CheckinNationality": {
+													"type": "boolean"
+												},
+												"CheckinResidence": {
+													"type": "boolean"
+												},
+												"CheckinOrigDest": {
+													"type": "boolean"
+												},
+												"CheckinClearance": {
+													"type": "boolean"
+												},
+												"CheckinTravelDoc": {
+													"type": "boolean"
+												},
+												"CheckinDestinationAddress": {
+													"type": "boolean"
+												},
+												"CheckinDestinationAddressCondition": {
+													"type": "integer"
+												}
+											}
+										}
+									},
+									"BatchPassengerMask": {
+										"type": "string"
+									},
+									"BatchCrewMemberMask": {
+										"type": "string"
+									},
+									"PreDepartureCloseOutPassengerMask": {
+										"type": "string"
+									},
+									"PostDepartureCloseOutPassengerMask": {
+										"type": "string"
+									},
+									"PreDepartureCloseOutCrewMemberMask": {
+										"type": "string"
+									},
+									"PostDepartureCloseOutCrewMemberMask": {
+										"type": "string"
+									},
+									"PaxFlightPreDepartureCloseOutStatus": {
+										"type": "string"
+									},
+									"PaxFlightPostDepartureCloseOutStatus": {
+										"type": "string"
+									},
+									"CrewFlightPreDepartureCloseOutStatus": {
+										"type": "string"
+									},
+									"CrewFlightPostDepartureCloseOutStatus": {
+										"type": "string"
+									},
+									"PaxBatchPreVetStatus": {
+										"type": "string"
+									},
+									"HasPassengerSecurityTransactions": {
+										"type": "boolean"
+									},
+									"CustomData": {
+										"type": "object",
+										"properties": {
+											"Properties": {
+												"type": "object"
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/eal_ac_airport')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -164,7 +847,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "eal_sqldb_piyer",
+					"referenceName": "eal_sqldb_STG",
 					"type": "LinkedServiceReference"
 				},
 				"folder": {
@@ -1250,7 +1933,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "eal_sqldb_piyer",
+					"referenceName": "eal_sqldb_EDW",
 					"type": "LinkedServiceReference"
 				},
 				"folder": {
@@ -1346,7 +2029,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "eal_sqldb_piyer",
+					"referenceName": "eal_sqldb_EDW",
 					"type": "LinkedServiceReference"
 				},
 				"folder": {
@@ -1518,92 +2201,12 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/sql_eqip_schd_acpt')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "eal_sqldb_piyer",
-					"type": "LinkedServiceReference"
-				},
-				"folder": {
-					"name": "Destination Table/Rejections"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "EQP_SCHED_ID",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "AC_RGSTRN",
-						"type": "text"
-					},
-					{
-						"name": "STS_CD",
-						"type": "text"
-					},
-					{
-						"name": "STS_NAME",
-						"type": "text"
-					},
-					{
-						"name": "STS_DESC",
-						"type": "text"
-					},
-					{
-						"name": "STRT_TIME",
-						"type": "datetime",
-						"precision": 23,
-						"scale": 3
-					},
-					{
-						"name": "END_TIME",
-						"type": "datetime",
-						"precision": 23,
-						"scale": 3
-					},
-					{
-						"name": "NOTE",
-						"type": "text"
-					},
-					{
-						"name": "IS_DELD",
-						"type": "bit"
-					},
-					{
-						"name": "UPDTD_AT",
-						"type": "datetime",
-						"precision": 23,
-						"scale": 3
-					},
-					{
-						"name": "ADF_TIME_STMP",
-						"type": "datetime",
-						"precision": 23,
-						"scale": 3
-					},
-					{
-						"name": "ADF_RUN_ID",
-						"type": "text"
-					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "S_EQUIP_SCHD_ACPT"
-				}
-			},
-			"dependsOn": []
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/sql_eqip_schd_rej')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "eal_sqldb_piyer",
+					"referenceName": "eal_sqldb_STG",
 					"type": "LinkedServiceReference"
 				},
 				"folder": {
@@ -1687,7 +2290,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "eal_sqldb_piyer",
+					"referenceName": "eal_sqldb_EDW",
 					"type": "LinkedServiceReference"
 				},
 				"folder": {
@@ -1773,255 +2376,6 @@
 				"typeProperties": {
 					"schema": "dbo",
 					"table": "F_EQUIP_SCHD"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/sql_f_flights_ops')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "eal_sqldb_piyer",
-					"type": "LinkedServiceReference"
-				},
-				"folder": {
-					"name": "Destination Table/Prod"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "FLGHT_ID",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "FLGHT_DT_ID",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "FLGHT_NUM",
-						"type": "varchar"
-					},
-					{
-						"name": "FLGHT_TYP",
-						"type": "varchar"
-					},
-					{
-						"name": "AIR_CRAFT_RGSTRN_NUM",
-						"type": "varchar"
-					},
-					{
-						"name": "AIR_CRAFT_TYP",
-						"type": "varchar"
-					},
-					{
-						"name": "SCHDD_DPRT_TS_UTC",
-						"type": "datetime",
-						"precision": 23,
-						"scale": 3
-					},
-					{
-						"name": "SCHDD_ARRVL_TS_UTC",
-						"type": "datetime",
-						"precision": 23,
-						"scale": 3
-					},
-					{
-						"name": "ESTD_DPRT_TS_UTC",
-						"type": "datetime",
-						"precision": 23,
-						"scale": 3
-					},
-					{
-						"name": "ESTD_ARRVL_TS_UTC",
-						"type": "datetime",
-						"precision": 23,
-						"scale": 3
-					},
-					{
-						"name": "ACTL_OOOI_OUT_TS_UTC",
-						"type": "datetime",
-						"precision": 23,
-						"scale": 3
-					},
-					{
-						"name": "ACTL_OOOI_OFF_TS_UTC",
-						"type": "datetime",
-						"precision": 23,
-						"scale": 3
-					},
-					{
-						"name": "ACTL_OOOI_ON_TS_UTC",
-						"type": "datetime",
-						"precision": 23,
-						"scale": 3
-					},
-					{
-						"name": "ACTL_OOOI_IN_TS_UTC",
-						"type": "datetime",
-						"precision": 23,
-						"scale": 3
-					},
-					{
-						"name": "BASE_ARPT_CD",
-						"type": "varchar"
-					},
-					{
-						"name": "BASE_ARPT_ID",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "SCHDD_DRPT_ARPT_CD",
-						"type": "varchar"
-					},
-					{
-						"name": "SCHDD_DRPT_ARPT_ID",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "SCHDD_ARRVL_ARPT_CD",
-						"type": "varchar"
-					},
-					{
-						"name": "SCHDD_ARRVL_ARPT_ID",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "ACTL_ARRVL_ARPT_CD",
-						"type": "varchar"
-					},
-					{
-						"name": "ACTL_ARRVL_ARPT_ID",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "ACTL_DPTR_ARPT_CD",
-						"type": "varchar"
-					},
-					{
-						"name": "ACTL_DPTR_ARPT_ID",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "FUEL_IN",
-						"type": "char"
-					},
-					{
-						"name": "FUEL_OUT",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "FUEL_UPLIFT",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "CRGO_WT",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "MAINT_LOG",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "NOTES",
-						"type": "varchar"
-					},
-					{
-						"name": "IS_CNCLD",
-						"type": "bit"
-					},
-					{
-						"name": "IS_VERFD",
-						"type": "bit"
-					},
-					{
-						"name": "DEP_VAR",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "ARRVL_VAR",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "SCHDD_BLK_DUR",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "ACTL_BLK_DUR",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "ACTL_FLGHT_DUR",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "DPRT_DELAY_DUR_D0_IND",
-						"type": "smallint",
-						"precision": 5
-					},
-					{
-						"name": "DPRT_DELAY_DUR_D15_IND",
-						"type": "smallint",
-						"precision": 5
-					},
-					{
-						"name": "ARRVL_DELAY_DUR_A0_IND",
-						"type": "smallint",
-						"precision": 5
-					},
-					{
-						"name": "ARRVL_DELAY_DUR_A14_IND",
-						"type": "smallint",
-						"precision": 5
-					},
-					{
-						"name": "BLK_DUR_B0_IND",
-						"type": "smallint",
-						"precision": 5
-					},
-					{
-						"name": "SCHDD_FLT_DUR",
-						"type": "varchar"
-					},
-					{
-						"name": "DELAY_TYP",
-						"type": "varchar"
-					},
-					{
-						"name": "DELAY_DUR",
-						"type": "smallint",
-						"precision": 5
-					},
-					{
-						"name": "DELAY_CD",
-						"type": "varchar"
-					},
-					{
-						"name": "DELAY_DESC",
-						"type": "varchar"
-					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "F_FLGHT_OPS"
 				}
 			},
 			"dependsOn": []
