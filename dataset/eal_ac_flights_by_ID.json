@@ -1,0 +1,22 @@
+{
+	"name": "eal_ac_flights_by_ID",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ealblobdconnection",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Azure blobs"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "eal_ac_flightById.json",
+				"container": "eal-src-stg"
+			}
+		},
+		"schema": {}
+	}
+}

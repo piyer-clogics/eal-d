@@ -1,0 +1,35 @@
+{
+	"name": "eal_reset_controls",
+	"properties": {
+		"activities": [
+			{
+				"name": "Reset Controls",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "adf_reset_dataflow",
+						"type": "DataFlowReference",
+						"parameters": {
+							"job_name": "'eal_s_arpt_load'"
+						}
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			}
+		],
+		"annotations": []
+	}
+}

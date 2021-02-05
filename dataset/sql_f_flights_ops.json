@@ -1,0 +1,246 @@
+{
+	"name": "sql_f_flights_ops",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "eal_sqldb_piyer",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Destination Table/Prod"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "FLGHT_ID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "FLGHT_DT_ID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "FLGHT_NUM",
+				"type": "varchar"
+			},
+			{
+				"name": "FLGHT_TYP",
+				"type": "varchar"
+			},
+			{
+				"name": "AIR_CRAFT_RGSTRN_NUM",
+				"type": "varchar"
+			},
+			{
+				"name": "AIR_CRAFT_TYP",
+				"type": "varchar"
+			},
+			{
+				"name": "SCHDD_DPRT_TS_UTC",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "SCHDD_ARRVL_TS_UTC",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "ESTD_DPRT_TS_UTC",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "ESTD_ARRVL_TS_UTC",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "ACTL_OOOI_OUT_TS_UTC",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "ACTL_OOOI_OFF_TS_UTC",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "ACTL_OOOI_ON_TS_UTC",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "ACTL_OOOI_IN_TS_UTC",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "BASE_ARPT_CD",
+				"type": "varchar"
+			},
+			{
+				"name": "BASE_ARPT_ID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "SCHDD_DRPT_ARPT_CD",
+				"type": "varchar"
+			},
+			{
+				"name": "SCHDD_DRPT_ARPT_ID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "SCHDD_ARRVL_ARPT_CD",
+				"type": "varchar"
+			},
+			{
+				"name": "SCHDD_ARRVL_ARPT_ID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "ACTL_ARRVL_ARPT_CD",
+				"type": "varchar"
+			},
+			{
+				"name": "ACTL_ARRVL_ARPT_ID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "ACTL_DPTR_ARPT_CD",
+				"type": "varchar"
+			},
+			{
+				"name": "ACTL_DPTR_ARPT_ID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "FUEL_IN",
+				"type": "char"
+			},
+			{
+				"name": "FUEL_OUT",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "FUEL_UPLIFT",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "CRGO_WT",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "MAINT_LOG",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "NOTES",
+				"type": "varchar"
+			},
+			{
+				"name": "IS_CNCLD",
+				"type": "bit"
+			},
+			{
+				"name": "IS_VERFD",
+				"type": "bit"
+			},
+			{
+				"name": "DEP_VAR",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "ARRVL_VAR",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "SCHDD_BLK_DUR",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "ACTL_BLK_DUR",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "ACTL_FLGHT_DUR",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "DPRT_DELAY_DUR_D0_IND",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "DPRT_DELAY_DUR_D15_IND",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "ARRVL_DELAY_DUR_A0_IND",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "ARRVL_DELAY_DUR_A14_IND",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "BLK_DUR_B0_IND",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "SCHDD_FLT_DUR",
+				"type": "varchar"
+			},
+			{
+				"name": "DELAY_TYP",
+				"type": "varchar"
+			},
+			{
+				"name": "DELAY_DUR",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "DELAY_CD",
+				"type": "varchar"
+			},
+			{
+				"name": "DELAY_DESC",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "F_FLGHT_OPS"
+		}
+	}
+}

@@ -1,0 +1,16 @@
+{
+	"name": "AWSPostgreSql",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "PostgreSql",
+		"typeProperties": {
+			"connectionString": "host=sf-eastern.cbslz8jhy8xf.us-west-2.rds.amazonaws.com;port=5432;database=skedflexbi;uid=sfbi;encryptionmethod=0",
+			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiJiNmMzMjA5Ni00ZmNmLTRjNmItYWZlNS1kZWVlMmQ2OTM1YWYiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
+		},
+		"connectVia": {
+			"referenceName": "Azure-VM-Intergation-Runtime",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}

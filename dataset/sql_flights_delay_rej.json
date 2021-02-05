@@ -1,0 +1,56 @@
+{
+	"name": "sql_flights_delay_rej",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "eal_sqldb_piyer",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Destination Table/Rejections"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "FLT_ID",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "DLAY_TYP",
+				"type": "text"
+			},
+			{
+				"name": "DURTN_MNT",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "DLAY_CD",
+				"type": "text"
+			},
+			{
+				"name": "DLAY_CD_NAME",
+				"type": "text"
+			},
+			{
+				"name": "REJECT_REASON",
+				"type": "varchar"
+			},
+			{
+				"name": "ADF_TIME_STMP",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "ADF_RUN_ID",
+				"type": "text"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "S_FLIGHTS_DELAY_REJ"
+		}
+	}
+}

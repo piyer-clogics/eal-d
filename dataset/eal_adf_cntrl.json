@@ -1,0 +1,34 @@
+{
+	"name": "eal_adf_cntrl",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "eal_sqldb_piyer",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Destination Table"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "ADF_RUN_ID",
+				"type": "varchar"
+			},
+			{
+				"name": "ADF_JOB_NAME",
+				"type": "varchar"
+			},
+			{
+				"name": "ADF_SUC_TS",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "S_ADF_CNTRL"
+		}
+	}
+}

@@ -1,0 +1,81 @@
+{
+	"name": "sql_eqip_schd_rej",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "eal_sqldb_piyer",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Destination Table/Rejections"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "EQP_SCHED_ID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "AC_RGSTRN",
+				"type": "text"
+			},
+			{
+				"name": "STS_CD",
+				"type": "text"
+			},
+			{
+				"name": "STS_NAME",
+				"type": "text"
+			},
+			{
+				"name": "STS_DESC",
+				"type": "text"
+			},
+			{
+				"name": "STRT_TIME",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "END_TIME",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "NOTE",
+				"type": "text"
+			},
+			{
+				"name": "IS_DELD",
+				"type": "bit"
+			},
+			{
+				"name": "UPDTD_AT",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "REJECT_REASON",
+				"type": "varchar"
+			},
+			{
+				"name": "ADF_TIME_STMP",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "ADF_RUN_ID",
+				"type": "text"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "S_EQUIP_SCHD_REJ"
+		}
+	}
+}

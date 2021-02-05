@@ -1,0 +1,45 @@
+{
+	"name": "d_arpt_daily_load_insert",
+	"properties": {
+		"folder": {
+			"name": "Airport"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "sql_s_airports",
+						"type": "DatasetReference"
+					},
+					"name": "StgArpt"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "sql_d_aprt",
+						"type": "DatasetReference"
+					},
+					"name": "WriteNewRows"
+				}
+			],
+			"transformations": [
+				{
+					"name": "MapDrifted1",
+					"description": "Creates an explicit mapping for each drifted column"
+				},
+				{
+					"name": "AddADFColumns1"
+				},
+				{
+					"name": "DropColumns1"
+				},
+				{
+					"name": "SetRowNumber"
+				}
+			],
+			"script": "parameters{\n\tdt as string ('2021-01-27'),\n\trow_num as integer (990000)\n}\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tquery: (\"SELECT [ARPT_NAME],[ARPT_CITY],[ARPT_CNTRY],[ARPT_IATA_CD],[ARPT_ICAO_CD],[ARPT_LAT],[ARPT_LONG],[ARPT_ALTD],[ARPT_UTC_OFSET],[ARPT_DST],[ARPT_TZONE],[LAST_UPDT_DT],[ADF_RUN_ID],[ADF_TIME_STMP] FROM [S_AIRPORTS] WHERE [LAST_UPDT_DT] > '\"+$dt+\"'\"),\n\tformat: 'query') ~> StgArpt\nStgArpt derive(ARPT_NAME = toString(byName('ARPT_NAME')),\n\t\tARPT_CITY = toString(byName('ARPT_CITY')),\n\t\tARPT_CNTRY = toString(byName('ARPT_CNTRY')),\n\t\tARPT_IATA_CD = toString(byName('ARPT_IATA_CD')),\n\t\tARPT_ICAO_CD = toString(byName('ARPT_ICAO_CD')),\n\t\tARPT_LAT = toDouble(byName('ARPT_LAT')),\n\t\tARPT_LONG = toDouble(byName('ARPT_LONG')),\n\t\tARPT_ALTD = toShort(byName('ARPT_ALTD')),\n\t\tARPT_UTC_OFSET = toDouble(byName('ARPT_UTC_OFSET')),\n\t\tARPT_DST = toString(byName('ARPT_DST')),\n\t\tARPT_TZONE = toString(byName('ARPT_TZONE')),\n\t\tLAST_UPDT_DT = toDate(byName('LAST_UPDT_DT')),\n\t\tADF_RUN_ID = toString(byName('ADF_RUN_ID')),\n\t\tADF_TIME_STMP = toTimestamp(byName('ADF_TIME_STMP'))) ~> MapDrifted1\nDropColumns1 derive(EFF_STRT_DT = LAST_UPDT_DT,\n\t\tEFF_END_DT = toDate('2500-01-01'),\n\t\tACTV_IND = 'Y',\n\t\tID = $row_num+1) ~> AddADFColumns1\nMapDrifted1 select(mapColumn(\n\t\tARPT_NAME,\n\t\tARPT_CITY,\n\t\tARPT_CNTRY,\n\t\tARPT_IATA_CD,\n\t\tARPT_ICAO_CD,\n\t\tARPT_LAT,\n\t\tARPT_LONG,\n\t\tARPT_ALTD,\n\t\tARPT_UTC_OFSET,\n\t\tARPT_DST,\n\t\tARPT_TZONE,\n\t\tLAST_UPDT_DT\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> DropColumns1\nAddADFColumns1 window(over(ID),\n\tasc(ID, true),\n\tAPRT_ID = $row_num + rowNumber()) ~> SetRowNumber\nSetRowNumber sink(input(\n\t\tARPT_ID as integer,\n\t\tARPT_IATA_CD as string,\n\t\tARPT_ICAO_CD as string,\n\t\tARPT_NAME as string,\n\t\tARPT_CNTRY as string,\n\t\tARPT_CITY as string,\n\t\tARPT_LAT as decimal(8,6),\n\t\tARPT_LONG as decimal(9,6),\n\t\tARPT_ALTD as decimal(6,2),\n\t\tARPT_UTC_OFSET as decimal(2,2),\n\t\tARPT_DST_CD as string,\n\t\tARPT_TZONE as string,\n\t\tEFF_STRT_DT as timestamp,\n\t\tEFF_END_DT as timestamp,\n\t\tACTV_IND as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tmapColumn(\n\t\tARPT_ID = APRT_ID,\n\t\tARPT_IATA_CD,\n\t\tARPT_ICAO_CD,\n\t\tARPT_NAME,\n\t\tARPT_CNTRY,\n\t\tARPT_CITY,\n\t\tARPT_LAT,\n\t\tARPT_LONG,\n\t\tARPT_ALTD,\n\t\tARPT_UTC_OFSET,\n\t\tARPT_DST_CD = ARPT_DST,\n\t\tARPT_TZONE,\n\t\tEFF_STRT_DT,\n\t\tEFF_END_DT,\n\t\tACTV_IND\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> WriteNewRows"
+		}
+	}
+}

@@ -1,0 +1,68 @@
+{
+	"name": "eal_ac_bdavis_Airports",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "eal_sqldb_bdavis",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Azure blobs"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "Airport_Name",
+				"type": "nvarchar"
+			},
+			{
+				"name": "City",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Country",
+				"type": "nvarchar"
+			},
+			{
+				"name": "IATA",
+				"type": "nvarchar"
+			},
+			{
+				"name": "ICAO",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Latitude",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Longitude",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Altitude",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "UTC_offset",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "DST",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Time_Zone",
+				"type": "nvarchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "Airports_with_UTC_offset"
+		}
+	}
+}

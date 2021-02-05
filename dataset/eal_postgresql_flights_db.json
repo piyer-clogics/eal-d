@@ -1,0 +1,19 @@
+{
+	"name": "eal_postgresql_flights_db",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AWSPostgreSql",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Source"
+		},
+		"annotations": [],
+		"type": "PostgreSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "bi",
+			"table": "flight"
+		}
+	}
+}

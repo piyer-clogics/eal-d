@@ -1,0 +1,71 @@
+{
+	"name": "sql_s_eqip_schd",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "eal_sqldb_piyer",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Destination Table/Staging"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "EQP_SCHED_ID",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "AC_RGSTRN",
+				"type": "varchar"
+			},
+			{
+				"name": "STS_CD",
+				"type": "varchar"
+			},
+			{
+				"name": "STS_NAME",
+				"type": "varchar"
+			},
+			{
+				"name": "STS_DESC",
+				"type": "varchar"
+			},
+			{
+				"name": "STRT_TIME",
+				"type": "varchar"
+			},
+			{
+				"name": "END_TIME",
+				"type": "varchar"
+			},
+			{
+				"name": "NOTE",
+				"type": "varchar"
+			},
+			{
+				"name": "IS_DELD",
+				"type": "bit"
+			},
+			{
+				"name": "UPDTD_AT",
+				"type": "varchar"
+			},
+			{
+				"name": "ADF_TIME_STMP",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "ADF_RUN_ID",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "S_EQUIP_SCHD"
+		}
+	}
+}

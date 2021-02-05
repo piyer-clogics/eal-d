@@ -1,0 +1,174 @@
+{
+	"name": "sql_d_clndr",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "eal_sqldb_piyer",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Destination Table/Prod"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "CLNDR_ID",
+				"type": "char"
+			},
+			{
+				"name": "TheDate",
+				"type": "date"
+			},
+			{
+				"name": "TheDay",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "TheDaySuffix",
+				"type": "char"
+			},
+			{
+				"name": "TheDayName",
+				"type": "nvarchar"
+			},
+			{
+				"name": "TheDayOfWeek",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "TheDayOfWeekInMonth",
+				"type": "tinyint",
+				"precision": 3
+			},
+			{
+				"name": "TheDayOfYear",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "IsWeekend",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "TheWeek",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "TheISOweek",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "TheFirstOfWeek",
+				"type": "date"
+			},
+			{
+				"name": "TheLastOfWeek",
+				"type": "date"
+			},
+			{
+				"name": "TheWeekOfMonth",
+				"type": "tinyint",
+				"precision": 3
+			},
+			{
+				"name": "TheMonth",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "TheMonthName",
+				"type": "nvarchar"
+			},
+			{
+				"name": "TheFirstOfMonth",
+				"type": "date"
+			},
+			{
+				"name": "TheLastOfMonth",
+				"type": "date"
+			},
+			{
+				"name": "TheFirstOfNextMonth",
+				"type": "date"
+			},
+			{
+				"name": "TheLastOfNextMonth",
+				"type": "date"
+			},
+			{
+				"name": "TheQuarter",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "TheFirstOfQuarter",
+				"type": "date"
+			},
+			{
+				"name": "TheLastOfQuarter",
+				"type": "date"
+			},
+			{
+				"name": "TheYear",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "TheISOYear",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "TheFirstOfYear",
+				"type": "date"
+			},
+			{
+				"name": "TheLastOfYear",
+				"type": "date"
+			},
+			{
+				"name": "IsLeapYear",
+				"type": "bit"
+			},
+			{
+				"name": "Has53Weeks",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "Has53ISOWeeks",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "MMYYYY",
+				"type": "char"
+			},
+			{
+				"name": "Style101",
+				"type": "char"
+			},
+			{
+				"name": "Style103",
+				"type": "char"
+			},
+			{
+				"name": "Style112",
+				"type": "char"
+			},
+			{
+				"name": "Style120",
+				"type": "char"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "D_CLNDR"
+		}
+	}
+}

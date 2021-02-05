@@ -1,0 +1,22 @@
+{
+	"name": "eal_ac_passengers_by_Id",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ealblobdconnection",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Azure blobs"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "passenger_by_id.json",
+				"container": "eal-src-stg"
+			}
+		},
+		"schema": {}
+	}
+}

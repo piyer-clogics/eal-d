@@ -1,0 +1,41 @@
+{
+	"name": "f_equip_schd_load_insert",
+	"properties": {
+		"folder": {
+			"name": "Equip Schd"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "sql_s_eqip_schd",
+						"type": "DatasetReference"
+					},
+					"name": "StgEquipSchd"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "sql_f_equip_schd",
+						"type": "DatasetReference"
+					},
+					"name": "InsertRows"
+				}
+			],
+			"transformations": [
+				{
+					"name": "DistinctRows"
+				},
+				{
+					"name": "AddRowCount"
+				},
+				{
+					"name": "SetEquipID"
+				}
+			],
+			"script": "parameters{\n\tdate as string ('1899-01-01'),\n\trow_num as integer (0)\n}\nsource(output(\n\t\tEQP_SCHED_ID as integer,\n\t\tAC_RGSTRN as string,\n\t\tSTS_CD as string,\n\t\tSTS_NAME as string,\n\t\tSTS_DESC as string,\n\t\tSTRT_TIME as timestamp,\n\t\tEND_TIME as timestamp,\n\t\tNOTE as string,\n\t\tIS_DELD as boolean,\n\t\tUPDTD_AT as timestamp,\n\t\tADF_TIME_STMP as timestamp,\n\t\tADF_RUN_ID as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tquery: (\"SELECT * FROM [dbo].[S_EQUIP_SCHD] where  UPDTD_AT > '\"+$date+\"'\"),\n\tformat: 'query') ~> StgEquipSchd\nStgEquipSchd aggregate(groupBy(AC_RGSTRN,\n\t\tSTS_CD,\n\t\tSTRT_TIME),\n\teach(match(name!='AC_RGSTRN'&&name!='STS_CD'&&name!='STRT_TIME'), $$ = iif(first(UPDTD_AT)>last(UPDTD_AT),first($$),last($$)))) ~> DistinctRows\nDistinctRows derive(RNO_Constant = $row_num) ~> AddRowCount\nAddRowCount window(over(row_num = RNO_Constant),\n\tasc(RNO_Constant, true),\n\tEQUIP_ID = $row_num + rowNumber()) ~> SetEquipID\nSetEquipID sink(input(\n\t\tEQP_SCHED_ID as integer,\n\t\tAC_RGSTRN as string,\n\t\tSTS_CD as string,\n\t\tSTS_NAME as string,\n\t\tSTS_DESC as string,\n\t\tSTRT_TIME as timestamp,\n\t\tEND_TIME as timestamp,\n\t\tNOTE as string,\n\t\tIS_DELD as boolean\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tmapColumn(\n\t\tEQP_SCHED_ID = EQUIP_ID,\n\t\tAC_RGSTRN,\n\t\tSTS_CD,\n\t\tSTS_NAME,\n\t\tSTS_DESC,\n\t\tSTRT_TIME,\n\t\tEND_TIME,\n\t\tNOTE,\n\t\tIS_DELD\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> InsertRows"
+		}
+	}
+}

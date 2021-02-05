@@ -1,0 +1,41 @@
+{
+	"name": "eal_ac_src_passengers",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "eal_airlinechoice_src",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"flightID": {
+				"type": "string"
+			},
+			"flightSegmentNo": {
+				"type": "int"
+			},
+			"includeBags": {
+				"type": "bool",
+				"defaultValue": true
+			},
+			"includeAncillaries": {
+				"type": "bool",
+				"defaultValue": false
+			},
+			"includeBagTracking": {
+				"type": "bool",
+				"defaultValue": false
+			}
+		},
+		"folder": {
+			"name": "Source"
+		},
+		"annotations": [],
+		"type": "RestResource",
+		"typeProperties": {
+			"relativeUrl": {
+				"value": "@concat('passengers/GetPassengersByFlightID?flightID=',dataset().flightID,'&flightsegmentNo=',string(dataset().flightSegmentNo))",
+				"type": "Expression"
+			}
+		},
+		"schema": []
+	}
+}

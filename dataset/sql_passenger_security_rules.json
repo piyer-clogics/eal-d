@@ -1,0 +1,192 @@
+{
+	"name": "sql_passenger_security_rules",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "eal_sqldb_piyer",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Destination Table"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "ApplicationRecipientID",
+				"type": "varchar"
+			},
+			{
+				"name": "BatchClearance",
+				"type": "bit"
+			},
+			{
+				"name": "BatchDestinationAddress",
+				"type": "bit"
+			},
+			{
+				"name": "BatchDestinationAddressCondition",
+				"type": "bit"
+			},
+			{
+				"name": "BatchOrigDest",
+				"type": "bit"
+			},
+			{
+				"name": "BatchPNR",
+				"type": "bit"
+			},
+			{
+				"name": "BatchResidence",
+				"type": "bit"
+			},
+			{
+				"name": "BatchSubmission",
+				"type": "bit"
+			},
+			{
+				"name": "BatchTriggerHours",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "BatchValidation",
+				"type": "bit"
+			},
+			{
+				"name": "CheckinClearance",
+				"type": "bit"
+			},
+			{
+				"name": "CheckinDOB",
+				"type": "bit"
+			},
+			{
+				"name": "CheckinDestinationAddress",
+				"type": "bit"
+			},
+			{
+				"name": "CheckinDestinationAddressCondition",
+				"type": "bit"
+			},
+			{
+				"name": "CheckinGender",
+				"type": "bit"
+			},
+			{
+				"name": "CheckinNationality",
+				"type": "bit"
+			},
+			{
+				"name": "CheckinOrigDest",
+				"type": "bit"
+			},
+			{
+				"name": "CheckinPNR",
+				"type": "bit"
+			},
+			{
+				"name": "CheckinResidence",
+				"type": "bit"
+			},
+			{
+				"name": "CheckinTravelDoc",
+				"type": "bit"
+			},
+			{
+				"name": "CommonAccessReference",
+				"type": "varchar"
+			},
+			{
+				"name": "CountryEntity",
+				"type": "varchar"
+			},
+			{
+				"name": "FlightAdd",
+				"type": "bit"
+			},
+			{
+				"name": "FlightCancel",
+				"type": "bit"
+			},
+			{
+				"name": "FlightChange",
+				"type": "bit"
+			},
+			{
+				"name": "FlightPostDepartureCloseout",
+				"type": "bit"
+			},
+			{
+				"name": "FlightPostDepartureCloseoutOnBoard",
+				"type": "bit"
+			},
+			{
+				"name": "FlightPreDepartureCloseout",
+				"type": "bit"
+			},
+			{
+				"name": "FlightRouting",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "FlightType",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "GatePass",
+				"type": "bit"
+			},
+			{
+				"name": "HasFlightCloseoutRequirement",
+				"type": "bit"
+			},
+			{
+				"name": "InteractiveComms",
+				"type": "bit"
+			},
+			{
+				"name": "InterchangeRecipientID",
+				"type": "varchar"
+			},
+			{
+				"name": "OutageVettingStatus",
+				"type": "bit"
+			},
+			{
+				"name": "PaxAdd",
+				"type": "bit"
+			},
+			{
+				"name": "PaxCancel",
+				"type": "bit"
+			},
+			{
+				"name": "PaxChange",
+				"type": "bit"
+			},
+			{
+				"name": "PaxTransfer",
+				"type": "bit"
+			},
+			{
+				"name": "PaxVerifiedID",
+				"type": "bit"
+			},
+			{
+				"name": "RequireSecurityClearance",
+				"type": "bit"
+			},
+			{
+				"name": "WatchlistVet",
+				"type": "int",
+				"precision": 10
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "S_PSNGR_SEC_RULES"
+		}
+	}
+}
