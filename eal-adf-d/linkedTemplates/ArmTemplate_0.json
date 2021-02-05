@@ -31,6 +31,14 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'eal_cosmos_db'"
 		},
+		"eal_sqldb_EDW_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'eal_sqldb_EDW'"
+		},
+		"eal_sqldb_STG_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'eal_sqldb_STG'"
+		},
 		"eal_sqldb_bdavis_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'eal_sqldb_bdavis'"
@@ -42,14 +50,6 @@
 		"ealblobdconnection_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'ealblobdconnection'"
-		},
-		"eal_sqldb_EDW_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'eal_sqldb_EDW'"
-		},
-		"eal_sqldb_STG_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'eal_sqldb_STG'"
 		},
 		"eal_airlinechoice_src_properties_typeProperties_url": {
 			"type": "string",
@@ -397,6 +397,44 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/eal_sqldb_EDW')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"connectionString": "[parameters('eal_sqldb_EDW_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/eal_sqldb_STG')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"connectionString": "[parameters('eal_sqldb_STG_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/eal_sqldb_bdavis')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -443,44 +481,6 @@
 				"type": "AzureBlobStorage",
 				"typeProperties": {
 					"connectionString": "[parameters('ealblobdconnection_connectionString')]"
-				},
-				"connectVia": {
-					"referenceName": "AutoResolveIntegrationRuntime",
-					"type": "IntegrationRuntimeReference"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/eal_sqldb_EDW')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureSqlDatabase",
-				"typeProperties": {
-					"connectionString": "[parameters('eal_sqldb_EDW_connectionString')]"
-				},
-				"connectVia": {
-					"referenceName": "AutoResolveIntegrationRuntime",
-					"type": "IntegrationRuntimeReference"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/eal_sqldb_STG')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureSqlDatabase",
-				"typeProperties": {
-					"connectionString": "[parameters('eal_sqldb_STG_connectionString')]"
 				},
 				"connectVia": {
 					"referenceName": "AutoResolveIntegrationRuntime",

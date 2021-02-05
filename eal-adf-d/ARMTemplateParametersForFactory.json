@@ -20,6 +20,12 @@
 		"eal_cosmos_db_connectionString": {
 			"value": ""
 		},
+		"eal_sqldb_EDW_connectionString": {
+			"value": ""
+		},
+		"eal_sqldb_STG_connectionString": {
+			"value": ""
+		},
 		"eal_sqldb_bdavis_connectionString": {
 			"value": ""
 		},
@@ -30,12 +36,6 @@
 			"value": ""
 		},
 		"ealblobdconnection_connectionString": {
-			"value": ""
-		},
-		"eal_sqldb_EDW_connectionString": {
-			"value": ""
-		},
-		"eal_sqldb_STG_connectionString": {
 			"value": ""
 		},
 		"Swagger Connection_properties_typeProperties_url": {

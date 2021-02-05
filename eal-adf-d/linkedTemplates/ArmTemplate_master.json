@@ -27,6 +27,14 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'eal_cosmos_db'"
 		},
+		"eal_sqldb_EDW_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'eal_sqldb_EDW'"
+		},
+		"eal_sqldb_STG_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'eal_sqldb_STG'"
+		},
 		"eal_sqldb_bdavis_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'eal_sqldb_bdavis'"
@@ -42,14 +50,6 @@
 		"ealblobdconnection_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'ealblobdconnection'"
-		},
-		"eal_sqldb_EDW_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'eal_sqldb_EDW'"
-		},
-		"eal_sqldb_STG_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'eal_sqldb_STG'"
 		},
 		"Swagger Connection_properties_typeProperties_url": {
 			"type": "string",
@@ -112,6 +112,12 @@
 					"eal_cosmos_db_connectionString": {
 						"value": "[parameters('eal_cosmos_db_connectionString')]"
 					},
+					"eal_sqldb_EDW_connectionString": {
+						"value": "[parameters('eal_sqldb_EDW_connectionString')]"
+					},
+					"eal_sqldb_STG_connectionString": {
+						"value": "[parameters('eal_sqldb_STG_connectionString')]"
+					},
 					"eal_sqldb_bdavis_connectionString": {
 						"value": "[parameters('eal_sqldb_bdavis_connectionString')]"
 					},
@@ -120,12 +126,6 @@
 					},
 					"ealblobdconnection_connectionString": {
 						"value": "[parameters('ealblobdconnection_connectionString')]"
-					},
-					"eal_sqldb_EDW_connectionString": {
-						"value": "[parameters('eal_sqldb_EDW_connectionString')]"
-					},
-					"eal_sqldb_STG_connectionString": {
-						"value": "[parameters('eal_sqldb_STG_connectionString')]"
 					},
 					"eal_airlinechoice_src_properties_typeProperties_url": {
 						"value": "[parameters('eal_airlinechoice_src_properties_typeProperties_url')]"
