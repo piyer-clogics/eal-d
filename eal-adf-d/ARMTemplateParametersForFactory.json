@@ -1,0 +1,48 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "eal-adf-d"
+		},
+		"AWSPostgreSql_connectionString": {
+			"value": ""
+		},
+		"AzurePostgreSql_connectionString": {
+			"value": ""
+		},
+		"Swagger Connection_password": {
+			"value": ""
+		},
+		"eal_airlinechoice_src_password": {
+			"value": ""
+		},
+		"eal_cosmos_db_connectionString": {
+			"value": ""
+		},
+		"eal_sqldb_bdavis_connectionString": {
+			"value": ""
+		},
+		"eal_sqldb_d_tgt_connectionString": {
+			"value": ""
+		},
+		"eal_sqldb_piyer_connectionString": {
+			"value": ""
+		},
+		"ealblobdconnection_connectionString": {
+			"value": ""
+		},
+		"Swagger Connection_properties_typeProperties_url": {
+			"value": "https://api.airline-choice.com/rest/"
+		},
+		"Swagger Connection_properties_typeProperties_userName": {
+			"value": "eastern-test"
+		},
+		"eal_airlinechoice_src_properties_typeProperties_url": {
+			"value": "https://api.airline-choice.com/rest/"
+		},
+		"eal_airlinechoice_src_properties_typeProperties_userName": {
+			"value": "eastern-test"
+		}
+	}
+}

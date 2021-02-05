@@ -1,0 +1,2030 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "eal-adf-d"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/eal_ac_airport')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ealblobdconnection",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Azure blobs"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "eal_ac_airport.json",
+						"container": "eal-src-stg"
+					}
+				},
+				"schema": {}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/eal_ac_bdavis_Airports')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "eal_sqldb_bdavis",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Azure blobs"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "Airport_Name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "City",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Country",
+						"type": "nvarchar"
+					},
+					{
+						"name": "IATA",
+						"type": "nvarchar"
+					},
+					{
+						"name": "ICAO",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Latitude",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "Longitude",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "Altitude",
+						"type": "smallint",
+						"precision": 5
+					},
+					{
+						"name": "UTC_offset",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "DST",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Time_Zone",
+						"type": "nvarchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "Airports_with_UTC_offset"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/eal_ac_flights_by_ID')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ealblobdconnection",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Azure blobs"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "eal_ac_flightById.json",
+						"container": "eal-src-stg"
+					}
+				},
+				"schema": {}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/eal_ac_passengers_by_Id')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ealblobdconnection",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Azure blobs"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "passenger_by_id.json",
+						"container": "eal-src-stg"
+					}
+				},
+				"schema": {}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/eal_adf_cntrl')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "eal_sqldb_piyer",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Destination Table"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "ADF_RUN_ID",
+						"type": "varchar"
+					},
+					{
+						"name": "ADF_JOB_NAME",
+						"type": "varchar"
+					},
+					{
+						"name": "ADF_SUC_TS",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "S_ADF_CNTRL"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/eal_arpt_az_blob')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ealblobdconnection",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Azure blobs"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "eal_aprt.json",
+						"container": "eal-src-stg"
+					}
+				},
+				"schema": {
+					"type": "object",
+					"properties": {
+						"ARPT_NAME": {
+							"type": "string"
+						},
+						"ARPT_CITY": {
+							"type": "string"
+						},
+						"ARPT_CNTRY": {
+							"type": "string"
+						},
+						"ARPT_IATA_CD": {
+							"type": "string"
+						},
+						"ARPT_ICAO_CD": {
+							"type": "string"
+						},
+						"ARPT_LAT": {
+							"type": "number"
+						},
+						"ARPT_LONG": {
+							"type": "number"
+						},
+						"ARPT_ALTD": {
+							"type": "integer"
+						},
+						"ARPT_UTC_OFSET": {
+							"type": "number"
+						},
+						"ARPT_DST": {
+							"type": "string"
+						},
+						"ARPT_TZONE": {
+							"type": "string"
+						},
+						"LAST_UPDT_DT": {
+							"type": "string"
+						}
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/eal_az_equipment_schd')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ealblobdconnection",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Azure blobs"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "eal_az_equipment_schd.json",
+						"container": "eal-src-stg"
+					}
+				},
+				"schema": {
+					"type": "object",
+					"properties": {
+						"eqp_sched_id": {
+							"type": "integer"
+						},
+						"ac_registration": {
+							"type": "string"
+						},
+						"status_code": {
+							"type": "string"
+						},
+						"status_name": {
+							"type": "string"
+						},
+						"status_description": {
+							"type": "string"
+						},
+						"start_time": {
+							"type": "string"
+						},
+						"end_time": {
+							"type": "string"
+						},
+						"notes": {
+							"type": "string"
+						},
+						"is_deleted": {
+							"type": "boolean"
+						},
+						"updated_at": {
+							"type": "string"
+						}
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/eal_az_flights')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ealblobdconnection",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Azure blobs"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "eal_flights_postgres.json",
+						"container": "eal-src-stg"
+					}
+				},
+				"schema": {
+					"type": "object",
+					"properties": {
+						"flight_id": {
+							"type": "integer"
+						},
+						"flight_number": {
+							"type": "string"
+						},
+						"flight_date": {
+							"type": "string"
+						},
+						"aircraft_registration_number": {
+							"type": "string"
+						},
+						"aircraft_type": {
+							"type": "string"
+						},
+						"scheduled_departure": {
+							"type": "string"
+						},
+						"scheduled_arrival": {
+							"type": "string"
+						},
+						"estimated_departure": {
+							"type": "null"
+						},
+						"estimated_arrival": {
+							"type": "null"
+						},
+						"actual_oooi_out": {
+							"type": "null"
+						},
+						"actual_oooi_off": {
+							"type": "null"
+						},
+						"actual_oooi_on": {
+							"type": "null"
+						},
+						"actual_oooi_in": {
+							"type": "null"
+						},
+						"base_airport": {
+							"type": "string"
+						},
+						"scheduled_departure_airport": {
+							"type": "string"
+						},
+						"scheduled_arrival_airport": {
+							"type": "string"
+						},
+						"actual_departure_airport": {
+							"type": "string"
+						},
+						"actual_arrival_airport": {
+							"type": "string"
+						},
+						"is_verified": {
+							"type": "boolean"
+						},
+						"notes": {
+							"type": "null"
+						},
+						"is_canceled": {
+							"type": "boolean"
+						},
+						"flight_type": {
+							"type": "string"
+						},
+						"cargo_weight": {
+							"type": "null"
+						},
+						"fuel_out": {
+							"type": "null"
+						},
+						"fuel_in": {
+							"type": "null"
+						},
+						"fuel_uplift": {
+							"type": "null"
+						},
+						"maint_log_page": {
+							"type": "null"
+						},
+						"updated_at": {
+							"type": "string"
+						}
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/eal_az_flights_delay')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ealblobdconnection",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Azure blobs"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "eal_az_flights_delay.json",
+						"container": "eal-src-stg"
+					}
+				},
+				"schema": {
+					"type": "object",
+					"properties": {
+						"flight_id": {
+							"type": "integer"
+						},
+						"delay_type": {
+							"type": "string"
+						},
+						"duration_mins": {
+							"type": "integer"
+						},
+						"delay_code": {
+							"type": "string"
+						},
+						"delay_code_name": {
+							"type": "string"
+						}
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/sql_active_flights')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "eal_sqldb_piyer",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Destination Table"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "AIR_CRAFT_CPTY",
+						"type": "smallint",
+						"precision": 5
+					},
+					{
+						"name": "ANCLRY_TMPLT_ID",
+						"type": "varchar"
+					},
+					{
+						"name": "ARRVL_GT",
+						"type": "varchar"
+					},
+					{
+						"name": "ARRVL_TRMNL",
+						"type": "varchar"
+					},
+					{
+						"name": "BTCH_CREW_MBR_MASK",
+						"type": "varchar"
+					},
+					{
+						"name": "BTCH_PSNGR_MASK",
+						"type": "varchar"
+					},
+					{
+						"name": "BRDNG_TIME",
+						"type": "varchar"
+					},
+					{
+						"name": "BKD_PSNGR_CNT",
+						"type": "smallint",
+						"precision": 5
+					},
+					{
+						"name": "CNCLD_BY",
+						"type": "varchar"
+					},
+					{
+						"name": "CNCLD_RSN",
+						"type": "varchar"
+					},
+					{
+						"name": "CARR_CD",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "CREW_FLT_POST_DPTR_CLS_OUT_STS",
+						"type": "varchar"
+					},
+					{
+						"name": "CREW_FLT_PRE_DPTR_CLS_OUT_STS",
+						"type": "varchar"
+					},
+					{
+						"name": "CUST_ID",
+						"type": "varchar"
+					},
+					{
+						"name": "DPTR_GT",
+						"type": "varchar"
+					},
+					{
+						"name": "DPTR_TRMNL",
+						"type": "varchar"
+					},
+					{
+						"name": "DEST_AIRPORT_CITY",
+						"type": "varchar"
+					},
+					{
+						"name": "DEST_AIRPORT_CNTRY_CD",
+						"type": "varchar"
+					},
+					{
+						"name": "DEST_AIRPORT_NAME",
+						"type": "varchar"
+					},
+					{
+						"name": "DEST_IATA",
+						"type": "varchar"
+					},
+					{
+						"name": "DEST_ICAO",
+						"type": "varchar"
+					},
+					{
+						"name": "ENABL_BRDNG",
+						"type": "bit"
+					},
+					{
+						"name": "ENABL_CREW_APIS",
+						"type": "bit"
+					},
+					{
+						"name": "ENABL_DCS",
+						"type": "bit"
+					},
+					{
+						"name": "ENABL_PSNGR_APIS",
+						"type": "bit"
+					},
+					{
+						"name": "ENABL_THRU_CHK_IN",
+						"type": "bit"
+					},
+					{
+						"name": "ESTD_ARRVL_TIME",
+						"type": "varchar"
+					},
+					{
+						"name": "ESTD_DPTR_TIME",
+						"type": "varchar"
+					},
+					{
+						"name": "EXTRNL_ID",
+						"type": "smallint",
+						"precision": 5
+					},
+					{
+						"name": "FLT_DLAY",
+						"type": "varchar"
+					},
+					{
+						"name": "FLT_NO",
+						"type": "smallint",
+						"precision": 5
+					},
+					{
+						"name": "HAS_PSNGR_SCRTY_TRNS",
+						"type": "bit"
+					},
+					{
+						"name": "HLTH_CHK_RULES_ID",
+						"type": "varchar"
+					},
+					{
+						"name": "PSNGRS",
+						"type": "varchar"
+					},
+					{
+						"name": "PAX_BTCH_PRE_VET_STS",
+						"type": "varchar"
+					},
+					{
+						"name": "FLT_ID",
+						"type": "varchar"
+					},
+					{
+						"name": "IS_CNCLD",
+						"type": "bit"
+					},
+					{
+						"name": "IS_OPEN_STNG",
+						"type": "bit"
+					},
+					{
+						"name": "IS_PRGRSV_FLT",
+						"type": "bit"
+					},
+					{
+						"name": "MKTG_CARR_CD",
+						"type": "varchar"
+					},
+					{
+						"name": "MSG",
+						"type": "varchar"
+					},
+					{
+						"name": "ORIG_AIRPORT_CITY",
+						"type": "varchar"
+					},
+					{
+						"name": "ORIG_AIRPORT_CNTRY_CD",
+						"type": "varchar"
+					},
+					{
+						"name": "ORIG_AIRPORT_NAME",
+						"type": "varchar"
+					},
+					{
+						"name": "ORIG_IATA",
+						"type": "varchar"
+					},
+					{
+						"name": "ORIG_ICAO",
+						"type": "varchar"
+					},
+					{
+						"name": "PSNGR_APP_RCPNT_ID",
+						"type": "varchar"
+					},
+					{
+						"name": "PAX_FLT_POST_DPTR_CLS_OUT_STS",
+						"type": "varchar"
+					},
+					{
+						"name": "PAX_FLT_PRE_DPTR_CLS_OUT_STS",
+						"type": "varchar"
+					},
+					{
+						"name": "PNL_IMPRTD",
+						"type": "bit"
+					},
+					{
+						"name": "POST_DPTR_CLS_OUT_CREW_MBR_MASK",
+						"type": "varchar"
+					},
+					{
+						"name": "POST_DPTR_CLS_OUT_PSNGR_MASK",
+						"type": "varchar"
+					},
+					{
+						"name": "PRE_DPTR_CLS_OUT_CREW_MBR_MASK",
+						"type": "varchar"
+					},
+					{
+						"name": "PRE_DPTR_CLS_OUT_PSNGR_MASK",
+						"type": "varchar"
+					},
+					{
+						"name": "REMNG_FUEL_LOAD",
+						"type": "bit"
+					},
+					{
+						"name": "SCHDD_ARRVL_TIME",
+						"type": "varchar"
+					},
+					{
+						"name": "SCHDD_DPTR_TIME",
+						"type": "varchar"
+					},
+					{
+						"name": "SCHDD_DPTR_TIME_UTC",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "SEG_NO",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "STS",
+						"type": "varchar"
+					},
+					{
+						"name": "TAIL_NO",
+						"type": "varchar"
+					},
+					{
+						"name": "TOT_CRGO_LOAD",
+						"type": "bit"
+					},
+					{
+						"name": "TOT_FUEL_LOAD",
+						"type": "bit"
+					},
+					{
+						"name": "TYPE",
+						"type": "varchar"
+					},
+					{
+						"name": "UPLIFT_FUEL_LOAD",
+						"type": "bit"
+					},
+					{
+						"name": "USE_AVG_BAG_WGT",
+						"type": "bit"
+					},
+					{
+						"name": "USE_AVG_PAX_WGT",
+						"type": "bit"
+					},
+					{
+						"name": "WGT_UNITS_KG",
+						"type": "bit"
+					},
+					{
+						"name": "CREW_APP_RCPNT_ID",
+						"type": "varchar"
+					},
+					{
+						"name": "ETL_CAPT_DT",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "ADF_RUN_ID",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "S_ACTV_FLT"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/sql_bdavis_test_arpt')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "eal_sqldb_piyer",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Destination Table"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "ARPT_NAME",
+						"type": "nvarchar"
+					},
+					{
+						"name": "ARPT_CITY",
+						"type": "nvarchar"
+					},
+					{
+						"name": "ARPT_CNTRY",
+						"type": "nvarchar"
+					},
+					{
+						"name": "ARPT_IATA_CD",
+						"type": "nvarchar"
+					},
+					{
+						"name": "ARPT_ICAO_CD",
+						"type": "nvarchar"
+					},
+					{
+						"name": "ARPT_LAT",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "ARPT_LONG",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "ARPT_ALTD",
+						"type": "smallint",
+						"precision": 5
+					},
+					{
+						"name": "ARPT_UTC_OFSET",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "ARPT_DST",
+						"type": "nvarchar"
+					},
+					{
+						"name": "ARPT_TZONE",
+						"type": "nvarchar"
+					},
+					{
+						"name": "LAST_UPDT_DT",
+						"type": "date"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "BDAVIS_AIRPORTS"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/sql_carrier')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "eal_sqldb_piyer",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Destination Table"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "ApisCarrierCode",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "ApisContactName",
+						"type": "varchar"
+					},
+					{
+						"name": "ApisFax",
+						"type": "varchar"
+					},
+					{
+						"name": "ApisSenderID",
+						"type": "varchar"
+					},
+					{
+						"name": "ApisTelephone",
+						"type": "varchar"
+					},
+					{
+						"name": "CarrierName",
+						"type": "varchar"
+					},
+					{
+						"name": "Code",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "DefaultAdultAge",
+						"type": "smallint",
+						"precision": 5
+					},
+					{
+						"name": "DefaultChildAge",
+						"type": "smallint",
+						"precision": 5
+					},
+					{
+						"name": "Email",
+						"type": "varchar"
+					},
+					{
+						"name": "EmailSenderAddress",
+						"type": "varchar"
+					},
+					{
+						"name": "EmergencySeatGateStopInstructions",
+						"type": "varchar"
+					},
+					{
+						"name": "IATA",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "ICAO",
+						"type": "varchar"
+					},
+					{
+						"name": "Icon",
+						"type": "varchar"
+					},
+					{
+						"name": "IsPrintingBagTagWithoutCheckInAllowed",
+						"type": "bit"
+					},
+					{
+						"name": "Logo",
+						"type": "varchar"
+					},
+					{
+						"name": "MaximumPassengerBags",
+						"type": "smallint",
+						"precision": 5
+					},
+					{
+						"name": "PnlImportCloseTime",
+						"type": "smallint",
+						"precision": 5
+					},
+					{
+						"name": "Prefix",
+						"type": "smallint",
+						"precision": 5
+					},
+					{
+						"name": "SelecteeGateStopInstructions",
+						"type": "varchar"
+					},
+					{
+						"name": "TsaPreCheck",
+						"type": "bit"
+					},
+					{
+						"name": "UnverifiedDocumentsGateStopInstructions",
+						"type": "varchar"
+					},
+					{
+						"name": "WatchlistNoFlyMatchInstructions",
+						"type": "varchar"
+					},
+					{
+						"name": "WatchlistPreventMatchInstructions",
+						"type": "varchar"
+					},
+					{
+						"name": "WatchlistSelecteeMatchInstructions",
+						"type": "varchar"
+					},
+					{
+						"name": "Website",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "S_CARRIER"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/sql_carrier_address')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "eal_sqldb_piyer",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Destination Table"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "ID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "CountryCode",
+						"type": "varchar"
+					},
+					{
+						"name": "City",
+						"type": "varchar"
+					},
+					{
+						"name": "Location",
+						"type": "varchar"
+					},
+					{
+						"name": "PostalCode",
+						"type": "varchar"
+					},
+					{
+						"name": "StateCode",
+						"type": "varchar"
+					},
+					{
+						"name": "Street1",
+						"type": "varchar"
+					},
+					{
+						"name": "Street2",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "S_CARRIER_ADDR"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/sql_crew_security_rules')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "eal_sqldb_piyer",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Destination Table"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "ApplicationRecipientID",
+						"type": "varchar"
+					},
+					{
+						"name": "BatchContactDetails",
+						"type": "bit"
+					},
+					{
+						"name": "BatchDestinationAddressCondition",
+						"type": "bit"
+					},
+					{
+						"name": "BatchSubmission",
+						"type": "bit"
+					},
+					{
+						"name": "BatchTriggerHours",
+						"type": "bit"
+					},
+					{
+						"name": "BatchValidation",
+						"type": "bit"
+					},
+					{
+						"name": "BuildFcmFromMclOnly",
+						"type": "bit"
+					},
+					{
+						"name": "CheckinBirthPlace",
+						"type": "bit"
+					},
+					{
+						"name": "CheckinClearance",
+						"type": "bit"
+					},
+					{
+						"name": "CheckinContactDetails",
+						"type": "bit"
+					},
+					{
+						"name": "CheckinDOB",
+						"type": "bit"
+					},
+					{
+						"name": "CheckinDestinationAddress",
+						"type": "bit"
+					},
+					{
+						"name": "CheckinDestinationAddressCondition",
+						"type": "bit"
+					},
+					{
+						"name": "CheckinGender",
+						"type": "bit"
+					},
+					{
+						"name": "CheckinHomeAddress",
+						"type": "bit"
+					},
+					{
+						"name": "Nationality",
+						"type": "bit"
+					},
+					{
+						"name": "CheckinOrigDest",
+						"type": "bit"
+					},
+					{
+						"name": "Residence",
+						"type": "bit"
+					},
+					{
+						"name": "CheckinStatusOnBoard",
+						"type": "bit"
+					},
+					{
+						"name": "CheckinTravelDoc",
+						"type": "bit"
+					},
+					{
+						"name": "CommonAccessReference",
+						"type": "varchar"
+					},
+					{
+						"name": "CountryEntity",
+						"type": "varchar"
+					},
+					{
+						"name": "CrewAdd",
+						"type": "bit"
+					},
+					{
+						"name": "CrewCancel",
+						"type": "bit"
+					},
+					{
+						"name": "CrewChange",
+						"type": "bit"
+					},
+					{
+						"name": "FlightAdd",
+						"type": "bit"
+					},
+					{
+						"name": "FlightCancel",
+						"type": "bit"
+					},
+					{
+						"name": "FlightChange",
+						"type": "bit"
+					},
+					{
+						"name": "FlightPostDepartureCloseout",
+						"type": "bit"
+					},
+					{
+						"name": "FlightPostDepartureCloseoutOnBoard",
+						"type": "bit"
+					},
+					{
+						"name": "FlightPreDepartureCloseout",
+						"type": "bit"
+					},
+					{
+						"name": "FlightRouting",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "FlightType",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "HasFlightCloseoutRequirement",
+						"type": "bit"
+					},
+					{
+						"name": "InteractiveComms",
+						"type": "bit"
+					},
+					{
+						"name": "InterchangeRecipientID",
+						"type": "varchar"
+					},
+					{
+						"name": "OutageVettingStatus",
+						"type": "bit"
+					},
+					{
+						"name": "RequireSecurityClearance",
+						"type": "bit"
+					},
+					{
+						"name": "WatchlistVet",
+						"type": "bit"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "S_CREW_SEC_RULES"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/sql_d_aprt')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "eal_sqldb_piyer",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Destination Table/Prod"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "ARPT_ID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "ARPT_IATA_CD",
+						"type": "varchar"
+					},
+					{
+						"name": "ARPT_ICAO_CD",
+						"type": "varchar"
+					},
+					{
+						"name": "ARPT_NAME",
+						"type": "varchar"
+					},
+					{
+						"name": "ARPT_CNTRY",
+						"type": "varchar"
+					},
+					{
+						"name": "ARPT_CITY",
+						"type": "varchar"
+					},
+					{
+						"name": "ARPT_LAT",
+						"type": "decimal",
+						"precision": 8,
+						"scale": 6
+					},
+					{
+						"name": "ARPT_LONG",
+						"type": "decimal",
+						"precision": 9,
+						"scale": 6
+					},
+					{
+						"name": "ARPT_ALTD",
+						"type": "decimal",
+						"precision": 6,
+						"scale": 2
+					},
+					{
+						"name": "ARPT_UTC_OFSET",
+						"type": "decimal",
+						"precision": 2,
+						"scale": 2
+					},
+					{
+						"name": "ARPT_DST_CD",
+						"type": "varchar"
+					},
+					{
+						"name": "ARPT_TZONE",
+						"type": "varchar"
+					},
+					{
+						"name": "EFF_STRT_DT",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "EFF_END_DT",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "ACTV_IND",
+						"type": "char"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "D_ARPT"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/sql_d_clndr')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "eal_sqldb_piyer",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Destination Table/Prod"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "CLNDR_ID",
+						"type": "char"
+					},
+					{
+						"name": "TheDate",
+						"type": "date"
+					},
+					{
+						"name": "TheDay",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "TheDaySuffix",
+						"type": "char"
+					},
+					{
+						"name": "TheDayName",
+						"type": "nvarchar"
+					},
+					{
+						"name": "TheDayOfWeek",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "TheDayOfWeekInMonth",
+						"type": "tinyint",
+						"precision": 3
+					},
+					{
+						"name": "TheDayOfYear",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "IsWeekend",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "TheWeek",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "TheISOweek",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "TheFirstOfWeek",
+						"type": "date"
+					},
+					{
+						"name": "TheLastOfWeek",
+						"type": "date"
+					},
+					{
+						"name": "TheWeekOfMonth",
+						"type": "tinyint",
+						"precision": 3
+					},
+					{
+						"name": "TheMonth",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "TheMonthName",
+						"type": "nvarchar"
+					},
+					{
+						"name": "TheFirstOfMonth",
+						"type": "date"
+					},
+					{
+						"name": "TheLastOfMonth",
+						"type": "date"
+					},
+					{
+						"name": "TheFirstOfNextMonth",
+						"type": "date"
+					},
+					{
+						"name": "TheLastOfNextMonth",
+						"type": "date"
+					},
+					{
+						"name": "TheQuarter",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "TheFirstOfQuarter",
+						"type": "date"
+					},
+					{
+						"name": "TheLastOfQuarter",
+						"type": "date"
+					},
+					{
+						"name": "TheYear",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "TheISOYear",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "TheFirstOfYear",
+						"type": "date"
+					},
+					{
+						"name": "TheLastOfYear",
+						"type": "date"
+					},
+					{
+						"name": "IsLeapYear",
+						"type": "bit"
+					},
+					{
+						"name": "Has53Weeks",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Has53ISOWeeks",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "MMYYYY",
+						"type": "char"
+					},
+					{
+						"name": "Style101",
+						"type": "char"
+					},
+					{
+						"name": "Style103",
+						"type": "char"
+					},
+					{
+						"name": "Style112",
+						"type": "char"
+					},
+					{
+						"name": "Style120",
+						"type": "char"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "D_CLNDR"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/sql_eqip_schd_acpt')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "eal_sqldb_piyer",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Destination Table/Rejections"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "EQP_SCHED_ID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "AC_RGSTRN",
+						"type": "text"
+					},
+					{
+						"name": "STS_CD",
+						"type": "text"
+					},
+					{
+						"name": "STS_NAME",
+						"type": "text"
+					},
+					{
+						"name": "STS_DESC",
+						"type": "text"
+					},
+					{
+						"name": "STRT_TIME",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "END_TIME",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "NOTE",
+						"type": "text"
+					},
+					{
+						"name": "IS_DELD",
+						"type": "bit"
+					},
+					{
+						"name": "UPDTD_AT",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "ADF_TIME_STMP",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "ADF_RUN_ID",
+						"type": "text"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "S_EQUIP_SCHD_ACPT"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/sql_eqip_schd_rej')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "eal_sqldb_piyer",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Destination Table/Rejections"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "EQP_SCHED_ID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "AC_RGSTRN",
+						"type": "text"
+					},
+					{
+						"name": "STS_CD",
+						"type": "text"
+					},
+					{
+						"name": "STS_NAME",
+						"type": "text"
+					},
+					{
+						"name": "STS_DESC",
+						"type": "text"
+					},
+					{
+						"name": "STRT_TIME",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "END_TIME",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "NOTE",
+						"type": "text"
+					},
+					{
+						"name": "IS_DELD",
+						"type": "bit"
+					},
+					{
+						"name": "UPDTD_AT",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "REJECT_REASON",
+						"type": "varchar"
+					},
+					{
+						"name": "ADF_TIME_STMP",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "ADF_RUN_ID",
+						"type": "text"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "S_EQUIP_SCHD_REJ"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/sql_f_equip_schd')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "eal_sqldb_piyer",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Destination Table/Prod"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "ARPT_ID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "ARPT_IATA_CD",
+						"type": "varchar"
+					},
+					{
+						"name": "ARPT_ICAO_CD",
+						"type": "varchar"
+					},
+					{
+						"name": "ARPT_NAME",
+						"type": "varchar"
+					},
+					{
+						"name": "ARPT_CNTRY",
+						"type": "varchar"
+					},
+					{
+						"name": "ARPT_CITY",
+						"type": "varchar"
+					},
+					{
+						"name": "ARPT_LAT",
+						"type": "decimal",
+						"precision": 8,
+						"scale": 6
+					},
+					{
+						"name": "ARPT_LONG",
+						"type": "decimal",
+						"precision": 9,
+						"scale": 6
+					},
+					{
+						"name": "ARPT_ALTD",
+						"type": "decimal",
+						"precision": 6,
+						"scale": 2
+					},
+					{
+						"name": "ARPT_UTC_OFSET",
+						"type": "decimal",
+						"precision": 2,
+						"scale": 2
+					},
+					{
+						"name": "ARPT_DST_CD",
+						"type": "varchar"
+					},
+					{
+						"name": "ARPT_TZONE",
+						"type": "varchar"
+					},
+					{
+						"name": "EFF_STRT_DT",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "EFF_END_DT",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "ACTV_IND",
+						"type": "char"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "F_EQUIP_SCHD"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/sql_f_flights_ops')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "eal_sqldb_piyer",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Destination Table/Prod"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "FLGHT_ID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "FLGHT_DT_ID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "FLGHT_NUM",
+						"type": "varchar"
+					},
+					{
+						"name": "FLGHT_TYP",
+						"type": "varchar"
+					},
+					{
+						"name": "AIR_CRAFT_RGSTRN_NUM",
+						"type": "varchar"
+					},
+					{
+						"name": "AIR_CRAFT_TYP",
+						"type": "varchar"
+					},
+					{
+						"name": "SCHDD_DPRT_TS_UTC",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "SCHDD_ARRVL_TS_UTC",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "ESTD_DPRT_TS_UTC",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "ESTD_ARRVL_TS_UTC",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "ACTL_OOOI_OUT_TS_UTC",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "ACTL_OOOI_OFF_TS_UTC",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "ACTL_OOOI_ON_TS_UTC",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "ACTL_OOOI_IN_TS_UTC",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "BASE_ARPT_CD",
+						"type": "varchar"
+					},
+					{
+						"name": "BASE_ARPT_ID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "SCHDD_DRPT_ARPT_CD",
+						"type": "varchar"
+					},
+					{
+						"name": "SCHDD_DRPT_ARPT_ID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "SCHDD_ARRVL_ARPT_CD",
+						"type": "varchar"
+					},
+					{
+						"name": "SCHDD_ARRVL_ARPT_ID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "ACTL_ARRVL_ARPT_CD",
+						"type": "varchar"
+					},
+					{
+						"name": "ACTL_ARRVL_ARPT_ID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "ACTL_DPTR_ARPT_CD",
+						"type": "varchar"
+					},
+					{
+						"name": "ACTL_DPTR_ARPT_ID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "FUEL_IN",
+						"type": "char"
+					},
+					{
+						"name": "FUEL_OUT",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "FUEL_UPLIFT",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "CRGO_WT",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "MAINT_LOG",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "NOTES",
+						"type": "varchar"
+					},
+					{
+						"name": "IS_CNCLD",
+						"type": "bit"
+					},
+					{
+						"name": "IS_VERFD",
+						"type": "bit"
+					},
+					{
+						"name": "DEP_VAR",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "ARRVL_VAR",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "SCHDD_BLK_DUR",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "ACTL_BLK_DUR",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "ACTL_FLGHT_DUR",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "DPRT_DELAY_DUR_D0_IND",
+						"type": "smallint",
+						"precision": 5
+					},
+					{
+						"name": "DPRT_DELAY_DUR_D15_IND",
+						"type": "smallint",
+						"precision": 5
+					},
+					{
+						"name": "ARRVL_DELAY_DUR_A0_IND",
+						"type": "smallint",
+						"precision": 5
+					},
+					{
+						"name": "ARRVL_DELAY_DUR_A14_IND",
+						"type": "smallint",
+						"precision": 5
+					},
+					{
+						"name": "BLK_DUR_B0_IND",
+						"type": "smallint",
+						"precision": 5
+					},
+					{
+						"name": "SCHDD_FLT_DUR",
+						"type": "varchar"
+					},
+					{
+						"name": "DELAY_TYP",
+						"type": "varchar"
+					},
+					{
+						"name": "DELAY_DUR",
+						"type": "smallint",
+						"precision": 5
+					},
+					{
+						"name": "DELAY_CD",
+						"type": "varchar"
+					},
+					{
+						"name": "DELAY_DESC",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "F_FLGHT_OPS"
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}

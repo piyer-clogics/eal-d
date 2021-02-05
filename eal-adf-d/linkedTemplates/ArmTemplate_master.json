@@ -1,0 +1,193 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "eal-adf-d"
+		},
+		"AWSPostgreSql_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AWSPostgreSql'"
+		},
+		"AzurePostgreSql_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzurePostgreSql'"
+		},
+		"Swagger Connection_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'Swagger Connection'"
+		},
+		"eal_airlinechoice_src_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'eal_airlinechoice_src'"
+		},
+		"eal_cosmos_db_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'eal_cosmos_db'"
+		},
+		"eal_sqldb_bdavis_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'eal_sqldb_bdavis'"
+		},
+		"eal_sqldb_d_tgt_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'eal_sqldb_d_tgt'"
+		},
+		"eal_sqldb_piyer_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'eal_sqldb_piyer'"
+		},
+		"ealblobdconnection_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'ealblobdconnection'"
+		},
+		"Swagger Connection_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://api.airline-choice.com/rest/"
+		},
+		"Swagger Connection_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "eastern-test"
+		},
+		"eal_airlinechoice_src_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://api.airline-choice.com/rest/"
+		},
+		"eal_airlinechoice_src_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "eastern-test"
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "URI to storage account containing linked ARM templates"
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "Sas token to storage account containing linked ARM templates"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "eal-adf-d_ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"eal_airlinechoice_src_password": {
+						"value": "[parameters('eal_airlinechoice_src_password')]"
+					},
+					"eal_sqldb_d_tgt_connectionString": {
+						"value": "[parameters('eal_sqldb_d_tgt_connectionString')]"
+					},
+					"AWSPostgreSql_connectionString": {
+						"value": "[parameters('AWSPostgreSql_connectionString')]"
+					},
+					"AzurePostgreSql_connectionString": {
+						"value": "[parameters('AzurePostgreSql_connectionString')]"
+					},
+					"Swagger Connection_password": {
+						"value": "[parameters('Swagger Connection_password')]"
+					},
+					"eal_cosmos_db_connectionString": {
+						"value": "[parameters('eal_cosmos_db_connectionString')]"
+					},
+					"eal_sqldb_bdavis_connectionString": {
+						"value": "[parameters('eal_sqldb_bdavis_connectionString')]"
+					},
+					"eal_sqldb_piyer_connectionString": {
+						"value": "[parameters('eal_sqldb_piyer_connectionString')]"
+					},
+					"ealblobdconnection_connectionString": {
+						"value": "[parameters('ealblobdconnection_connectionString')]"
+					},
+					"eal_airlinechoice_src_properties_typeProperties_url": {
+						"value": "[parameters('eal_airlinechoice_src_properties_typeProperties_url')]"
+					},
+					"eal_airlinechoice_src_properties_typeProperties_userName": {
+						"value": "[parameters('eal_airlinechoice_src_properties_typeProperties_userName')]"
+					},
+					"Swagger Connection_properties_typeProperties_url": {
+						"value": "[parameters('Swagger Connection_properties_typeProperties_url')]"
+					},
+					"Swagger Connection_properties_typeProperties_userName": {
+						"value": "[parameters('Swagger Connection_properties_typeProperties_userName')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "eal-adf-d_ArmTemplate_1",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_1.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'eal-adf-d_ArmTemplate_0')]"
+			]
+		},
+		{
+			"name": "eal-adf-d_ArmTemplate_2",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_2.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'eal-adf-d_ArmTemplate_1')]"
+			]
+		},
+		{
+			"name": "eal-adf-d_ArmTemplate_3",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_3.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'eal-adf-d_ArmTemplate_2')]"
+			]
+		}
+	]
+}

@@ -1,0 +1,1136 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "eal-adf-d"
+		},
+		"eal_airlinechoice_src_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'eal_airlinechoice_src'"
+		},
+		"eal_sqldb_d_tgt_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'eal_sqldb_d_tgt'"
+		},
+		"AWSPostgreSql_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AWSPostgreSql'"
+		},
+		"AzurePostgreSql_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzurePostgreSql'"
+		},
+		"Swagger Connection_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'Swagger Connection'"
+		},
+		"eal_cosmos_db_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'eal_cosmos_db'"
+		},
+		"eal_sqldb_bdavis_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'eal_sqldb_bdavis'"
+		},
+		"eal_sqldb_piyer_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'eal_sqldb_piyer'"
+		},
+		"ealblobdconnection_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'ealblobdconnection'"
+		},
+		"eal_airlinechoice_src_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://api.airline-choice.com/rest/"
+		},
+		"eal_airlinechoice_src_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "eastern-test"
+		},
+		"Swagger Connection_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://api.airline-choice.com/rest/"
+		},
+		"Swagger Connection_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "eastern-test"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/eal_airlinechoice_src')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "RestService",
+				"typeProperties": {
+					"url": "[parameters('eal_airlinechoice_src_properties_typeProperties_url')]",
+					"enableServerCertificateValidation": true,
+					"authenticationType": "Basic",
+					"userName": "[parameters('eal_airlinechoice_src_properties_typeProperties_userName')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('eal_airlinechoice_src_password')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/eal_sqldb_d_tgt')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"connectionString": "[parameters('eal_sqldb_d_tgt_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Azure-VM-Intergation-Runtime')]",
+			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "SelfHosted",
+				"typeProperties": {}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/default')]",
+			"type": "Microsoft.DataFactory/factories/managedVirtualNetworks",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"preventDataExfiltration": false
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/eal_ac_src_active_flights')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "eal_airlinechoice_src",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Source"
+				},
+				"annotations": [],
+				"type": "RestResource",
+				"typeProperties": {
+					"relativeUrl": "flights/GetActiveFlights"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/eal_airlinechoice_src')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/eal_ac_src_airports')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "eal_airlinechoice_src",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Source"
+				},
+				"annotations": [],
+				"type": "RestResource",
+				"typeProperties": {
+					"relativeUrl": "airports"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/eal_airlinechoice_src')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/eal_ac_src_passengers')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "eal_airlinechoice_src",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"flightID": {
+						"type": "string"
+					},
+					"flightSegmentNo": {
+						"type": "int"
+					},
+					"includeBags": {
+						"type": "bool",
+						"defaultValue": true
+					},
+					"includeAncillaries": {
+						"type": "bool",
+						"defaultValue": false
+					},
+					"includeBagTracking": {
+						"type": "bool",
+						"defaultValue": false
+					}
+				},
+				"folder": {
+					"name": "Source"
+				},
+				"annotations": [],
+				"type": "RestResource",
+				"typeProperties": {
+					"relativeUrl": {
+						"value": "@concat('passengers/GetPassengersByFlightID?flightID=',dataset().flightID,'&flightsegmentNo=',string(dataset().flightSegmentNo))",
+						"type": "Expression"
+					}
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/eal_airlinechoice_src')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AWSPostgreSql')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "PostgreSql",
+				"typeProperties": {
+					"connectionString": "[parameters('AWSPostgreSql_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "Azure-VM-Intergation-Runtime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/Azure-VM-Intergation-Runtime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AutoResolveIntegrationRuntime')]",
+			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "Managed",
+				"typeProperties": {
+					"computeProperties": {
+						"location": "AutoResolve",
+						"dataFlowProperties": {
+							"computeType": "General",
+							"coreCount": 8,
+							"timeToLive": 0
+						}
+					}
+				},
+				"managedVirtualNetwork": {
+					"type": "ManagedVirtualNetworkReference",
+					"referenceName": "default"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/managedVirtualNetworks/default')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/eal_postgresql_delay_db')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AWSPostgreSql",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Source"
+				},
+				"annotations": [],
+				"type": "PostgreSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "bi",
+					"table": "flight_delay"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AWSPostgreSql')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/eal_postgresql_equip_schd')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AWSPostgreSql",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Source"
+				},
+				"annotations": [],
+				"type": "PostgreSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "bi",
+					"table": "equipment_sched"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AWSPostgreSql')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/eal_postgresql_flights_db')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AWSPostgreSql",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Source"
+				},
+				"annotations": [],
+				"type": "PostgreSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "bi",
+					"table": "flight"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AWSPostgreSql')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzurePostgreSql')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzurePostgreSql",
+				"typeProperties": {
+					"connectionString": "[parameters('AzurePostgreSql_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Swagger Connection')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "RestService",
+				"typeProperties": {
+					"url": "[parameters('Swagger Connection_properties_typeProperties_url')]",
+					"enableServerCertificateValidation": true,
+					"authenticationType": "Basic",
+					"userName": "[parameters('Swagger Connection_properties_typeProperties_userName')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('Swagger Connection_password')]"
+					}
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/eal_cosmos_db')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "CosmosDb",
+				"typeProperties": {
+					"connectionString": "[parameters('eal_cosmos_db_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/eal_sqldb_bdavis')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"connectionString": "[parameters('eal_sqldb_bdavis_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/eal_sqldb_piyer')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"connectionString": "[parameters('eal_sqldb_piyer_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ealblobdconnection')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('ealblobdconnection_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ADF_Control')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ealblobdconnection",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Azure blobs"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "sample.json",
+						"container": "eal-src-stg"
+					}
+				},
+				"schema": {
+					"type": "object",
+					"properties": {
+						"row": {
+							"type": "integer"
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ealblobdconnection')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/eal_ac_active_flights')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ealblobdconnection",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Azure blobs"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "eal_ac_active_flights.json",
+						"container": "eal-src-stg"
+					}
+				},
+				"schema": {
+					"type": "object",
+					"properties": {
+						"Success": {
+							"type": "boolean"
+						},
+						"Flights": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"ID": {
+										"type": "string"
+									},
+									"SegmentNo": {
+										"type": "integer"
+									},
+									"ExternalID": {
+										"type": "string"
+									},
+									"CarrierCode": {
+										"type": "string"
+									},
+									"FlightNo": {
+										"type": "string"
+									},
+									"MarketingCarrierCode": {
+										"type": "string"
+									},
+									"MarketingFlightNo": {
+										"type": "string"
+									},
+									"Type": {
+										"type": "string"
+									},
+									"TailNo": {
+										"type": "string"
+									},
+									"OriginIATA": {
+										"type": "string"
+									},
+									"OriginICAO": {
+										"type": "string"
+									},
+									"OriginAirportName": {
+										"type": "string"
+									},
+									"OriginAirportCity": {
+										"type": "string"
+									},
+									"OriginAirportCountryCode": {
+										"type": "string"
+									},
+									"DepartureTerminal": {
+										"type": "string"
+									},
+									"DepartureGate": {
+										"type": "string"
+									},
+									"DestinationIATA": {
+										"type": "string"
+									},
+									"DestinationICAO": {
+										"type": "string"
+									},
+									"DestinationAirportName": {
+										"type": "string"
+									},
+									"DestinationAirportCity": {
+										"type": "string"
+									},
+									"DestinationAirportCountryCode": {
+										"type": "string"
+									},
+									"ArrivalTerminal": {
+										"type": "string"
+									},
+									"ArrivalGate": {
+										"type": "string"
+									},
+									"ScheduledDepartureTime": {
+										"type": "string"
+									},
+									"ScheduledDepartureTimeUTC": {
+										"type": "string"
+									},
+									"OffBlocksTime": {
+										"type": "string"
+									},
+									"TakeOffTime": {
+										"type": "string"
+									},
+									"ScheduledArrivalTime": {
+										"type": "string"
+									},
+									"EstimatedArrivalTime": {
+										"type": "string"
+									},
+									"TouchDownTime": {
+										"type": "string"
+									},
+									"OnBlocksTime": {
+										"type": "string"
+									},
+									"FlightTimeMinutes": {
+										"type": "integer"
+									},
+									"BoardingTime": {
+										"type": "string"
+									},
+									"Message": {
+										"type": "string"
+									},
+									"Status": {
+										"type": "string"
+									},
+									"EnablePassengerAPIS": {
+										"type": "boolean"
+									},
+									"EnableCrewAPIS": {
+										"type": "boolean"
+									},
+									"EnableDCS": {
+										"type": "boolean"
+									},
+									"WeightUnitsKgs": {
+										"type": "boolean"
+									},
+									"IsOpenSeating": {
+										"type": "boolean"
+									},
+									"IsProgressiveFlight": {
+										"type": "boolean"
+									},
+									"EnableThroughCheckIn": {
+										"type": "boolean"
+									},
+									"EnableBoarding": {
+										"type": "boolean"
+									},
+									"UseAveragePaxWeight": {
+										"type": "boolean"
+									},
+									"UseAverageBagWeight": {
+										"type": "boolean"
+									},
+									"PnlImported": {
+										"type": "boolean"
+									},
+									"IsCancelled": {
+										"type": "boolean"
+									},
+									"CancelledBy": {
+										"type": "string"
+									},
+									"CancelledReason": {
+										"type": "string"
+									},
+									"AircraftCapacity": {
+										"type": "integer"
+									},
+									"BookedPassengersCount": {
+										"type": "integer"
+									},
+									"TotalCargoLoad": {
+										"type": "integer"
+									},
+									"UpliftFuelLoad": {
+										"type": "integer"
+									},
+									"TotalFuelLoad": {
+										"type": "integer"
+									},
+									"RemainingFuelLoad": {
+										"type": "integer"
+									},
+									"Carrier": {
+										"type": "object",
+										"properties": {
+											"CarrierName": {
+												"type": "string"
+											},
+											"Code": {
+												"type": "string"
+											},
+											"IATA": {
+												"type": "string"
+											},
+											"ICAO": {
+												"type": "string"
+											},
+											"ApisCarrierCode": {
+												"type": "string"
+											},
+											"Prefix": {
+												"type": "string"
+											},
+											"Logo": {
+												"type": "string"
+											},
+											"Icon": {
+												"type": "string"
+											},
+											"Address": {
+												"type": "object",
+												"properties": {
+													"ID": {
+														"type": "string"
+													},
+													"Location": {
+														"type": "string"
+													},
+													"Street1": {
+														"type": "string"
+													},
+													"Street2": {
+														"type": "string"
+													},
+													"City": {
+														"type": "string"
+													},
+													"StateCode": {
+														"type": "string"
+													},
+													"PostalCode": {
+														"type": "string"
+													},
+													"CountryCode": {
+														"type": "string"
+													},
+													"CustomData": {
+														"type": "object",
+														"properties": {
+															"Properties": {
+																"type": "object"
+															}
+														}
+													}
+												}
+											},
+											"ApisSenderID": {
+												"type": "string"
+											},
+											"ApisContactName": {
+												"type": "string"
+											},
+											"ApisTelephone": {
+												"type": "string"
+											},
+											"ApisFax": {
+												"type": "string"
+											},
+											"Email": {
+												"type": "string"
+											},
+											"Website": {
+												"type": "string"
+											},
+											"TsaPreCheck": {
+												"type": "boolean"
+											},
+											"MaximumPassengerBags": {
+												"type": "integer"
+											},
+											"DefaultChildAge": {
+												"type": "integer"
+											},
+											"DefaultAdultAge": {
+												"type": "integer"
+											},
+											"PnlImportCloseTime": {
+												"type": "integer"
+											},
+											"IsPrintingBagTagWithoutCheckInAllowed": {
+												"type": "boolean"
+											},
+											"WatchlistNoFlyMatchInstructions": {
+												"type": "string"
+											},
+											"WatchlistPreventMatchInstructions": {
+												"type": "string"
+											},
+											"WatchlistSelecteeMatchInstructions": {
+												"type": "string"
+											},
+											"SelecteeGateStopInstructions": {
+												"type": "string"
+											},
+											"EmergencySeatGateStopInstructions": {
+												"type": "string"
+											},
+											"UnverifiedDocumentsGateStopInstructions": {
+												"type": "string"
+											},
+											"EmailSenderAddress": {
+												"type": "string"
+											},
+											"CustomData": {
+												"type": "object",
+												"properties": {
+													"Properties": {
+														"type": "object"
+													}
+												}
+											}
+										}
+									},
+									"Passengers": {
+										"type": "array"
+									},
+									"FlightDelays": {
+										"type": "array"
+									},
+									"AncillaryTemplateID": {
+										"type": "string"
+									},
+									"CustomerID": {
+										"type": "string"
+									},
+									"CrewMemberSecurityRules": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"properties": {
+												"CountryEntity": {
+													"type": "string"
+												},
+												"FlightType": {
+													"type": "integer"
+												},
+												"FlightRouting": {
+													"type": "integer"
+												},
+												"InterchangeRecipientID": {
+													"type": "string"
+												},
+												"ApplicationRecipientID": {
+													"type": "string"
+												},
+												"CommonAccessReference": {
+													"type": "string"
+												},
+												"BuildFcmFromMclOnly": {
+													"type": "boolean"
+												},
+												"InteractiveComms": {
+													"type": "boolean"
+												},
+												"BatchSubmission": {
+													"type": "boolean"
+												},
+												"BatchTriggerHours": {
+													"type": "integer"
+												},
+												"BatchValidation": {
+													"type": "boolean"
+												},
+												"WatchlistVet": {
+													"type": "integer"
+												},
+												"RequireSecurityClearance": {
+													"type": "boolean"
+												},
+												"OutageVettingStatus": {
+													"type": "integer"
+												},
+												"FlightAdd": {
+													"type": "boolean"
+												},
+												"FlightChange": {
+													"type": "boolean"
+												},
+												"FlightCancel": {
+													"type": "boolean"
+												},
+												"FlightPreDepartureCloseout": {
+													"type": "boolean"
+												},
+												"FlightPostDepartureCloseout": {
+													"type": "boolean"
+												},
+												"FlightPostDepartureCloseoutOnBoard": {
+													"type": "boolean"
+												},
+												"HasFlightCloseoutRequirement": {
+													"type": "boolean"
+												},
+												"CrewAdd": {
+													"type": "boolean"
+												},
+												"CrewChange": {
+													"type": "boolean"
+												},
+												"CrewCancel": {
+													"type": "boolean"
+												},
+												"BatchDestinationAddressCondition": {
+													"type": "integer"
+												},
+												"BatchContactDetails": {
+													"type": "boolean"
+												},
+												"CheckinStatusOnBoard": {
+													"type": "boolean"
+												},
+												"CheckinDOB": {
+													"type": "boolean"
+												},
+												"CheckinGender": {
+													"type": "boolean"
+												},
+												"CheckinNationality": {
+													"type": "boolean"
+												},
+												"CheckinResidence": {
+													"type": "boolean"
+												},
+												"CheckinOrigDest": {
+													"type": "boolean"
+												},
+												"CheckinClearance": {
+													"type": "boolean"
+												},
+												"CheckinTravelDoc": {
+													"type": "boolean"
+												},
+												"CheckinHomeAddress": {
+													"type": "boolean"
+												},
+												"CheckinDestinationAddress": {
+													"type": "boolean"
+												},
+												"CheckinDestinationAddressCondition": {
+													"type": "integer"
+												},
+												"CheckinBirthPlace": {
+													"type": "boolean"
+												},
+												"CheckinContactDetails": {
+													"type": "boolean"
+												}
+											}
+										}
+									},
+									"PassengerSecurityRules": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"properties": {
+												"CountryEntity": {
+													"type": "string"
+												},
+												"FlightType": {
+													"type": "integer"
+												},
+												"FlightRouting": {
+													"type": "integer"
+												},
+												"InterchangeRecipientID": {
+													"type": "string"
+												},
+												"ApplicationRecipientID": {
+													"type": "string"
+												},
+												"CommonAccessReference": {
+													"type": "string"
+												},
+												"InteractiveComms": {
+													"type": "boolean"
+												},
+												"BatchSubmission": {
+													"type": "boolean"
+												},
+												"BatchTriggerHours": {
+													"type": "integer"
+												},
+												"BatchValidation": {
+													"type": "boolean"
+												},
+												"WatchlistVet": {
+													"type": "integer"
+												},
+												"RequireSecurityClearance": {
+													"type": "boolean"
+												},
+												"OutageVettingStatus": {
+													"type": "integer"
+												},
+												"FlightAdd": {
+													"type": "boolean"
+												},
+												"FlightChange": {
+													"type": "boolean"
+												},
+												"FlightCancel": {
+													"type": "boolean"
+												},
+												"FlightPreDepartureCloseout": {
+													"type": "boolean"
+												},
+												"FlightPostDepartureCloseout": {
+													"type": "boolean"
+												},
+												"FlightPostDepartureCloseoutOnBoard": {
+													"type": "boolean"
+												},
+												"HasFlightCloseoutRequirement": {
+													"type": "boolean"
+												},
+												"PaxAdd": {
+													"type": "boolean"
+												},
+												"PaxChange": {
+													"type": "boolean"
+												},
+												"PaxCancel": {
+													"type": "boolean"
+												},
+												"PaxTransfer": {
+													"type": "boolean"
+												},
+												"PaxVerifiedID": {
+													"type": "boolean"
+												},
+												"GatePass": {
+													"type": "boolean"
+												},
+												"BatchPNR": {
+													"type": "boolean"
+												},
+												"BatchResidence": {
+													"type": "boolean"
+												},
+												"BatchOrigDest": {
+													"type": "boolean"
+												},
+												"BatchClearance": {
+													"type": "boolean"
+												},
+												"BatchDestinationAddress": {
+													"type": "boolean"
+												},
+												"BatchDestinationAddressCondition": {
+													"type": "integer"
+												},
+												"CheckinPNR": {
+													"type": "boolean"
+												},
+												"CheckinDOB": {
+													"type": "boolean"
+												},
+												"CheckinGender": {
+													"type": "boolean"
+												},
+												"CheckinNationality": {
+													"type": "boolean"
+												},
+												"CheckinResidence": {
+													"type": "boolean"
+												},
+												"CheckinOrigDest": {
+													"type": "boolean"
+												},
+												"CheckinClearance": {
+													"type": "boolean"
+												},
+												"CheckinTravelDoc": {
+													"type": "boolean"
+												},
+												"CheckinDestinationAddress": {
+													"type": "boolean"
+												},
+												"CheckinDestinationAddressCondition": {
+													"type": "integer"
+												}
+											}
+										}
+									},
+									"BatchPassengerMask": {
+										"type": "string"
+									},
+									"BatchCrewMemberMask": {
+										"type": "string"
+									},
+									"PreDepartureCloseOutPassengerMask": {
+										"type": "string"
+									},
+									"PostDepartureCloseOutPassengerMask": {
+										"type": "string"
+									},
+									"PreDepartureCloseOutCrewMemberMask": {
+										"type": "string"
+									},
+									"PostDepartureCloseOutCrewMemberMask": {
+										"type": "string"
+									},
+									"PaxFlightPreDepartureCloseOutStatus": {
+										"type": "string"
+									},
+									"PaxFlightPostDepartureCloseOutStatus": {
+										"type": "string"
+									},
+									"CrewFlightPreDepartureCloseOutStatus": {
+										"type": "string"
+									},
+									"CrewFlightPostDepartureCloseOutStatus": {
+										"type": "string"
+									},
+									"PaxBatchPreVetStatus": {
+										"type": "string"
+									},
+									"HasPassengerSecurityTransactions": {
+										"type": "boolean"
+									},
+									"CustomData": {
+										"type": "object",
+										"properties": {
+											"Properties": {
+												"type": "object"
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ealblobdconnection')]"
+			]
+		}
+	]
+}
