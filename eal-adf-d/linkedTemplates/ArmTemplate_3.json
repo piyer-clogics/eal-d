@@ -616,7 +616,10 @@
 								"referenceName": "f_flights_load_update",
 								"type": "DataFlowReference",
 								"parameters": {
-									"date": "'1899-01-01'"
+									"date": {
+										"value": "'@{variables('dt')}'",
+										"type": "Expression"
+									}
 								},
 								"datasetParameters": {
 									"StagingFlights": {},
