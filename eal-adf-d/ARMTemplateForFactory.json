@@ -1262,7 +1262,7 @@
 						]
 					},
 					{
-						"name": "equipment_schd_postgres_dataflow",
+						"name": "Call s_equip_schd_load",
 						"type": "ExecuteDataFlow",
 						"dependsOn": [
 							{
@@ -1367,7 +1367,7 @@
 						"type": "ExecuteDataFlow",
 						"dependsOn": [
 							{
-								"activity": "equipment_schd_postgres_dataflow",
+								"activity": "Call s_equip_schd_load",
 								"dependencyConditions": [
 									"Succeeded"
 								]
@@ -1423,6 +1423,7 @@
 				"[concat(variables('factoryId'), '/datasets/eal_postgresql_equip_schd')]",
 				"[concat(variables('factoryId'), '/datasets/eal_az_equipment_schd')]",
 				"[concat(variables('factoryId'), '/dataflows/s_equip_schd_load')]",
+				"[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]",
 				"[concat(variables('factoryId'), '/datasets/eal_adf_cntrl')]",
 				"[concat(variables('factoryId'), '/dataflows/adf_control')]"
 			]
@@ -5163,7 +5164,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "eal_sqldb_EDW",
+					"referenceName": "eal_sqldb_STG",
 					"type": "LinkedServiceReference"
 				},
 				"folder": {
@@ -5337,11 +5338,11 @@
 				],
 				"typeProperties": {
 					"schema": "dbo",
-					"table": "F_FLGHT_OPS"
+					"table": "S_FLIGHTS"
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/eal_sqldb_EDW')]"
+				"[concat(variables('factoryId'), '/linkedServices/eal_sqldb_STG')]"
 			]
 		},
 		{

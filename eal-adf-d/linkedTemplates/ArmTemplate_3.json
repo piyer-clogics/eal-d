@@ -1176,7 +1176,7 @@
 						]
 					},
 					{
-						"name": "equipment_schd_postgres_dataflow",
+						"name": "Call s_equip_schd_load",
 						"type": "ExecuteDataFlow",
 						"dependsOn": [
 							{
@@ -1281,7 +1281,7 @@
 						"type": "ExecuteDataFlow",
 						"dependsOn": [
 							{
-								"activity": "equipment_schd_postgres_dataflow",
+								"activity": "Call s_equip_schd_load",
 								"dependencyConditions": [
 									"Succeeded"
 								]
