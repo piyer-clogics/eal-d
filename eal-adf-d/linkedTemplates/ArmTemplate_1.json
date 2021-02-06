@@ -851,7 +851,7 @@
 					"type": "LinkedServiceReference"
 				},
 				"folder": {
-					"name": "Destination Table"
+					"name": "Destination Table/Staging"
 				},
 				"annotations": [],
 				"type": "AzureSqlTable",
@@ -866,9 +866,7 @@
 					},
 					{
 						"name": "ADF_SUC_TS",
-						"type": "datetime",
-						"precision": 23,
-						"scale": 3
+						"type": "date"
 					}
 				],
 				"typeProperties": {

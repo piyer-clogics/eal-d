@@ -362,7 +362,8 @@
 				"[concat(variables('factoryId'), '/dataflows/d_arpt_daily_load_insert')]",
 				"[concat(variables('factoryId'), '/datasets/sql_d_aprt')]",
 				"[concat(variables('factoryId'), '/datasets/eal_adf_cntrl')]",
-				"[concat(variables('factoryId'), '/dataflows/adf_control')]"
+				"[concat(variables('factoryId'), '/dataflows/adf_control')]",
+				"[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
 			]
 		},
 		{
@@ -2641,7 +2642,7 @@
 					"type": "LinkedServiceReference"
 				},
 				"folder": {
-					"name": "Destination Table"
+					"name": "Destination Table/Staging"
 				},
 				"annotations": [],
 				"type": "AzureSqlTable",
@@ -2656,9 +2657,7 @@
 					},
 					{
 						"name": "ADF_SUC_TS",
-						"type": "datetime",
-						"precision": 23,
-						"scale": 3
+						"type": "date"
 					}
 				],
 				"typeProperties": {
@@ -5750,7 +5749,7 @@
 							"name": "AlterRow"
 						}
 					],
-					"script": "parameters{\n\trun_id as string (''),\n\tadf_name as string ('')\n}\nsource(output(\n\t\trow as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tdocumentForm: 'documentPerLine') ~> ADFCONTROL\nADFCONTROL derive(ADF_RUN_ID = $run_id,\n\t\tADF_TIME_STMP = toTimestamp(toString(currentDate()-1)+\"23:59:59\") ,\n\t\tADF_JOB_NAME = $adf_name) ~> AddADFDetails\nAddADFDetails alterRow(updateIf(ADF_JOB_NAME==$adf_name)) ~> AlterRow\nAlterRow sink(input(\n\t\tADF_RUN_ID as string,\n\t\tADF_JOB_NAME as string,\n\t\tADF_SUC_TS as timestamp\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:true,\n\tupsertable:false,\n\tkeys:['ADF_JOB_NAME'],\n\tformat: 'table',\n\tmapColumn(\n\t\tADF_RUN_ID,\n\t\tADF_JOB_NAME,\n\t\tADF_SUC_TS = ADF_TIME_STMP\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> Write"
+					"script": "parameters{\n\trun_id as string (''),\n\tadf_name as string ('')\n}\nsource(output(\n\t\trow as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tdocumentForm: 'documentPerLine') ~> ADFCONTROL\nADFCONTROL derive(ADF_RUN_ID = $run_id,\n\t\tADF_TIME_STMP = currentDate()-1,\n\t\tADF_JOB_NAME = $adf_name) ~> AddADFDetails\nAddADFDetails alterRow(updateIf(ADF_JOB_NAME==$adf_name)) ~> AlterRow\nAlterRow sink(input(\n\t\tADF_RUN_ID as string,\n\t\tADF_JOB_NAME as string,\n\t\tADF_SUC_TS as date\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:true,\n\tupsertable:false,\n\tkeys:['ADF_JOB_NAME'],\n\tformat: 'table',\n\tmapColumn(\n\t\tADF_RUN_ID,\n\t\tADF_JOB_NAME,\n\t\tADF_SUC_TS = ADF_TIME_STMP\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> Write"
 				}
 			},
 			"dependsOn": [
@@ -5797,7 +5796,7 @@
 							"name": "ResetDate"
 						}
 					],
-					"script": "parameters{\n\tjob_name as string ('')\n}\nsource(output(\n\t\tADF_RUN_ID as string,\n\t\tADF_JOB_NAME as string,\n\t\tADF_SUC_TS as timestamp\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> GetControls\nResetDate alterRow(updateIf(ADF_JOB_NAME==$job_name)) ~> AlterRow\nGetControls filter(ADF_JOB_NAME == $job_name) ~> FilterJob\nFilterJob derive(Date = '1899-01-01 00:00:00.000',\n\t\tid = '') ~> ResetDate\nAlterRow sink(input(\n\t\tADF_RUN_ID as string,\n\t\tADF_JOB_NAME as string,\n\t\tADF_SUC_TS as timestamp\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:false,\n\tupdateable:true,\n\tupsertable:false,\n\tkeys:['ADF_JOB_NAME'],\n\tformat: 'table',\n\tmapColumn(\n\t\tADF_RUN_ID = id,\n\t\tADF_JOB_NAME,\n\t\tADF_SUC_TS = Date\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> WriteResetDate"
+					"script": "parameters{\n\tjob_name as string ('')\n}\nsource(output(\n\t\tADF_RUN_ID as string,\n\t\tADF_JOB_NAME as string,\n\t\tADF_SUC_TS as timestamp\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> GetControls\nResetDate alterRow(updateIf(ADF_JOB_NAME==$job_name)) ~> AlterRow\nGetControls filter(ADF_JOB_NAME == $job_name) ~> FilterJob\nFilterJob derive(Date = '1899-01-01 00:00:00.000',\n\t\tid = '') ~> ResetDate\nAlterRow sink(input(\n\t\tADF_RUN_ID as string,\n\t\tADF_JOB_NAME as string,\n\t\tADF_SUC_TS as date\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:false,\n\tupdateable:true,\n\tupsertable:false,\n\tkeys:['ADF_JOB_NAME'],\n\tformat: 'table',\n\tmapColumn(\n\t\tADF_RUN_ID = id,\n\t\tADF_JOB_NAME,\n\t\tADF_SUC_TS = Date\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> WriteResetDate"
 				}
 			},
 			"dependsOn": [
