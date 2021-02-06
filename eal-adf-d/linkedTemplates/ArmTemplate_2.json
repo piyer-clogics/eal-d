@@ -13,102 +13,6 @@
 	},
 	"resources": [
 		{
-			"name": "[concat(parameters('factoryName'), '/sql_f_equip_schd')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "eal_sqldb_EDW",
-					"type": "LinkedServiceReference"
-				},
-				"folder": {
-					"name": "Destination Table/Prod"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "ARPT_ID",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "ARPT_IATA_CD",
-						"type": "varchar"
-					},
-					{
-						"name": "ARPT_ICAO_CD",
-						"type": "varchar"
-					},
-					{
-						"name": "ARPT_NAME",
-						"type": "varchar"
-					},
-					{
-						"name": "ARPT_CNTRY",
-						"type": "varchar"
-					},
-					{
-						"name": "ARPT_CITY",
-						"type": "varchar"
-					},
-					{
-						"name": "ARPT_LAT",
-						"type": "decimal",
-						"precision": 8,
-						"scale": 6
-					},
-					{
-						"name": "ARPT_LONG",
-						"type": "decimal",
-						"precision": 9,
-						"scale": 6
-					},
-					{
-						"name": "ARPT_ALTD",
-						"type": "decimal",
-						"precision": 6,
-						"scale": 2
-					},
-					{
-						"name": "ARPT_UTC_OFSET",
-						"type": "decimal",
-						"precision": 2,
-						"scale": 2
-					},
-					{
-						"name": "ARPT_DST_CD",
-						"type": "varchar"
-					},
-					{
-						"name": "ARPT_TZONE",
-						"type": "varchar"
-					},
-					{
-						"name": "EFF_STRT_DT",
-						"type": "datetime",
-						"precision": 23,
-						"scale": 3
-					},
-					{
-						"name": "EFF_END_DT",
-						"type": "datetime",
-						"precision": 23,
-						"scale": 3
-					},
-					{
-						"name": "ACTV_IND",
-						"type": "char"
-					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "F_EQUIP_SCHD"
-				}
-			},
-			"dependsOn": []
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/sql_f_flights_ops')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -1529,8 +1433,7 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/sql_s_eqip_schd')]",
-				"[concat(variables('factoryId'), '/datasets/sql_f_equip_schd')]"
+				"[concat(variables('factoryId'), '/datasets/sql_s_eqip_schd')]"
 			]
 		},
 		{
@@ -1583,8 +1486,7 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/sql_s_eqip_schd')]",
-				"[concat(variables('factoryId'), '/datasets/sql_f_equip_schd')]"
+				"[concat(variables('factoryId'), '/datasets/sql_s_eqip_schd')]"
 			]
 		},
 		{
@@ -2000,6 +1902,242 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/sql_s_eqip_schd')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/s_flights_load')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "Flights"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "eal_az_flights",
+								"type": "DatasetReference"
+							},
+							"name": "StgFlights"
+						},
+						{
+							"dataset": {
+								"referenceName": "eal_ac_bdavis_Airports",
+								"type": "DatasetReference"
+							},
+							"name": "BdavisAirport"
+						},
+						{
+							"dataset": {
+								"referenceName": "eal_az_flights_delay",
+								"type": "DatasetReference"
+							},
+							"name": "FlightsDelay"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "sql_flights_rej",
+								"type": "DatasetReference"
+							},
+							"name": "Reject"
+						},
+						{
+							"dataset": {
+								"referenceName": "sql_s_flights",
+								"type": "DatasetReference"
+							},
+							"name": "StagingFlights"
+						}
+					],
+					"transformations": [
+						{
+							"name": "ConditionalSplit1"
+						},
+						{
+							"name": "IATAAirportExists"
+						},
+						{
+							"name": "IATAAirportDoesntExists1"
+						},
+						{
+							"name": "ICAOAirportExists"
+						},
+						{
+							"name": "ExsistUnion"
+						},
+						{
+							"name": "ICAOAirportdoesntExists"
+						},
+						{
+							"name": "RejectUnion1"
+						},
+						{
+							"name": "NullRejectReason"
+						},
+						{
+							"name": "AddRejectReason2"
+						},
+						{
+							"name": "ConditionalSplit2"
+						},
+						{
+							"name": "FilterUnion1"
+						},
+						{
+							"name": "ConditionalSplit3"
+						},
+						{
+							"name": "IATAAirportDoesntExists2"
+						},
+						{
+							"name": "ICAOAirportExists2"
+						},
+						{
+							"name": "ICAOAirportdoesntExists2"
+						},
+						{
+							"name": "AddRejectReason3"
+						},
+						{
+							"name": "RejectUnion2"
+						},
+						{
+							"name": "FilterUnion2"
+						},
+						{
+							"name": "ConditionalSplit4"
+						},
+						{
+							"name": "IATAAirportExists3"
+						},
+						{
+							"name": "IATAAirportDoesntExists3"
+						},
+						{
+							"name": "IATAAirportExists2"
+						},
+						{
+							"name": "ICAOAirportExists3"
+						},
+						{
+							"name": "ICAOAirportdoesntExists3"
+						},
+						{
+							"name": "FilterUnion3"
+						},
+						{
+							"name": "AddRejectReason4"
+						},
+						{
+							"name": "ExistUnion2"
+						},
+						{
+							"name": "ExistUnion3"
+						},
+						{
+							"name": "RejectUnion3"
+						},
+						{
+							"name": "SchdArrvlAirportNull"
+						},
+						{
+							"name": "IATAAirportDoesntExists4"
+						},
+						{
+							"name": "ICAOAirportExists4"
+						},
+						{
+							"name": "ICAOAirportDoesntExists4"
+						},
+						{
+							"name": "IATAAirportExists4"
+						},
+						{
+							"name": "ExistUnion4"
+						},
+						{
+							"name": "FilterUnion4"
+						},
+						{
+							"name": "AddRejectReason5"
+						},
+						{
+							"name": "SchdDptrAirportNull"
+						},
+						{
+							"name": "IATAAirportDoesntExists5"
+						},
+						{
+							"name": "ICAOAirportExists5"
+						},
+						{
+							"name": "ICAOAirportDoesntExists5"
+						},
+						{
+							"name": "IATAAirportExists5"
+						},
+						{
+							"name": "ExistUnion5"
+						},
+						{
+							"name": "FilterUnion5"
+						},
+						{
+							"name": "AddRejectReason6"
+						},
+						{
+							"name": "RejectUnion4"
+						},
+						{
+							"name": "RejectUnion5"
+						},
+						{
+							"name": "AddADFColumns"
+						},
+						{
+							"name": "AddADFColumns2"
+						},
+						{
+							"name": "FlightsJoinFlightsDelay"
+						},
+						{
+							"name": "TypeConvertion"
+						},
+						{
+							"name": "RemoveDuplicates"
+						},
+						{
+							"name": "FilterRows"
+						},
+						{
+							"name": "ConditionalSplit5"
+						},
+						{
+							"name": "OOOIRejectReason"
+						},
+						{
+							"name": "ConditionalSplit6"
+						},
+						{
+							"name": "EstSchdRejectReason"
+						},
+						{
+							"name": "UnionNullRejection"
+						},
+						{
+							"name": "UnionOOOIRejection"
+						}
+					],
+					"script": "parameters{\n\trun_id as string (''),\n\tdate as string ('')\n}\nsource(output(\n\t\tflight_id as string,\n\t\tflight_number as string,\n\t\tflight_date as string,\n\t\taircraft_registration_number as string,\n\t\taircraft_type as string,\n\t\tscheduled_departure as string,\n\t\tscheduled_arrival as string,\n\t\testimated_departure as string,\n\t\testimated_arrival as string,\n\t\tactual_oooi_out as string,\n\t\tactual_oooi_off as string,\n\t\tactual_oooi_on as string,\n\t\tactual_oooi_in as string,\n\t\tbase_airport as string,\n\t\tscheduled_departure_airport as string,\n\t\tscheduled_arrival_airport as string,\n\t\tactual_departure_airport as string,\n\t\tactual_arrival_airport as string,\n\t\tis_verified as boolean,\n\t\tnotes as string,\n\t\tis_canceled as boolean,\n\t\tflight_type as string,\n\t\tcargo_weight as string,\n\t\tfuel_out as string,\n\t\tfuel_in as string,\n\t\tfuel_uplift as string,\n\t\tmaint_log_page as string,\n\t\tupdated_at as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tdocumentForm: 'documentPerLine') ~> StgFlights\nsource(output(\n\t\tAirport_Name as string,\n\t\tCity as string,\n\t\tCountry as string,\n\t\tIATA as string,\n\t\tICAO as string,\n\t\tLatitude as double,\n\t\tLongitude as double,\n\t\tAltitude as integer,\n\t\tUTC_offset as double,\n\t\tDST as string,\n\t\tTime_Zone as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> BdavisAirport\nsource(output(\n\t\tflight_id as string,\n\t\tdelay_type as string,\n\t\tduration_mins as string,\n\t\tdelay_code as string,\n\t\tdelay_code_name as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tdocumentForm: 'documentPerLine') ~> FlightsDelay\nFilterRows split(isNull(flight_date) || isNull(flight_id) || isNull(flight_number) || isNull(flight_type) || isNull(SCHDD_DPTR) || isNull(UPDTD_AT),\n\tdisjoint: false) ~> ConditionalSplit1@(NullReject, NullAcpt)\nConditionalSplit2@ActlArrvlAirportNotNull, BdavisAirport exists(actual_arrival_airport == IATA,\n\tnegate:false,\n\tbroadcast: 'auto')~> IATAAirportExists\nConditionalSplit2@ActlArrvlAirportNotNull, BdavisAirport exists(actual_arrival_airport == IATA,\n\tnegate:true,\n\tbroadcast: 'auto')~> IATAAirportDoesntExists1\nIATAAirportDoesntExists1, BdavisAirport exists(toString(actual_arrival_airport)  == ICAO,\n\tnegate:false,\n\tbroadcast: 'auto')~> ICAOAirportExists\nIATAAirportExists, ICAOAirportExists union(byName: true)~> ExsistUnion\nIATAAirportDoesntExists1, BdavisAirport exists(actual_arrival_airport == ICAO,\n\tnegate:true,\n\tbroadcast: 'auto')~> ICAOAirportdoesntExists\nAddRejectReason2, UnionOOOIRejection union(byName: true)~> RejectUnion1\nConditionalSplit1@NullReject derive(Reject_Reason = \"Null Error\") ~> NullRejectReason\nICAOAirportdoesntExists derive(Reject_Reason = \"Invalid ACTL_ARRVL Airport Name\") ~> AddRejectReason2\nConditionalSplit6@EstSchdAcpt split(isNull(actual_arrival_airport),\n\tdisjoint: false) ~> ConditionalSplit2@(ActlArrvlAirportNull, ActlArrvlAirportNotNull)\nExsistUnion, ConditionalSplit2@ActlArrvlAirportNull union(byName: true)~> FilterUnion1\nFilterUnion1 split(isNull(actual_departure_airport),\n\tdisjoint: false) ~> ConditionalSplit3@(ActlDptrAirportNull, ActlDptrAirportNotNull)\nConditionalSplit3@ActlDptrAirportNotNull, BdavisAirport exists(actual_departure_airport == IATA,\n\tnegate:true,\n\tbroadcast: 'auto')~> IATAAirportDoesntExists2\nIATAAirportDoesntExists2, BdavisAirport exists(actual_departure_airport == ICAO,\n\tnegate:false,\n\tbroadcast: 'auto')~> ICAOAirportExists2\nIATAAirportDoesntExists2, BdavisAirport exists(actual_departure_airport == ICAO,\n\tnegate:true,\n\tbroadcast: 'auto')~> ICAOAirportdoesntExists2\nICAOAirportdoesntExists2 derive(Reject_Reason = \"Actl Dptr Airport Name not found\") ~> AddRejectReason3\nRejectUnion1, AddRejectReason3 union(byName: true)~> RejectUnion2\nExistUnion2, ConditionalSplit3@ActlDptrAirportNull union(byName: true)~> FilterUnion2\nFilterUnion2 split(isNull(base_airport),\n\tdisjoint: false) ~> ConditionalSplit4@(BaseAirportNull, BaseAirportNotNull)\nConditionalSplit4@BaseAirportNotNull, BdavisAirport exists(base_airport == IATA,\n\tnegate:false,\n\tbroadcast: 'auto')~> IATAAirportExists3\nConditionalSplit4@BaseAirportNotNull, BdavisAirport exists(base_airport == IATA,\n\tnegate:true,\n\tbroadcast: 'auto')~> IATAAirportDoesntExists3\nConditionalSplit3@ActlDptrAirportNotNull, BdavisAirport exists(actual_departure_airport == IATA,\n\tnegate:false,\n\tbroadcast: 'auto')~> IATAAirportExists2\nIATAAirportDoesntExists3, BdavisAirport exists(base_airport == ICAO,\n\tnegate:false,\n\tbroadcast: 'auto')~> ICAOAirportExists3\nIATAAirportDoesntExists3, BdavisAirport exists(base_airport == ICAO,\n\tnegate:true,\n\tbroadcast: 'auto')~> ICAOAirportdoesntExists3\nExistUnion3, ConditionalSplit4@BaseAirportNull union(byName: true)~> FilterUnion3\nICAOAirportdoesntExists3 derive(Reject_Reason = \"Base Airport Name not found\") ~> AddRejectReason4\nICAOAirportExists2, IATAAirportExists2 union(byName: true)~> ExistUnion2\nIATAAirportExists3, ICAOAirportExists3 union(byName: true)~> ExistUnion3\nRejectUnion2, AddRejectReason4 union(byName: true)~> RejectUnion3\nFilterUnion3 split(isNull(scheduled_arrival_airport),\n\tdisjoint: false) ~> SchdArrvlAirportNull@(SchdArrvlAirportNull, SchdArrvlAirportNotNull)\nSchdArrvlAirportNull@SchdArrvlAirportNotNull, BdavisAirport exists(scheduled_arrival_airport == IATA,\n\tnegate:true,\n\tbroadcast: 'auto')~> IATAAirportDoesntExists4\nIATAAirportDoesntExists4, BdavisAirport exists(scheduled_arrival_airport == ICAO,\n\tnegate:false,\n\tbroadcast: 'auto')~> ICAOAirportExists4\nIATAAirportDoesntExists4, BdavisAirport exists(scheduled_arrival_airport == ICAO,\n\tnegate:true,\n\tbroadcast: 'auto')~> ICAOAirportDoesntExists4\nSchdArrvlAirportNull@SchdArrvlAirportNotNull, BdavisAirport exists(scheduled_arrival_airport == IATA,\n\tnegate:false,\n\tbroadcast: 'auto')~> IATAAirportExists4\nICAOAirportExists4, IATAAirportExists4 union(byName: true)~> ExistUnion4\nExistUnion4, SchdArrvlAirportNull@SchdArrvlAirportNull union(byName: true)~> FilterUnion4\nICAOAirportDoesntExists4 derive(Reject_Reason = \"Schd Arrvl Airport Name not found\") ~> AddRejectReason5\nFilterUnion4 split(isNull(scheduled_departure_airport),\n\tdisjoint: false) ~> SchdDptrAirportNull@(SchdDptrAirportNull, SchdDptrAirportNotNull)\nSchdDptrAirportNull@SchdDptrAirportNotNull, BdavisAirport exists(scheduled_departure_airport == IATA,\n\tnegate:true,\n\tbroadcast: 'auto')~> IATAAirportDoesntExists5\nIATAAirportDoesntExists5, BdavisAirport exists(scheduled_departure_airport == ICAO,\n\tnegate:false,\n\tbroadcast: 'auto')~> ICAOAirportExists5\nIATAAirportDoesntExists5, BdavisAirport exists(scheduled_departure_airport == ICAO,\n\tnegate:true,\n\tbroadcast: 'auto')~> ICAOAirportDoesntExists5\nSchdDptrAirportNull@SchdDptrAirportNotNull, BdavisAirport exists(scheduled_departure_airport == IATA,\n\tnegate:false,\n\tbroadcast: 'auto')~> IATAAirportExists5\nICAOAirportExists5, IATAAirportExists5 union(byName: true)~> ExistUnion5\nExistUnion5, SchdDptrAirportNull@SchdDptrAirportNull union(byName: true)~> FilterUnion5\nICAOAirportDoesntExists5 derive(Reject_Reason = \"Schd Dptr Airport Name not found\") ~> AddRejectReason6\nRejectUnion3, AddRejectReason5 union(byName: true)~> RejectUnion4\nRejectUnion4, AddRejectReason6 union(byName: true)~> RejectUnion5\nRejectUnion5 derive(ADF_TIME_STMP = currentTimestamp(),\n\t\tADF_RUN_ID = $run_id) ~> AddADFColumns\nFlightsJoinFlightsDelay derive(ADF_TIME_STMP = currentTimestamp(),\n\t\tADF_RUN_ID = $run_id) ~> AddADFColumns2\nFilterUnion5, FlightsDelay join(FilterUnion5@flight_id == FlightsDelay@flight_id,\n\tjoinType:'left',\n\tbroadcast: 'auto')~> FlightsJoinFlightsDelay\nStgFlights derive(ACTL_OOOI_IN = toTimestamp(actual_oooi_in),\n\t\tACTL_OOOI_OFF = toTimestamp(actual_oooi_off),\n\t\tACTL_OOOI_ON = toTimestamp(actual_oooi_on),\n\t\tACTL_OOOI_OUT = toTimestamp(actual_oooi_out),\n\t\tESTD_ARRVL = toTimestamp(estimated_arrival),\n\t\tESTD_DPTR = toTimestamp(estimated_departure),\n\t\tSCHDD_ARRVL = toTimestamp(scheduled_arrival),\n\t\tSCHDD_DPTR = toTimestamp(scheduled_departure),\n\t\tUPDTD_AT = toTimestamp(updated_at)) ~> TypeConvertion\nTypeConvertion select(mapColumn(\n\t\tflight_id,\n\t\tflight_number,\n\t\tflight_date,\n\t\taircraft_registration_number,\n\t\taircraft_type,\n\t\tbase_airport,\n\t\tscheduled_departure_airport,\n\t\tscheduled_arrival_airport,\n\t\tactual_departure_airport,\n\t\tactual_arrival_airport,\n\t\tis_verified,\n\t\tnotes,\n\t\tis_canceled,\n\t\tflight_type,\n\t\tcargo_weight,\n\t\tfuel_out,\n\t\tfuel_in,\n\t\tfuel_uplift,\n\t\tmaint_log_page,\n\t\tACTL_OOOI_IN,\n\t\tACTL_OOOI_OFF,\n\t\tACTL_OOOI_ON,\n\t\tACTL_OOOI_OUT,\n\t\tESTD_ARRVL,\n\t\tESTD_DPTR,\n\t\tSCHDD_ARRVL,\n\t\tSCHDD_DPTR,\n\t\tUPDTD_AT\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> RemoveDuplicates\nRemoveDuplicates filter(toDate(UPDTD_AT)  > toDate($date) && toDate(UPDTD_AT) < currentDate()) ~> FilterRows\nConditionalSplit1@NullAcpt split(iif(isNull(ACTL_OOOI_IN), false(), iif(isNull(ACTL_OOOI_ON), iif(isNull(ACTL_OOOI_OUT), false(), ACTL_OOOI_IN>ACTL_OOOI_OUT), ACTL_OOOI_IN<ACTL_OOOI_ON)) || \r\niif(isNull(ACTL_OOOI_OFF), iif(isNull(ACTL_OOOI_ON), false(),true()), iif(isNull(ACTL_OOOI_OUT), false(), ACTL_OOOI_OFF<ACTL_OOOI_OUT)) ||\r\niif(isNull(ACTL_OOOI_ON), iif(isNull(ACTL_OOOI_IN), iif(isNull(ACTL_OOOI_OFF), false(),true()),true()),iif(isNull(ACTL_OOOI_OFF), false(), ACTL_OOOI_ON<=ACTL_OOOI_OFF)) ||\r\niif(isNull(ACTL_OOOI_OUT), iif(isNull(ACTL_OOOI_OFF), false(), true()), false()),\n\tdisjoint: false) ~> ConditionalSplit5@(OOOIReject, OOOIAcpt)\nConditionalSplit5@OOOIReject derive(Reject_Reason = \"OOOI Validation Error\") ~> OOOIRejectReason\nConditionalSplit5@OOOIAcpt split(iif(isNull(ESTD_ARRVL), iif(isNull(ESTD_DPTR), false(), true()), ESTD_ARRVL<ESTD_DPTR) ||\r\niif(isNull(SCHDD_ARRVL), true(), SCHDD_ARRVL<SCHDD_DPTR),\n\tdisjoint: false) ~> ConditionalSplit6@(EstSchdReject, EstSchdAcpt)\nConditionalSplit6@EstSchdReject derive(Reject_Reason = \"Estimated or Scheduled Arrival Validation Error\") ~> EstSchdRejectReason\nEstSchdRejectReason, NullRejectReason union(byName: true)~> UnionNullRejection\nUnionNullRejection, OOOIRejectReason union(byName: true)~> UnionOOOIRejection\nAddADFColumns sink(input(\n\t\tACTL_ARRVL_AIR_PORT as string,\n\t\tACTL_DPTR_AIR_PORT as string,\n\t\tACTL_OOOI_IN as timestamp,\n\t\tACTL_OOOI_OFF as timestamp,\n\t\tACTL_OOOI_ON as timestamp,\n\t\tACTL_OOOI_OUT as timestamp,\n\t\tAIR_CRAFT_RGSTRN_NUM as string,\n\t\tAIR_CRAFT_TYPE as string,\n\t\tBASE_AIR_PORT as string,\n\t\tCRGO_WGT as integer,\n\t\tESTD_ARRVL as timestamp,\n\t\tESTD_DPTR as timestamp,\n\t\tFLT_DT as date,\n\t\tFLT_ID as long,\n\t\tFLT_NUM as string,\n\t\tFLT_TYPE as string,\n\t\tFUEL_IN as double,\n\t\tFUEL_OUT as double,\n\t\tFUEL_UPLIFT as integer,\n\t\tIS_CNCLD as boolean,\n\t\tIS_VERFD as boolean,\n\t\tMAINT_LOG_PG as string,\n\t\tNOTES as string,\n\t\tSCHDD_ARRVL as timestamp,\n\t\tSCHDD_ARRVL_AIR_PORT as string,\n\t\tSCHDD_DPTR as timestamp,\n\t\tSCHDD_DPTR_AIR_PORT as string,\n\t\tUPDTD_AT as timestamp,\n\t\tREJECT_REASON as string,\n\t\tADF_TIME_STMP as timestamp,\n\t\tADF_RUN_ID as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tmapColumn(\n\t\tACTL_ARRVL_AIR_PORT = actual_arrival_airport,\n\t\tACTL_DPTR_AIR_PORT = actual_departure_airport,\n\t\tACTL_OOOI_IN,\n\t\tACTL_OOOI_OFF,\n\t\tACTL_OOOI_ON,\n\t\tACTL_OOOI_OUT,\n\t\tAIR_CRAFT_RGSTRN_NUM = aircraft_registration_number,\n\t\tAIR_CRAFT_TYPE = aircraft_type,\n\t\tBASE_AIR_PORT = base_airport,\n\t\tCRGO_WGT = cargo_weight,\n\t\tESTD_ARRVL,\n\t\tESTD_DPTR,\n\t\tFLT_DT = flight_date,\n\t\tFLT_ID = flight_id,\n\t\tFLT_NUM = flight_number,\n\t\tFLT_TYPE = flight_type,\n\t\tFUEL_IN = fuel_in,\n\t\tFUEL_OUT = fuel_out,\n\t\tFUEL_UPLIFT = fuel_uplift,\n\t\tIS_CNCLD = is_canceled,\n\t\tIS_VERFD = is_verified,\n\t\tMAINT_LOG_PG = maint_log_page,\n\t\tNOTES = notes,\n\t\tSCHDD_ARRVL,\n\t\tSCHDD_ARRVL_AIR_PORT = scheduled_arrival_airport,\n\t\tSCHDD_DPTR,\n\t\tSCHDD_DPTR_AIR_PORT = scheduled_departure_airport,\n\t\tUPDTD_AT,\n\t\tREJECT_REASON = Reject_Reason,\n\t\tADF_TIME_STMP,\n\t\tADF_RUN_ID\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> Reject\nAddADFColumns2 sink(input(\n\t\tACTL_ARRVL_AIR_PORT as string,\n\t\tACTL_DPTR_AIR_PORT as string,\n\t\tACTL_OOOI_IN as timestamp,\n\t\tACTL_OOOI_OFF as timestamp,\n\t\tACTL_OOOI_ON as timestamp,\n\t\tACTL_OOOI_OUT as timestamp,\n\t\tAIR_CRAFT_RGSTRN_NUM as string,\n\t\tAIR_CRAFT_TYPE as string,\n\t\tBASE_AIR_PORT as string,\n\t\tCRGO_WGT as integer,\n\t\tESTD_ARRVL as timestamp,\n\t\tESTD_DPTR as timestamp,\n\t\tFLT_DT as date,\n\t\tFLT_ID as long,\n\t\tFLT_NUM as string,\n\t\tFLT_TYPE as string,\n\t\tFUEL_IN as double,\n\t\tFUEL_OUT as double,\n\t\tFUEL_UPLIFT as integer,\n\t\tIS_CNCLD as boolean,\n\t\tIS_VERFD as boolean,\n\t\tMAINT_LOG_PG as string,\n\t\tNOTES as string,\n\t\tSCHDD_ARRVL as timestamp,\n\t\tSCHDD_ARRVL_AIR_PORT as string,\n\t\tSCHDD_DPTR as timestamp,\n\t\tSCHDD_DPTR_AIR_PORT as string,\n\t\tUPDTD_AT as timestamp,\n\t\tDLAY_TYP as string,\n\t\tDURTN_MNT as integer,\n\t\tDLAY_CD as string,\n\t\tDLAY_CD_NAME as string,\n\t\tADF_TIME_STMP as timestamp,\n\t\tADF_RUN_ID as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\ttruncate:true,\n\tformat: 'table',\n\tmapColumn(\n\t\tACTL_ARRVL_AIR_PORT = actual_arrival_airport,\n\t\tACTL_DPTR_AIR_PORT = actual_departure_airport,\n\t\tACTL_OOOI_IN,\n\t\tACTL_OOOI_OFF,\n\t\tACTL_OOOI_ON,\n\t\tACTL_OOOI_OUT,\n\t\tAIR_CRAFT_RGSTRN_NUM = aircraft_registration_number,\n\t\tAIR_CRAFT_TYPE = aircraft_type,\n\t\tBASE_AIR_PORT = base_airport,\n\t\tCRGO_WGT = cargo_weight,\n\t\tESTD_ARRVL,\n\t\tESTD_DPTR,\n\t\tFLT_DT = flight_date,\n\t\tFLT_ID = FilterUnion5@flight_id,\n\t\tFLT_NUM = flight_number,\n\t\tFLT_TYPE = flight_type,\n\t\tFUEL_IN = fuel_in,\n\t\tFUEL_OUT = fuel_out,\n\t\tFUEL_UPLIFT = fuel_uplift,\n\t\tIS_CNCLD = is_canceled,\n\t\tIS_VERFD = is_verified,\n\t\tMAINT_LOG_PG = maint_log_page,\n\t\tNOTES = notes,\n\t\tSCHDD_ARRVL,\n\t\tSCHDD_ARRVL_AIR_PORT = scheduled_arrival_airport,\n\t\tSCHDD_DPTR,\n\t\tSCHDD_DPTR_AIR_PORT = scheduled_departure_airport,\n\t\tUPDTD_AT,\n\t\tDLAY_TYP = delay_type,\n\t\tDURTN_MNT = duration_mins,\n\t\tDLAY_CD = delay_code,\n\t\tDLAY_CD_NAME = delay_code_name,\n\t\tADF_TIME_STMP,\n\t\tADF_RUN_ID\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> StagingFlights"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/sql_flights_rej')]",
+				"[concat(variables('factoryId'), '/datasets/sql_s_flights')]"
 			]
 		}
 	]

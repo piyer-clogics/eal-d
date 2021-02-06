@@ -124,6 +124,9 @@
 					"eal_sqldb_piyer_connectionString": {
 						"value": "[parameters('eal_sqldb_piyer_connectionString')]"
 					},
+					"ealblobdconnection_connectionString": {
+						"value": "[parameters('ealblobdconnection_connectionString')]"
+					},
 					"eal_airlinechoice_src_properties_typeProperties_url": {
 						"value": "[parameters('eal_airlinechoice_src_properties_typeProperties_url')]"
 					},
@@ -153,9 +156,6 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
-					},
-					"ealblobdconnection_connectionString": {
-						"value": "[parameters('ealblobdconnection_connectionString')]"
 					}
 				}
 			},
