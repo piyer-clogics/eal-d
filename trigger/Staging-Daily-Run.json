@@ -2,7 +2,7 @@
 	"name": "Staging-Daily-Run",
 	"properties": {
 		"annotations": [],
-		"runtimeState": "Started",
+		"runtimeState": "Stopped",
 		"pipeline": {
 			"pipelineReference": {
 				"referenceName": "eal_stg_arpt_load",
