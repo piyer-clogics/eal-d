@@ -9,6 +9,12 @@
 					"referenceName": "eal_stg_arpt_load",
 					"type": "PipelineReference"
 				}
+			},
+			{
+				"pipelineReference": {
+					"referenceName": "eal_stg_flights_load",
+					"type": "PipelineReference"
+				}
 			}
 		],
 		"type": "ScheduleTrigger",
