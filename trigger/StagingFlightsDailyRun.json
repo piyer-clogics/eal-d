@@ -1,5 +1,5 @@
 {
-	"name": "StagingDailyRun",
+	"name": "StagingFlightsDailyRun",
 	"properties": {
 		"annotations": [],
 		"runtimeState": "Started",
@@ -19,11 +19,7 @@
 			"retryPolicy": {
 				"intervalInSeconds": 30
 			},
-			"dependsOn": [
-				{
-					"type": "SelfDependencyTumblingWindowTriggerReference"
-				}
-			]
+			"dependsOn": []
 		}
 	}
 }
