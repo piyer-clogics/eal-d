@@ -1,0 +1,57 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "eal-adf-d"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/adf_control')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "ADF Control Table"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "ADF_Control",
+								"type": "DatasetReference"
+							},
+							"name": "ADFCONTROL"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "eal_adf_cntrl",
+								"type": "DatasetReference"
+							},
+							"name": "Write"
+						}
+					],
+					"transformations": [
+						{
+							"name": "AddADFDetails"
+						},
+						{
+							"name": "AlterRow"
+						}
+					],
+					"script": "parameters{\n\trun_id as string (''),\n\tadf_name as string ('')\n}\nsource(output(\n\t\trow as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tdocumentForm: 'documentPerLine') ~> ADFCONTROL\nADFCONTROL derive(ADF_RUN_ID = $run_id,\n\t\tADF_TIME_STMP = toTimestamp(toString(currentDate()-1)+\"23:59:59\") ,\n\t\tADF_JOB_NAME = $adf_name) ~> AddADFDetails\nAddADFDetails alterRow(updateIf(ADF_JOB_NAME==$adf_name)) ~> AlterRow\nAlterRow sink(input(\n\t\tADF_RUN_ID as string,\n\t\tADF_JOB_NAME as string,\n\t\tADF_SUC_TS as timestamp\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:true,\n\tupsertable:false,\n\tkeys:['ADF_JOB_NAME'],\n\tformat: 'table',\n\tmapColumn(\n\t\tADF_RUN_ID,\n\t\tADF_JOB_NAME,\n\t\tADF_SUC_TS = ADF_TIME_STMP\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> Write"
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}
