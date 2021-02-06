@@ -1,0 +1,118 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "eal-adf-d"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/StagingFlightsDailyRun')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipeline": {
+					"pipelineReference": {
+						"referenceName": "eal_stg_flights_load",
+						"type": "PipelineReference"
+					}
+				},
+				"type": "TumblingWindowTrigger",
+				"typeProperties": {
+					"frequency": "Hour",
+					"interval": 24,
+					"startTime": "2021-02-06T04:00:00Z",
+					"delay": "00:00:00",
+					"maxConcurrency": 50,
+					"retryPolicy": {
+						"intervalInSeconds": 30
+					},
+					"dependsOn": []
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Staging_Daily_Run')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "eal_stg_arpt_load",
+							"type": "PipelineReference"
+						}
+					},
+					{
+						"pipelineReference": {
+							"referenceName": "eal_stg_equip_schd_load",
+							"type": "PipelineReference"
+						}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Day",
+						"interval": 1,
+						"startTime": "2021-02-06T04:00:00Z",
+						"timeZone": "UTC"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/adf_control')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "ADF Control Table"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "ADF_Control",
+								"type": "DatasetReference"
+							},
+							"name": "ADFCONTROL"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "eal_adf_cntrl",
+								"type": "DatasetReference"
+							},
+							"name": "Write"
+						}
+					],
+					"transformations": [
+						{
+							"name": "AddADFDetails"
+						},
+						{
+							"name": "AlterRow"
+						}
+					],
+					"script": "parameters{\n\trun_id as string (''),\n\tadf_name as string ('')\n}\nsource(output(\n\t\trow as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tdocumentForm: 'documentPerLine') ~> ADFCONTROL\nADFCONTROL derive(ADF_RUN_ID = $run_id,\n\t\tADF_TIME_STMP = currentDate(),\n\t\tADF_JOB_NAME = $adf_name) ~> AddADFDetails\nAddADFDetails alterRow(updateIf(ADF_JOB_NAME==$adf_name)) ~> AlterRow\nAlterRow sink(input(\n\t\tADF_RUN_ID as string,\n\t\tADF_JOB_NAME as string,\n\t\tADF_SUC_TS as date\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:true,\n\tupsertable:false,\n\tkeys:['ADF_JOB_NAME'],\n\tformat: 'table',\n\tmapColumn(\n\t\tADF_RUN_ID,\n\t\tADF_JOB_NAME,\n\t\tADF_SUC_TS = ADF_TIME_STMP\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> Write"
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}

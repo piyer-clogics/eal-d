@@ -362,8 +362,7 @@
 				"[concat(variables('factoryId'), '/dataflows/d_arpt_daily_load_insert')]",
 				"[concat(variables('factoryId'), '/datasets/sql_d_aprt')]",
 				"[concat(variables('factoryId'), '/datasets/eal_adf_cntrl')]",
-				"[concat(variables('factoryId'), '/dataflows/adf_control')]",
-				"[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+				"[concat(variables('factoryId'), '/dataflows/adf_control')]"
 			]
 		},
 		{
@@ -1213,7 +1212,6 @@
 				"[concat(variables('factoryId'), '/datasets/sql_bdavis_test_arpt')]",
 				"[concat(variables('factoryId'), '/datasets/eal_arpt_az_blob')]",
 				"[concat(variables('factoryId'), '/dataflows/s_arpt_load')]",
-				"[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]",
 				"[concat(variables('factoryId'), '/dataflows/adf_control')]",
 				"[concat(variables('factoryId'), '/datasets/eal_adf_cntrl')]"
 			]
@@ -5559,6 +5557,75 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/StagingFlightsDailyRun')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipeline": {
+					"pipelineReference": {
+						"referenceName": "eal_stg_flights_load",
+						"type": "PipelineReference"
+					},
+					"parameters": {}
+				},
+				"type": "TumblingWindowTrigger",
+				"typeProperties": {
+					"frequency": "Hour",
+					"interval": 24,
+					"startTime": "2021-02-06T04:00:00Z",
+					"delay": "00:00:00",
+					"maxConcurrency": 50,
+					"retryPolicy": {
+						"intervalInSeconds": 30
+					},
+					"dependsOn": []
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/eal_stg_flights_load')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Staging_Daily_Run')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "eal_stg_arpt_load",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					},
+					{
+						"pipelineReference": {
+							"referenceName": "eal_stg_equip_schd_load",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Day",
+						"interval": 1,
+						"startTime": "2021-02-06T04:00:00Z",
+						"timeZone": "UTC"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/eal_stg_arpt_load')]",
+				"[concat(variables('factoryId'), '/pipelines/eal_stg_equip_schd_load')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/AutoResolveIntegrationRuntime')]",
 			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
 			"apiVersion": "2018-06-01",
@@ -5749,7 +5816,7 @@
 							"name": "AlterRow"
 						}
 					],
-					"script": "parameters{\n\trun_id as string (''),\n\tadf_name as string ('')\n}\nsource(output(\n\t\trow as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tdocumentForm: 'documentPerLine') ~> ADFCONTROL\nADFCONTROL derive(ADF_RUN_ID = $run_id,\n\t\tADF_TIME_STMP = currentDate()-1,\n\t\tADF_JOB_NAME = $adf_name) ~> AddADFDetails\nAddADFDetails alterRow(updateIf(ADF_JOB_NAME==$adf_name)) ~> AlterRow\nAlterRow sink(input(\n\t\tADF_RUN_ID as string,\n\t\tADF_JOB_NAME as string,\n\t\tADF_SUC_TS as date\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:true,\n\tupsertable:false,\n\tkeys:['ADF_JOB_NAME'],\n\tformat: 'table',\n\tmapColumn(\n\t\tADF_RUN_ID,\n\t\tADF_JOB_NAME,\n\t\tADF_SUC_TS = ADF_TIME_STMP\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> Write"
+					"script": "parameters{\n\trun_id as string (''),\n\tadf_name as string ('')\n}\nsource(output(\n\t\trow as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tdocumentForm: 'documentPerLine') ~> ADFCONTROL\nADFCONTROL derive(ADF_RUN_ID = $run_id,\n\t\tADF_TIME_STMP = currentDate(),\n\t\tADF_JOB_NAME = $adf_name) ~> AddADFDetails\nAddADFDetails alterRow(updateIf(ADF_JOB_NAME==$adf_name)) ~> AlterRow\nAlterRow sink(input(\n\t\tADF_RUN_ID as string,\n\t\tADF_JOB_NAME as string,\n\t\tADF_SUC_TS as date\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:true,\n\tupsertable:false,\n\tkeys:['ADF_JOB_NAME'],\n\tformat: 'table',\n\tmapColumn(\n\t\tADF_RUN_ID,\n\t\tADF_JOB_NAME,\n\t\tADF_SUC_TS = ADF_TIME_STMP\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> Write"
 				}
 			},
 			"dependsOn": [
@@ -6691,37 +6758,6 @@
 				"preventDataExfiltration": false
 			},
 			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Staging_Daily_Run')]",
-			"type": "Microsoft.DataFactory/factories/triggers",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"runtimeState": "Started",
-				"pipelines": [
-					{
-						"pipelineReference": {
-							"referenceName": "eal_stg_arpt_load",
-							"type": "PipelineReference"
-						},
-						"parameters": {}
-					}
-				],
-				"type": "ScheduleTrigger",
-				"typeProperties": {
-					"recurrence": {
-						"frequency": "Day",
-						"interval": 1,
-						"startTime": "2021-02-06T04:00:00Z",
-						"timeZone": "UTC",
-						"schedule": {}
-					}
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/eal_stg_arpt_load')]"
-			]
 		}
 	]
 }

@@ -1598,6 +1598,37 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/StagingFlightsDailyRun')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipeline": {
+					"pipelineReference": {
+						"referenceName": "eal_stg_flights_load",
+						"type": "PipelineReference"
+					},
+					"parameters": {}
+				},
+				"type": "TumblingWindowTrigger",
+				"typeProperties": {
+					"frequency": "Hour",
+					"interval": 24,
+					"startTime": "2021-02-06T04:00:00Z",
+					"delay": "00:00:00",
+					"maxConcurrency": 50,
+					"retryPolicy": {
+						"intervalInSeconds": 30
+					},
+					"dependsOn": []
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/eal_stg_flights_load')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/Staging_Daily_Run')]",
 			"type": "Microsoft.DataFactory/factories/triggers",
 			"apiVersion": "2018-06-01",
@@ -1611,6 +1642,13 @@
 							"type": "PipelineReference"
 						},
 						"parameters": {}
+					},
+					{
+						"pipelineReference": {
+							"referenceName": "eal_stg_equip_schd_load",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
 					}
 				],
 				"type": "ScheduleTrigger",
@@ -1619,13 +1657,13 @@
 						"frequency": "Day",
 						"interval": 1,
 						"startTime": "2021-02-06T04:00:00Z",
-						"timeZone": "UTC",
-						"schedule": {}
+						"timeZone": "UTC"
 					}
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/eal_stg_arpt_load')]"
+				"[concat(variables('factoryId'), '/pipelines/eal_stg_arpt_load')]",
+				"[concat(variables('factoryId'), '/pipelines/eal_stg_equip_schd_load')]"
 			]
 		}
 	]
