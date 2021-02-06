@@ -15,6 +15,12 @@
 					"referenceName": "eal_stg_flights_load",
 					"type": "PipelineReference"
 				}
+			},
+			{
+				"pipelineReference": {
+					"referenceName": "eal_stg_equip_schd_load",
+					"type": "PipelineReference"
+				}
 			}
 		],
 		"type": "ScheduleTrigger",
