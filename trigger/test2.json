@@ -2,7 +2,7 @@
 	"name": "test2",
 	"properties": {
 		"annotations": [],
-		"runtimeState": "Stopped",
+		"runtimeState": "Started",
 		"pipeline": {
 			"pipelineReference": {
 				"referenceName": "eal_reset_controls",
