@@ -70,10 +70,7 @@
 								"value": "'@{pipeline().RunId}'",
 								"type": "Expression"
 							},
-							"date": {
-								"value": "'@{variables('date')}'",
-								"type": "Expression"
-							}
+							"date": "'1900-01-01'"
 						}
 					},
 					"compute": {
