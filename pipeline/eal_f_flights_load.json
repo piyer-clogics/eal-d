@@ -234,7 +234,7 @@
 								"type": "Expression"
 							},
 							"date": {
-								"value": "'@{variables('dt')}'",
+								"value": "'@{'1900-01-01'}'",
 								"type": "Expression"
 							}
 						}
