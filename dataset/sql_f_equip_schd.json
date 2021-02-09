@@ -12,77 +12,45 @@
 		"type": "AzureSqlTable",
 		"schema": [
 			{
-				"name": "ARPT_ID",
+				"name": "EQP_SCHED_ID",
 				"type": "int",
 				"precision": 10
 			},
 			{
-				"name": "ARPT_IATA_CD",
+				"name": "AC_RGSTRN",
 				"type": "varchar"
 			},
 			{
-				"name": "ARPT_ICAO_CD",
+				"name": "STS_CD",
 				"type": "varchar"
 			},
 			{
-				"name": "ARPT_NAME",
+				"name": "STS_NAME",
 				"type": "varchar"
 			},
 			{
-				"name": "ARPT_CNTRY",
+				"name": "STS_DESC",
 				"type": "varchar"
 			},
 			{
-				"name": "ARPT_CITY",
-				"type": "varchar"
-			},
-			{
-				"name": "ARPT_LAT",
-				"type": "decimal",
-				"precision": 8,
-				"scale": 6
-			},
-			{
-				"name": "ARPT_LONG",
-				"type": "decimal",
-				"precision": 9,
-				"scale": 6
-			},
-			{
-				"name": "ARPT_ALTD",
-				"type": "decimal",
-				"precision": 6,
-				"scale": 2
-			},
-			{
-				"name": "ARPT_UTC_OFSET",
-				"type": "decimal",
-				"precision": 2,
-				"scale": 2
-			},
-			{
-				"name": "ARPT_DST_CD",
-				"type": "varchar"
-			},
-			{
-				"name": "ARPT_TZONE",
-				"type": "varchar"
-			},
-			{
-				"name": "EFF_STRT_DT",
+				"name": "STRT_TIME",
 				"type": "datetime",
 				"precision": 23,
 				"scale": 3
 			},
 			{
-				"name": "EFF_END_DT",
+				"name": "END_TIME",
 				"type": "datetime",
 				"precision": 23,
 				"scale": 3
 			},
 			{
-				"name": "ACTV_IND",
-				"type": "char"
+				"name": "NOTE",
+				"type": "text"
+			},
+			{
+				"name": "IS_DELD",
+				"type": "bit"
 			}
 		],
 		"typeProperties": {
