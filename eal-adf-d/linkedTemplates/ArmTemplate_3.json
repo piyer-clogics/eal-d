@@ -901,7 +901,7 @@
 								"referenceName": "adf_reset_dataflow",
 								"type": "DataFlowReference",
 								"parameters": {
-									"job_name": "'eal_f_flights_load'"
+									"job_name": "'eal_stg_flights_load'"
 								},
 								"datasetParameters": {
 									"GetControls": {},
