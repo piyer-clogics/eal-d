@@ -1,0 +1,659 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "eal-adf-d"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/eal_reset_controls')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Reset Controls",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "adf_reset_dataflow",
+								"type": "DataFlowReference",
+								"parameters": {
+									"job_name": "'eal_f_flights_load'"
+								}
+							},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/sql_f_equip_schd')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "eal_sqldb_EDW",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Destination Table/Prod"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "EQP_SCHED_ID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "AC_RGSTRN",
+						"type": "varchar"
+					},
+					{
+						"name": "STS_CD",
+						"type": "varchar"
+					},
+					{
+						"name": "STS_NAME",
+						"type": "varchar"
+					},
+					{
+						"name": "STS_DESC",
+						"type": "varchar"
+					},
+					{
+						"name": "STRT_TIME",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "END_TIME",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "NOTE",
+						"type": "text"
+					},
+					{
+						"name": "IS_DELD",
+						"type": "bit"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "F_EQUIP_SCHD"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/f_equip_schd_load_insert')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "Equip Schd"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "sql_s_eqip_schd",
+								"type": "DatasetReference"
+							},
+							"name": "StgEquipSchd"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "sql_f_equip_schd",
+								"type": "DatasetReference"
+							},
+							"name": "InsertRows"
+						}
+					],
+					"transformations": [
+						{
+							"name": "DistinctRows"
+						},
+						{
+							"name": "AddRowCount"
+						},
+						{
+							"name": "SetEquipID"
+						}
+					],
+					"script": "parameters{\n\tdate as string ('1899-01-01'),\n\trow_num as integer (0)\n}\nsource(output(\n\t\tEQP_SCHED_ID as integer,\n\t\tAC_RGSTRN as string,\n\t\tSTS_CD as string,\n\t\tSTS_NAME as string,\n\t\tSTS_DESC as string,\n\t\tSTRT_TIME as timestamp,\n\t\tEND_TIME as timestamp,\n\t\tNOTE as string,\n\t\tIS_DELD as boolean,\n\t\tUPDTD_AT as timestamp,\n\t\tADF_TIME_STMP as timestamp,\n\t\tADF_RUN_ID as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tquery: (\"SELECT * FROM [dbo].[S_EQUIP_SCHD] where  UPDTD_AT >= '\"+$date+\"' and UPDTD_AT <  CAST(GETDATE() AS DATE)\"),\n\tformat: 'query') ~> StgEquipSchd\nStgEquipSchd aggregate(groupBy(AC_RGSTRN,\n\t\tSTS_CD,\n\t\tSTRT_TIME),\n\teach(match(name!='AC_RGSTRN'&&name!='STS_CD'&&name!='STRT_TIME'), $$ = iif(first(UPDTD_AT)>last(UPDTD_AT),first($$),last($$)))) ~> DistinctRows\nDistinctRows derive(RNO_Constant = $row_num) ~> AddRowCount\nAddRowCount window(over(row_num = RNO_Constant),\n\tasc(RNO_Constant, true),\n\tEQUIP_ID = $row_num + rowNumber()) ~> SetEquipID\nSetEquipID sink(input(\n\t\tEQP_SCHED_ID as integer,\n\t\tAC_RGSTRN as string,\n\t\tSTS_CD as string,\n\t\tSTS_NAME as string,\n\t\tSTS_DESC as string,\n\t\tSTRT_TIME as timestamp,\n\t\tEND_TIME as timestamp,\n\t\tNOTE as string,\n\t\tIS_DELD as boolean\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tmapColumn(\n\t\tEQP_SCHED_ID = EQUIP_ID,\n\t\tAC_RGSTRN,\n\t\tSTS_CD,\n\t\tSTS_NAME,\n\t\tSTS_DESC,\n\t\tSTRT_TIME,\n\t\tEND_TIME,\n\t\tNOTE,\n\t\tIS_DELD\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> InsertRows"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/sql_f_equip_schd')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/f_equip_schd_load_update')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "Equip Schd"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "sql_s_eqip_schd",
+								"type": "DatasetReference"
+							},
+							"name": "StgEquipSchd"
+						},
+						{
+							"dataset": {
+								"referenceName": "sql_f_equip_schd",
+								"type": "DatasetReference"
+							},
+							"name": "EquipSchd"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "sql_f_equip_schd",
+								"type": "DatasetReference"
+							},
+							"name": "UpdateRows"
+						}
+					],
+					"transformations": [
+						{
+							"name": "DistinctRows"
+						},
+						{
+							"name": "CheckRowExistsInProd"
+						},
+						{
+							"name": "AlterRow"
+						}
+					],
+					"script": "parameters{\n\tdate as string ('1899-01-01')\n}\nsource(output(\n\t\tEQP_SCHED_ID as integer,\n\t\tAC_RGSTRN as string,\n\t\tSTS_CD as string,\n\t\tSTS_NAME as string,\n\t\tSTS_DESC as string,\n\t\tSTRT_TIME as timestamp,\n\t\tEND_TIME as timestamp,\n\t\tNOTE as string,\n\t\tIS_DELD as boolean,\n\t\tUPDTD_AT as timestamp,\n\t\tADF_TIME_STMP as timestamp,\n\t\tADF_RUN_ID as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tquery: (\"SELECT * FROM [dbo].[S_EQUIP_SCHD] where  UPDTD_AT >= '\"+$date+\"'  and UPDTD_AT <  CAST(GETDATE() AS DATE)\"),\n\tformat: 'query') ~> StgEquipSchd\nsource(output(\n\t\tEQP_SCHED_ID as integer,\n\t\tAC_RGSTRN as string,\n\t\tSTS_CD as string,\n\t\tSTS_NAME as string,\n\t\tSTS_DESC as string,\n\t\tSTRT_TIME as timestamp,\n\t\tEND_TIME as timestamp,\n\t\tNOTE as string,\n\t\tIS_DELD as boolean\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> EquipSchd\nCheckRowExistsInProd aggregate(groupBy(AC_RGSTRN,\n\t\tSTS_CD,\n\t\tSTRT_TIME),\n\teach(match(name!='AC_RGSTRN'&&name!='STS_CD'&&name!='STRT_TIME'), $$ = iif(first(UPDTD_AT)>last(UPDTD_AT),first($$),last($$)))) ~> DistinctRows\nStgEquipSchd, EquipSchd exists(iif(StgEquipSchd@AC_RGSTRN == EquipSchd@AC_RGSTRN\r\n\t&& StgEquipSchd@STS_CD ==EquipSchd@STS_CD\r\n\t&& StgEquipSchd@STRT_TIME == EquipSchd@STRT_TIME,true(),false()),\n\tnegate:false,\n\tbroadcast: 'auto')~> CheckRowExistsInProd\nDistinctRows alterRow(updateIf(true())) ~> AlterRow\nAlterRow sink(input(\n\t\tEQP_SCHED_ID as integer,\n\t\tAC_RGSTRN as string,\n\t\tSTS_CD as string,\n\t\tSTS_NAME as string,\n\t\tSTS_DESC as string,\n\t\tSTRT_TIME as timestamp,\n\t\tEND_TIME as timestamp,\n\t\tNOTE as string,\n\t\tIS_DELD as boolean\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:false,\n\tupdateable:true,\n\tupsertable:false,\n\tkeys:['AC_RGSTRN','STS_CD','STRT_TIME'],\n\tformat: 'table',\n\tmapColumn(\n\t\tAC_RGSTRN,\n\t\tSTS_CD,\n\t\tSTS_NAME,\n\t\tSTS_DESC,\n\t\tSTRT_TIME,\n\t\tEND_TIME,\n\t\tNOTE,\n\t\tIS_DELD\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> UpdateRows"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/sql_f_equip_schd')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/f_flights_load_update')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "Flights"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "sql_s_flights",
+								"type": "DatasetReference"
+							},
+							"name": "StagingFlights"
+						},
+						{
+							"dataset": {
+								"referenceName": "sql_d_aprt",
+								"type": "DatasetReference"
+							},
+							"name": "ARPT"
+						},
+						{
+							"dataset": {
+								"referenceName": "sql_d_clndr",
+								"type": "DatasetReference"
+							},
+							"name": "CLNDR"
+						},
+						{
+							"dataset": {
+								"referenceName": "sql_f_flights_ops",
+								"type": "DatasetReference"
+							},
+							"name": "Flights"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "sql_f_flights_ops",
+								"type": "DatasetReference"
+							},
+							"name": "Update"
+						}
+					],
+					"transformations": [
+						{
+							"name": "FilterFlightType"
+						},
+						{
+							"name": "LookupIATA"
+						},
+						{
+							"name": "FilterActvInd"
+						},
+						{
+							"name": "RemoveColumns1"
+						},
+						{
+							"name": "LookupICAO"
+						},
+						{
+							"name": "AddBaseAirportID"
+						},
+						{
+							"name": "RemoveIATAICAO"
+						},
+						{
+							"name": "LookupIATA2"
+						},
+						{
+							"name": "RemoveColumns2"
+						},
+						{
+							"name": "LookupICAO2"
+						},
+						{
+							"name": "AddSchdDptrID"
+						},
+						{
+							"name": "RemoveIATAICAO2"
+						},
+						{
+							"name": "LookupIATA3"
+						},
+						{
+							"name": "RemoveColumns3"
+						},
+						{
+							"name": "LookupICAO3"
+						},
+						{
+							"name": "AddSchdArrID"
+						},
+						{
+							"name": "RemoveIATAICAO3"
+						},
+						{
+							"name": "LookupIATA4"
+						},
+						{
+							"name": "RemoveColumns4"
+						},
+						{
+							"name": "LookupICAO4"
+						},
+						{
+							"name": "AddActArrID"
+						},
+						{
+							"name": "RemoveIATAICAO4"
+						},
+						{
+							"name": "AddNewColumns"
+						},
+						{
+							"name": "AddNewColumns2"
+						},
+						{
+							"name": "LookupIATA5"
+						},
+						{
+							"name": "RemoveColumns5"
+						},
+						{
+							"name": "LookupICAO5"
+						},
+						{
+							"name": "AddActlDptrID"
+						},
+						{
+							"name": "RemoveIATAICAO5"
+						},
+						{
+							"name": "LookupCLNDR"
+						},
+						{
+							"name": "RemoveCLNDRColumns"
+						},
+						{
+							"name": "Exists"
+						},
+						{
+							"name": "AlterRowUpdate"
+						}
+					],
+					"script": "parameters{\n\tdate as string ('1899-01-01')\n}\nsource(output(\n\t\tACTL_ARRVL_AIR_PORT as string,\n\t\tACTL_DPTR_AIR_PORT as string,\n\t\tACTL_OOOI_IN as timestamp,\n\t\tACTL_OOOI_OFF as timestamp,\n\t\tACTL_OOOI_ON as timestamp,\n\t\tACTL_OOOI_OUT as timestamp,\n\t\tAIR_CRAFT_RGSTRN_NUM as string,\n\t\tAIR_CRAFT_TYPE as string,\n\t\tBASE_AIR_PORT as string,\n\t\tCRGO_WGT as integer,\n\t\tESTD_ARRVL as timestamp,\n\t\tESTD_DPTR as timestamp,\n\t\tFLT_DT as date,\n\t\tFLT_ID as long,\n\t\tFLT_NUM as string,\n\t\tFLT_TYPE as string,\n\t\tFUEL_IN as double,\n\t\tFUEL_OUT as double,\n\t\tFUEL_UPLIFT as integer,\n\t\tIS_CNCLD as boolean,\n\t\tIS_VERFD as boolean,\n\t\tMAINT_LOG_PG as string,\n\t\tNOTES as string,\n\t\tSCHDD_ARRVL as timestamp,\n\t\tSCHDD_ARRVL_AIR_PORT as string,\n\t\tSCHDD_DPTR as timestamp,\n\t\tSCHDD_DPTR_AIR_PORT as string,\n\t\tUPDTD_AT as timestamp,\n\t\tDLAY_TYP as string,\n\t\tDURTN_MNT as integer,\n\t\tDLAY_CD as string,\n\t\tDLAY_CD_NAME as string,\n\t\tADF_TIME_STMP as timestamp,\n\t\tADF_RUN_ID as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tquery: (\"SELECT * FROM [dbo].[S_FLIGHTS] where  UPDTD_AT >= '\"+$date+\"' and UPDTD_AT <  CAST(GETDATE() AS DATE)\"),\n\tformat: 'query') ~> StagingFlights\nsource(output(\n\t\tARPT_ID as integer,\n\t\tARPT_IATA_CD as string,\n\t\tARPT_ICAO_CD as string,\n\t\tARPT_NAME as string,\n\t\tARPT_CNTRY as string,\n\t\tARPT_CITY as string,\n\t\tARPT_LAT as decimal(8,6),\n\t\tARPT_LONG as decimal(9,6),\n\t\tARPT_ALTD as decimal(6,2),\n\t\tARPT_UTC_OFSET as decimal(2,2),\n\t\tARPT_DST_CD as string,\n\t\tARPT_TZONE as string,\n\t\tEFF_STRT_DT as timestamp,\n\t\tEFF_END_DT as timestamp,\n\t\tACTV_IND as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> ARPT\nsource(output(\n\t\tCLNDR_ID as string,\n\t\tTheDate as date,\n\t\tTheDay as integer,\n\t\tTheDaySuffix as string,\n\t\tTheDayName as string,\n\t\tTheDayOfWeek as integer,\n\t\tTheDayOfWeekInMonth as integer,\n\t\tTheDayOfYear as integer,\n\t\tIsWeekend as integer,\n\t\tTheWeek as integer,\n\t\tTheISOweek as integer,\n\t\tTheFirstOfWeek as date,\n\t\tTheLastOfWeek as date,\n\t\tTheWeekOfMonth as integer,\n\t\tTheMonth as integer,\n\t\tTheMonthName as string,\n\t\tTheFirstOfMonth as date,\n\t\tTheLastOfMonth as date,\n\t\tTheFirstOfNextMonth as date,\n\t\tTheLastOfNextMonth as date,\n\t\tTheQuarter as integer,\n\t\tTheFirstOfQuarter as date,\n\t\tTheLastOfQuarter as date,\n\t\tTheYear as integer,\n\t\tTheISOYear as integer,\n\t\tTheFirstOfYear as date,\n\t\tTheLastOfYear as date,\n\t\tIsLeapYear as boolean,\n\t\tHas53Weeks as integer,\n\t\tHas53ISOWeeks as integer,\n\t\tMMYYYY as string,\n\t\tStyle101 as string,\n\t\tStyle103 as string,\n\t\tStyle112 as string,\n\t\tStyle120 as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> CLNDR\nsource(output(\n\t\tFLGHT_ID as integer,\n\t\tFLGHT_DT_ID as integer,\n\t\tFLGHT_NUM as string,\n\t\tFLGHT_TYP as string,\n\t\tAIR_CRAFT_RGSTRN_NUM as string,\n\t\tAIR_CRAFT_TYP as string,\n\t\tSCHDD_DPRT_TS_UTC as timestamp,\n\t\tSCHDD_ARRVL_TS_UTC as timestamp,\n\t\tESTD_DPRT_TS_UTC as timestamp,\n\t\tESTD_ARRVL_TS_UTC as timestamp,\n\t\tACTL_OOOI_OUT_TS_UTC as timestamp,\n\t\tACTL_OOOI_OFF_TS_UTC as timestamp,\n\t\tACTL_OOOI_ON_TS_UTC as timestamp,\n\t\tACTL_OOOI_IN_TS_UTC as timestamp,\n\t\tBASE_ARPT_CD as string,\n\t\tBASE_ARPT_ID as integer,\n\t\tSCHDD_DRPT_ARPT_CD as string,\n\t\tSCHDD_DRPT_ARPT_ID as integer,\n\t\tSCHDD_ARRVL_ARPT_CD as string,\n\t\tSCHDD_ARRVL_ARPT_ID as integer,\n\t\tACTL_ARRVL_ARPT_CD as string,\n\t\tACTL_ARRVL_ARPT_ID as integer,\n\t\tACTL_DPTR_ARPT_CD as string,\n\t\tACTL_DPTR_ARPT_ID as integer,\n\t\tFUEL_IN as string,\n\t\tFUEL_OUT as integer,\n\t\tFUEL_UPLIFT as integer,\n\t\tCRGO_WT as integer,\n\t\tMAINT_LOG as integer,\n\t\tNOTES as string,\n\t\tIS_CNCLD as boolean,\n\t\tIS_VERFD as boolean,\n\t\tDEP_VAR as integer,\n\t\tARRVL_VAR as integer,\n\t\tSCHDD_BLK_DUR as integer,\n\t\tACTL_BLK_DUR as integer,\n\t\tACTL_FLGHT_DUR as integer,\n\t\tDPRT_DELAY_DUR_D0_IND as integer,\n\t\tDPRT_DELAY_DUR_D15_IND as integer,\n\t\tARRVL_DELAY_DUR_A0_IND as integer,\n\t\tARRVL_DELAY_DUR_A14_IND as integer,\n\t\tBLK_DUR_B0_IND as integer,\n\t\tSCHDD_FLT_DUR as string,\n\t\tDELAY_TYP as string,\n\t\tDELAY_DUR as integer,\n\t\tDELAY_CD as string,\n\t\tDELAY_DESC as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> Flights\nStagingFlights filter(FLT_TYPE <=>'flight') ~> FilterFlightType\nFilterFlightType, FilterActvInd lookup(BASE_AIR_PORT == ARPT_IATA_CD,\n\tmultiple: false,\n\tpickup: 'any',\n\tbroadcast: 'auto')~> LookupIATA\nARPT filter(ACTV_IND == 'Y') ~> FilterActvInd\nLookupIATA select(mapColumn(\n\t\tACTL_ARRVL_AIR_PORT,\n\t\tACTL_DPTR_AIR_PORT,\n\t\tACTL_OOOI_IN,\n\t\tACTL_OOOI_OFF,\n\t\tACTL_OOOI_ON,\n\t\tACTL_OOOI_OUT,\n\t\tAIR_CRAFT_RGSTRN_NUM,\n\t\tAIR_CRAFT_TYPE,\n\t\tBASE_AIR_PORT,\n\t\tCRGO_WGT,\n\t\tESTD_ARRVL,\n\t\tESTD_DPTR,\n\t\tFLT_DT,\n\t\tFLT_ID,\n\t\tFLT_NUM,\n\t\tFLT_TYPE,\n\t\tFUEL_IN,\n\t\tFUEL_OUT,\n\t\tFUEL_UPLIFT,\n\t\tIS_CNCLD,\n\t\tIS_VERFD,\n\t\tMAINT_LOG_PG,\n\t\tNOTES,\n\t\tSCHDD_ARRVL,\n\t\tSCHDD_ARRVL_AIR_PORT,\n\t\tSCHDD_DPTR,\n\t\tSCHDD_DPTR_AIR_PORT,\n\t\tUPDTD_AT,\n\t\tDLAY_TYP,\n\t\tDURTN_MNT,\n\t\tDLAY_CD,\n\t\tDLAY_CD_NAME,\n\t\tADF_TIME_STMP,\n\t\tADF_RUN_ID,\n\t\tIATA_ARPT_ID = ARPT_ID\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> RemoveColumns1\nRemoveColumns1, FilterActvInd lookup(BASE_AIR_PORT == ARPT_ICAO_CD,\n\tmultiple: false,\n\tpickup: 'any',\n\tbroadcast: 'auto')~> LookupICAO\nLookupICAO derive(BASE_ARPT_ID = iif(isNull(IATA_ARPT_ID), ARPT_ID, IATA_ARPT_ID)) ~> AddBaseAirportID\nAddBaseAirportID select(mapColumn(\n\t\tACTL_ARRVL_AIR_PORT,\n\t\tACTL_DPTR_AIR_PORT,\n\t\tACTL_OOOI_IN,\n\t\tACTL_OOOI_OFF,\n\t\tACTL_OOOI_ON,\n\t\tACTL_OOOI_OUT,\n\t\tAIR_CRAFT_RGSTRN_NUM,\n\t\tAIR_CRAFT_TYPE,\n\t\tBASE_AIR_PORT,\n\t\tBASE_ARPT_ID,\n\t\tCRGO_WGT,\n\t\tESTD_ARRVL,\n\t\tESTD_DPTR,\n\t\tFLT_DT,\n\t\tFLT_ID,\n\t\tFLT_NUM,\n\t\tFLT_TYPE,\n\t\tFUEL_IN,\n\t\tFUEL_OUT,\n\t\tFUEL_UPLIFT,\n\t\tIS_CNCLD,\n\t\tIS_VERFD,\n\t\tMAINT_LOG_PG,\n\t\tNOTES,\n\t\tSCHDD_ARRVL,\n\t\tSCHDD_ARRVL_AIR_PORT,\n\t\tSCHDD_DPTR,\n\t\tSCHDD_DPTR_AIR_PORT,\n\t\tUPDTD_AT,\n\t\tDLAY_TYP,\n\t\tDURTN_MNT,\n\t\tDLAY_CD,\n\t\tDLAY_CD_NAME,\n\t\tADF_TIME_STMP,\n\t\tADF_RUN_ID\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> RemoveIATAICAO\nRemoveIATAICAO, FilterActvInd lookup(SCHDD_DPTR_AIR_PORT == ARPT_IATA_CD,\n\tmultiple: false,\n\tpickup: 'any',\n\tbroadcast: 'auto')~> LookupIATA2\nLookupIATA2 select(mapColumn(\n\t\tACTL_ARRVL_AIR_PORT,\n\t\tACTL_DPTR_AIR_PORT,\n\t\tACTL_OOOI_IN,\n\t\tACTL_OOOI_OFF,\n\t\tACTL_OOOI_ON,\n\t\tACTL_OOOI_OUT,\n\t\tAIR_CRAFT_RGSTRN_NUM,\n\t\tAIR_CRAFT_TYPE,\n\t\tBASE_AIR_PORT,\n\t\tBASE_ARPT_ID,\n\t\tCRGO_WGT,\n\t\tESTD_ARRVL,\n\t\tESTD_DPTR,\n\t\tFLT_DT,\n\t\tFLT_ID,\n\t\tFLT_NUM,\n\t\tFLT_TYPE,\n\t\tFUEL_IN,\n\t\tFUEL_OUT,\n\t\tFUEL_UPLIFT,\n\t\tIS_CNCLD,\n\t\tIS_VERFD,\n\t\tMAINT_LOG_PG,\n\t\tNOTES,\n\t\tSCHDD_ARRVL,\n\t\tSCHDD_ARRVL_AIR_PORT,\n\t\tSCHDD_DPTR,\n\t\tSCHDD_DPTR_AIR_PORT,\n\t\tUPDTD_AT,\n\t\tDLAY_TYP,\n\t\tDURTN_MNT,\n\t\tDLAY_CD,\n\t\tDLAY_CD_NAME,\n\t\tADF_TIME_STMP,\n\t\tADF_RUN_ID,\n\t\tIATA_ARPT_ID = ARPT_ID\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> RemoveColumns2\nRemoveColumns2, FilterActvInd lookup(ACTL_DPTR_AIR_PORT == ARPT_ICAO_CD,\n\tmultiple: false,\n\tpickup: 'any',\n\tbroadcast: 'auto')~> LookupICAO2\nLookupICAO2 derive(SCHDD_DRPT_ARPT_ID = iif(isNull(IATA_ARPT_ID), ARPT_ID, IATA_ARPT_ID)) ~> AddSchdDptrID\nAddSchdDptrID select(mapColumn(\n\t\tACTL_ARRVL_AIR_PORT,\n\t\tACTL_DPTR_AIR_PORT,\n\t\tACTL_OOOI_IN,\n\t\tACTL_OOOI_OFF,\n\t\tACTL_OOOI_ON,\n\t\tACTL_OOOI_OUT,\n\t\tAIR_CRAFT_RGSTRN_NUM,\n\t\tAIR_CRAFT_TYPE,\n\t\tBASE_AIR_PORT,\n\t\tBASE_ARPT_ID,\n\t\tCRGO_WGT,\n\t\tESTD_ARRVL,\n\t\tESTD_DPTR,\n\t\tFLT_DT,\n\t\tFLT_ID,\n\t\tFLT_NUM,\n\t\tFLT_TYPE,\n\t\tFUEL_IN,\n\t\tFUEL_OUT,\n\t\tFUEL_UPLIFT,\n\t\tIS_CNCLD,\n\t\tIS_VERFD,\n\t\tMAINT_LOG_PG,\n\t\tNOTES,\n\t\tSCHDD_ARRVL,\n\t\tSCHDD_ARRVL_AIR_PORT,\n\t\tSCHDD_DPTR,\n\t\tSCHDD_DPTR_AIR_PORT,\n\t\tSCHDD_DRPT_ARPT_ID,\n\t\tUPDTD_AT,\n\t\tDLAY_TYP,\n\t\tDURTN_MNT,\n\t\tDLAY_CD,\n\t\tDLAY_CD_NAME,\n\t\tADF_TIME_STMP,\n\t\tADF_RUN_ID\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> RemoveIATAICAO2\nRemoveIATAICAO2, FilterActvInd lookup(ACTL_ARRVL_AIR_PORT == ARPT_IATA_CD,\n\tmultiple: false,\n\tpickup: 'any',\n\tbroadcast: 'auto')~> LookupIATA3\nLookupIATA3 select(mapColumn(\n\t\tACTL_ARRVL_AIR_PORT,\n\t\tACTL_DPTR_AIR_PORT,\n\t\tACTL_OOOI_IN,\n\t\tACTL_OOOI_OFF,\n\t\tACTL_OOOI_ON,\n\t\tACTL_OOOI_OUT,\n\t\tAIR_CRAFT_RGSTRN_NUM,\n\t\tAIR_CRAFT_TYPE,\n\t\tBASE_AIR_PORT,\n\t\tBASE_ARPT_ID,\n\t\tCRGO_WGT,\n\t\tESTD_ARRVL,\n\t\tESTD_DPTR,\n\t\tFLT_DT,\n\t\tFLT_ID,\n\t\tFLT_NUM,\n\t\tFLT_TYPE,\n\t\tFUEL_IN,\n\t\tFUEL_OUT,\n\t\tFUEL_UPLIFT,\n\t\tIS_CNCLD,\n\t\tIS_VERFD,\n\t\tMAINT_LOG_PG,\n\t\tNOTES,\n\t\tSCHDD_ARRVL,\n\t\tSCHDD_ARRVL_AIR_PORT,\n\t\tSCHDD_DPTR,\n\t\tSCHDD_DPTR_AIR_PORT,\n\t\tSCHDD_DRPT_ARPT_ID,\n\t\tUPDTD_AT,\n\t\tDLAY_TYP,\n\t\tDURTN_MNT,\n\t\tDLAY_CD,\n\t\tDLAY_CD_NAME,\n\t\tADF_TIME_STMP,\n\t\tADF_RUN_ID,\n\t\tIATA_ARPT_ID = ARPT_ID\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> RemoveColumns3\nRemoveColumns3, FilterActvInd lookup(ACTL_ARRVL_AIR_PORT == ARPT_ICAO_CD,\n\tmultiple: false,\n\tpickup: 'any',\n\tbroadcast: 'auto')~> LookupICAO3\nLookupICAO3 derive(SCHDD_ARRVL_ARPT_ID = iif(isNull(IATA_ARPT_ID), ARPT_ID, IATA_ARPT_ID)) ~> AddSchdArrID\nAddSchdArrID select(mapColumn(\n\t\tACTL_ARRVL_AIR_PORT,\n\t\tACTL_DPTR_AIR_PORT,\n\t\tACTL_OOOI_IN,\n\t\tACTL_OOOI_OFF,\n\t\tACTL_OOOI_ON,\n\t\tACTL_OOOI_OUT,\n\t\tAIR_CRAFT_RGSTRN_NUM,\n\t\tAIR_CRAFT_TYPE,\n\t\tBASE_AIR_PORT,\n\t\tBASE_ARPT_ID,\n\t\tCRGO_WGT,\n\t\tESTD_ARRVL,\n\t\tESTD_DPTR,\n\t\tFLT_DT,\n\t\tFLT_ID,\n\t\tFLT_NUM,\n\t\tFLT_TYPE,\n\t\tFUEL_IN,\n\t\tFUEL_OUT,\n\t\tFUEL_UPLIFT,\n\t\tIS_CNCLD,\n\t\tIS_VERFD,\n\t\tMAINT_LOG_PG,\n\t\tNOTES,\n\t\tSCHDD_ARRVL,\n\t\tSCHDD_ARRVL_AIR_PORT,\n\t\tSCHDD_ARRVL_ARPT_ID,\n\t\tSCHDD_DPTR,\n\t\tSCHDD_DPTR_AIR_PORT,\n\t\tSCHDD_DRPT_ARPT_ID,\n\t\tUPDTD_AT,\n\t\tDLAY_TYP,\n\t\tDURTN_MNT,\n\t\tDLAY_CD,\n\t\tDLAY_CD_NAME,\n\t\tADF_TIME_STMP,\n\t\tADF_RUN_ID\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> RemoveIATAICAO3\nRemoveIATAICAO3, FilterActvInd lookup(ACTL_ARRVL_AIR_PORT == ARPT_IATA_CD,\n\tmultiple: false,\n\tpickup: 'any',\n\tbroadcast: 'auto')~> LookupIATA4\nLookupIATA4 select(mapColumn(\n\t\tACTL_ARRVL_AIR_PORT,\n\t\tACTL_DPTR_AIR_PORT,\n\t\tACTL_OOOI_IN,\n\t\tACTL_OOOI_OFF,\n\t\tACTL_OOOI_ON,\n\t\tACTL_OOOI_OUT,\n\t\tAIR_CRAFT_RGSTRN_NUM,\n\t\tAIR_CRAFT_TYPE,\n\t\tBASE_AIR_PORT,\n\t\tBASE_ARPT_ID,\n\t\tCRGO_WGT,\n\t\tESTD_ARRVL,\n\t\tESTD_DPTR,\n\t\tFLT_DT,\n\t\tFLT_ID,\n\t\tFLT_NUM,\n\t\tFLT_TYPE,\n\t\tFUEL_IN,\n\t\tFUEL_OUT,\n\t\tFUEL_UPLIFT,\n\t\tIS_CNCLD,\n\t\tIS_VERFD,\n\t\tMAINT_LOG_PG,\n\t\tNOTES,\n\t\tSCHDD_ARRVL,\n\t\tSCHDD_ARRVL_AIR_PORT,\n\t\tSCHDD_ARRVL_ARPT_ID,\n\t\tSCHDD_DPTR,\n\t\tSCHDD_DPTR_AIR_PORT,\n\t\tSCHDD_DRPT_ARPT_ID,\n\t\tUPDTD_AT,\n\t\tDLAY_TYP,\n\t\tDURTN_MNT,\n\t\tDLAY_CD,\n\t\tDLAY_CD_NAME,\n\t\tADF_TIME_STMP,\n\t\tADF_RUN_ID,\n\t\tIATA_ARPT_ID = ARPT_ID\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> RemoveColumns4\nRemoveColumns4, FilterActvInd lookup(ACTL_ARRVL_AIR_PORT == ARPT_ICAO_CD,\n\tmultiple: false,\n\tpickup: 'any',\n\tbroadcast: 'auto')~> LookupICAO4\nLookupICAO4 derive(ACTL_ARRVL_ARPT_ID = iif(isNull(IATA_ARPT_ID), ARPT_ID, IATA_ARPT_ID)) ~> AddActArrID\nAddActArrID select(mapColumn(\n\t\tACTL_ARRVL_AIR_PORT,\n\t\tACTL_ARRVL_ARPT_ID,\n\t\tACTL_DPTR_AIR_PORT,\n\t\tACTL_OOOI_IN,\n\t\tACTL_OOOI_OFF,\n\t\tACTL_OOOI_ON,\n\t\tACTL_OOOI_OUT,\n\t\tAIR_CRAFT_RGSTRN_NUM,\n\t\tAIR_CRAFT_TYPE,\n\t\tBASE_AIR_PORT,\n\t\tBASE_ARPT_ID,\n\t\tCRGO_WGT,\n\t\tESTD_ARRVL,\n\t\tESTD_DPTR,\n\t\tFLT_DT,\n\t\tFLT_ID,\n\t\tFLT_NUM,\n\t\tFLT_TYPE,\n\t\tFUEL_IN,\n\t\tFUEL_OUT,\n\t\tFUEL_UPLIFT,\n\t\tIS_CNCLD,\n\t\tIS_VERFD,\n\t\tMAINT_LOG_PG,\n\t\tNOTES,\n\t\tSCHDD_ARRVL,\n\t\tSCHDD_ARRVL_AIR_PORT,\n\t\tSCHDD_ARRVL_ARPT_ID,\n\t\tSCHDD_DPTR,\n\t\tSCHDD_DPTR_AIR_PORT,\n\t\tSCHDD_DRPT_ARPT_ID,\n\t\tUPDTD_AT,\n\t\tDLAY_TYP,\n\t\tDURTN_MNT,\n\t\tDLAY_CD,\n\t\tDLAY_CD_NAME,\n\t\tADF_TIME_STMP,\n\t\tADF_RUN_ID\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> RemoveIATAICAO4\nRemoveIATAICAO5 derive(DEP_VAR = ACTL_OOOI_OUT - SCHDD_DPTR,\n\t\tARRVL_VAR = ACTL_OOOI_IN - SCHDD_ARRVL,\n\t\tSCHDD_BLK_DUR = SCHDD_DPTR - SCHDD_ARRVL,\n\t\tACTL_BLK_DUR = ACTL_OOOI_OUT - ACTL_OOOI_IN,\n\t\tACTL_FLGHT_DUR = ACTL_OOOI_OUT - ACTL_OOOI_IN) ~> AddNewColumns\nAddNewColumns derive(DPRT_DELAY_DUR_D0_IND = iif(DEP_VAR>0||isNull(ACTL_OOOI_OUT), 0, 1),\n\t\tDPRT_DELAY_DUR_D15_IND = iif(DEP_VAR>15||isNull(ACTL_OOOI_OUT), 0, 1),\n\t\tARRVL_DELAY_DUR_A0_IND = iif(ARRVL_VAR>0||isNull(ACTL_OOOI_IN), 0, 1),\n\t\tARRVL_DELAY_DUR_A14_IND = iif(ARRVL_VAR>14||isNull(ACTL_OOOI_IN), 0, 1),\n\t\tBLK_DUR_B0_IND = iif(ACTL_BLK_DUR>0||isNull(ACTL_OOOI_IN), 0, 1),\n\t\tSCHDD_FLT_DUR = '') ~> AddNewColumns2\nRemoveIATAICAO4, FilterActvInd lookup(ACTL_DPTR_AIR_PORT == ARPT_IATA_CD,\n\tmultiple: false,\n\tpickup: 'any',\n\tbroadcast: 'auto')~> LookupIATA5\nLookupIATA5 select(mapColumn(\n\t\tACTL_ARRVL_AIR_PORT,\n\t\tACTL_ARRVL_ARPT_ID,\n\t\tACTL_DPTR_AIR_PORT,\n\t\tACTL_OOOI_IN,\n\t\tACTL_OOOI_OFF,\n\t\tACTL_OOOI_ON,\n\t\tACTL_OOOI_OUT,\n\t\tAIR_CRAFT_RGSTRN_NUM,\n\t\tAIR_CRAFT_TYPE,\n\t\tBASE_AIR_PORT,\n\t\tBASE_ARPT_ID,\n\t\tCRGO_WGT,\n\t\tESTD_ARRVL,\n\t\tESTD_DPTR,\n\t\tFLT_DT,\n\t\tFLT_ID,\n\t\tFLT_NUM,\n\t\tFLT_TYPE,\n\t\tFUEL_IN,\n\t\tFUEL_OUT,\n\t\tFUEL_UPLIFT,\n\t\tIS_CNCLD,\n\t\tIS_VERFD,\n\t\tMAINT_LOG_PG,\n\t\tNOTES,\n\t\tSCHDD_ARRVL,\n\t\tSCHDD_ARRVL_AIR_PORT,\n\t\tSCHDD_ARRVL_ARPT_ID,\n\t\tSCHDD_DPTR,\n\t\tSCHDD_DPTR_AIR_PORT,\n\t\tSCHDD_DRPT_ARPT_ID,\n\t\tUPDTD_AT,\n\t\tDLAY_TYP,\n\t\tDURTN_MNT,\n\t\tDLAY_CD,\n\t\tDLAY_CD_NAME,\n\t\tADF_TIME_STMP,\n\t\tADF_RUN_ID,\n\t\tIATA_ARPT_ID = ARPT_ID\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> RemoveColumns5\nRemoveColumns5, FilterActvInd lookup(ACTL_DPTR_AIR_PORT == ARPT_ICAO_CD,\n\tmultiple: false,\n\tpickup: 'any',\n\tbroadcast: 'auto')~> LookupICAO5\nLookupICAO5 derive(ACTL_DPTR_ARPT_ID = iif(isNull(IATA_ARPT_ID), ARPT_ID, IATA_ARPT_ID)) ~> AddActlDptrID\nAddActlDptrID select(mapColumn(\n\t\tACTL_ARRVL_AIR_PORT,\n\t\tACTL_ARRVL_ARPT_ID,\n\t\tACTL_DPTR_AIR_PORT,\n\t\tACTL_OOOI_IN,\n\t\tACTL_OOOI_OFF,\n\t\tACTL_OOOI_ON,\n\t\tACTL_OOOI_OUT,\n\t\tAIR_CRAFT_RGSTRN_NUM,\n\t\tAIR_CRAFT_TYPE,\n\t\tBASE_AIR_PORT,\n\t\tBASE_ARPT_ID,\n\t\tCRGO_WGT,\n\t\tESTD_ARRVL,\n\t\tESTD_DPTR,\n\t\tFLT_DT,\n\t\tFLT_ID,\n\t\tFLT_NUM,\n\t\tFLT_TYPE,\n\t\tFUEL_IN,\n\t\tFUEL_OUT,\n\t\tFUEL_UPLIFT,\n\t\tIS_CNCLD,\n\t\tIS_VERFD,\n\t\tMAINT_LOG_PG,\n\t\tNOTES,\n\t\tSCHDD_ARRVL,\n\t\tSCHDD_ARRVL_AIR_PORT,\n\t\tSCHDD_ARRVL_ARPT_ID,\n\t\tSCHDD_DPTR,\n\t\tSCHDD_DPTR_AIR_PORT,\n\t\tSCHDD_DRPT_ARPT_ID,\n\t\tUPDTD_AT,\n\t\tDLAY_TYP,\n\t\tDURTN_MNT,\n\t\tDLAY_CD,\n\t\tDLAY_CD_NAME,\n\t\tADF_TIME_STMP,\n\t\tADF_RUN_ID,\n\t\tACTL_DPTR_ARPT_ID\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> RemoveIATAICAO5\nAddNewColumns2, CLNDR lookup(FLT_DT == TheDate,\n\tmultiple: false,\n\tpickup: 'any',\n\tbroadcast: 'auto')~> LookupCLNDR\nLookupCLNDR select(mapColumn(\n\t\tACTL_ARRVL_AIR_PORT,\n\t\tACTL_ARRVL_ARPT_ID,\n\t\tACTL_DPTR_AIR_PORT,\n\t\tACTL_OOOI_IN,\n\t\tACTL_OOOI_OFF,\n\t\tACTL_OOOI_ON,\n\t\tACTL_OOOI_OUT,\n\t\tAIR_CRAFT_RGSTRN_NUM,\n\t\tAIR_CRAFT_TYPE,\n\t\tBASE_AIR_PORT,\n\t\tBASE_ARPT_ID,\n\t\tCRGO_WGT,\n\t\tESTD_ARRVL,\n\t\tESTD_DPTR,\n\t\tFLT_DT,\n\t\tFLT_ID,\n\t\tFLT_NUM,\n\t\tFLT_TYPE,\n\t\tFUEL_IN,\n\t\tFUEL_OUT,\n\t\tFUEL_UPLIFT,\n\t\tIS_CNCLD,\n\t\tIS_VERFD,\n\t\tMAINT_LOG_PG,\n\t\tNOTES,\n\t\tSCHDD_ARRVL,\n\t\tSCHDD_ARRVL_AIR_PORT,\n\t\tSCHDD_ARRVL_ARPT_ID,\n\t\tSCHDD_DPTR,\n\t\tSCHDD_DPTR_AIR_PORT,\n\t\tSCHDD_DRPT_ARPT_ID,\n\t\tUPDTD_AT,\n\t\tDLAY_TYP,\n\t\tDURTN_MNT,\n\t\tDLAY_CD,\n\t\tDLAY_CD_NAME,\n\t\tADF_TIME_STMP,\n\t\tADF_RUN_ID,\n\t\tACTL_DPTR_ARPT_ID,\n\t\tDEP_VAR,\n\t\tARRVL_VAR,\n\t\tSCHDD_BLK_DUR,\n\t\tACTL_BLK_DUR,\n\t\tACTL_FLGHT_DUR,\n\t\tDPRT_DELAY_DUR_D0_IND,\n\t\tDPRT_DELAY_DUR_D15_IND,\n\t\tARRVL_DELAY_DUR_A0_IND,\n\t\tARRVL_DELAY_DUR_A14_IND,\n\t\tBLK_DUR_B0_IND,\n\t\tSCHDD_FLT_DUR,\n\t\tCLNDR_ID\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> RemoveCLNDRColumns\nRemoveCLNDRColumns, Flights exists(iif(FLT_NUM == FLGHT_NUM\n\t&& CLNDR_ID == toString(FLGHT_DT_ID)\n\t&& (SCHDD_ARRVL_AIR_PORT == SCHDD_ARRVL_ARPT_CD\n\t|| SCHDD_DPTR_AIR_PORT == SCHDD_DRPT_ARPT_CD),true(),false()),\n\tnegate:false,\n\tbroadcast: 'auto')~> Exists\nExists alterRow(updateIf(true())) ~> AlterRowUpdate\nAlterRowUpdate sink(input(\n\t\tFLGHT_ID as integer,\n\t\tFLGHT_DT_ID as integer,\n\t\tFLGHT_NUM as string,\n\t\tFLGHT_TYP as string,\n\t\tAIR_CRAFT_RGSTRN_NUM as string,\n\t\tAIR_CRAFT_TYP as string,\n\t\tSCHDD_DPRT_TS_UTC as timestamp,\n\t\tSCHDD_ARRVL_TS_UTC as timestamp,\n\t\tESTD_DPRT_TS_UTC as timestamp,\n\t\tESTD_ARRVL_TS_UTC as timestamp,\n\t\tACTL_OOOI_OUT_TS_UTC as timestamp,\n\t\tACTL_OOOI_OFF_TS_UTC as timestamp,\n\t\tACTL_OOOI_ON_TS_UTC as timestamp,\n\t\tACTL_OOOI_IN_TS_UTC as timestamp,\n\t\tBASE_ARPT_CD as string,\n\t\tBASE_ARPT_ID as integer,\n\t\tSCHDD_DRPT_ARPT_CD as string,\n\t\tSCHDD_DRPT_ARPT_ID as integer,\n\t\tSCHDD_ARRVL_ARPT_CD as string,\n\t\tSCHDD_ARRVL_ARPT_ID as integer,\n\t\tACTL_ARRVL_ARPT_CD as string,\n\t\tACTL_ARRVL_ARPT_ID as integer,\n\t\tACTL_DPTR_ARPT_CD as string,\n\t\tACTL_DPTR_ARPT_ID as integer,\n\t\tFUEL_IN as string,\n\t\tFUEL_OUT as integer,\n\t\tFUEL_UPLIFT as integer,\n\t\tCRGO_WT as integer,\n\t\tMAINT_LOG as integer,\n\t\tNOTES as string,\n\t\tIS_CNCLD as boolean,\n\t\tIS_VERFD as boolean,\n\t\tDEP_VAR as integer,\n\t\tARRVL_VAR as integer,\n\t\tSCHDD_BLK_DUR as integer,\n\t\tACTL_BLK_DUR as integer,\n\t\tACTL_FLGHT_DUR as integer,\n\t\tDPRT_DELAY_DUR_D0_IND as integer,\n\t\tDPRT_DELAY_DUR_D15_IND as integer,\n\t\tARRVL_DELAY_DUR_A0_IND as integer,\n\t\tARRVL_DELAY_DUR_A14_IND as integer,\n\t\tBLK_DUR_B0_IND as integer,\n\t\tSCHDD_FLT_DUR as string,\n\t\tDELAY_TYP as string,\n\t\tDELAY_DUR as integer,\n\t\tDELAY_CD as string,\n\t\tDELAY_DESC as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:false,\n\tupdateable:true,\n\tupsertable:false,\n\tkeys:['FLGHT_NUM','FLGHT_DT_ID','SCHDD_DRPT_ARPT_ID','SCHDD_ARRVL_ARPT_ID'],\n\tformat: 'table',\n\tmapColumn(\n\t\tFLGHT_DT_ID = CLNDR_ID,\n\t\tFLGHT_NUM = FLT_NUM,\n\t\tFLGHT_TYP = FLT_TYPE,\n\t\tAIR_CRAFT_RGSTRN_NUM,\n\t\tAIR_CRAFT_TYP = AIR_CRAFT_TYPE,\n\t\tSCHDD_DPRT_TS_UTC = SCHDD_DPTR,\n\t\tSCHDD_ARRVL_TS_UTC = SCHDD_ARRVL,\n\t\tESTD_DPRT_TS_UTC = ESTD_DPTR,\n\t\tESTD_ARRVL_TS_UTC = ESTD_ARRVL,\n\t\tACTL_OOOI_OUT_TS_UTC = ACTL_OOOI_OUT,\n\t\tACTL_OOOI_OFF_TS_UTC = ACTL_OOOI_OFF,\n\t\tACTL_OOOI_ON_TS_UTC = ACTL_OOOI_ON,\n\t\tACTL_OOOI_IN_TS_UTC = ACTL_OOOI_IN,\n\t\tBASE_ARPT_CD = BASE_AIR_PORT,\n\t\tBASE_ARPT_ID,\n\t\tSCHDD_DRPT_ARPT_CD = SCHDD_ARRVL_AIR_PORT,\n\t\tSCHDD_DRPT_ARPT_ID,\n\t\tSCHDD_ARRVL_ARPT_CD = SCHDD_ARRVL_AIR_PORT,\n\t\tSCHDD_ARRVL_ARPT_ID,\n\t\tACTL_ARRVL_ARPT_CD = ACTL_ARRVL_AIR_PORT,\n\t\tACTL_ARRVL_ARPT_ID,\n\t\tACTL_DPTR_ARPT_CD = ACTL_DPTR_AIR_PORT,\n\t\tACTL_DPTR_ARPT_ID,\n\t\tFUEL_IN,\n\t\tFUEL_OUT,\n\t\tFUEL_UPLIFT,\n\t\tCRGO_WT = CRGO_WGT,\n\t\tMAINT_LOG = MAINT_LOG_PG,\n\t\tNOTES,\n\t\tIS_CNCLD,\n\t\tIS_VERFD,\n\t\tDEP_VAR,\n\t\tARRVL_VAR,\n\t\tSCHDD_BLK_DUR,\n\t\tACTL_BLK_DUR,\n\t\tACTL_FLGHT_DUR,\n\t\tDPRT_DELAY_DUR_D0_IND,\n\t\tDPRT_DELAY_DUR_D15_IND,\n\t\tARRVL_DELAY_DUR_A0_IND,\n\t\tARRVL_DELAY_DUR_A14_IND,\n\t\tBLK_DUR_B0_IND,\n\t\tSCHDD_FLT_DUR,\n\t\tDELAY_TYP = DLAY_TYP,\n\t\tDELAY_DUR = DURTN_MNT,\n\t\tDELAY_CD = DLAY_CD,\n\t\tDELAY_DESC = DLAY_CD_NAME\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> Update"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/s_equip_schd_load')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "Equip Schd"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "eal_az_equipment_schd",
+								"type": "DatasetReference"
+							},
+							"name": "StgEquipSchd"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "sql_eqip_schd_rej",
+								"type": "DatasetReference"
+							},
+							"name": "EquipReject"
+						},
+						{
+							"dataset": {
+								"referenceName": "sql_s_eqip_schd",
+								"type": "DatasetReference"
+							},
+							"name": "EquipStg"
+						}
+					],
+					"transformations": [
+						{
+							"name": "ConditionalSplit1"
+						},
+						{
+							"name": "AddADFColumns"
+						},
+						{
+							"name": "AddADFColumns2"
+						},
+						{
+							"name": "FilterByDate"
+						}
+					],
+					"script": "parameters{\n\trun_id as string (''),\n\tdate as string ('2021-02-06')\n}\nsource(output(\n\t\teqp_sched_id as string,\n\t\tac_registration as string,\n\t\tstatus_code as string,\n\t\tstatus_name as string,\n\t\tstatus_description as string,\n\t\tstart_time as string,\n\t\tend_time as string,\n\t\tnotes as string,\n\t\tis_deleted as boolean,\n\t\tupdated_at as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tdocumentForm: 'documentPerLine') ~> StgEquipSchd\nFilterByDate split(isNull(ac_registration) || iif(isNull(end_time), false(), iif(isNull(start_time), false(), start_time>end_time)),\n\tdisjoint: false) ~> ConditionalSplit1@(Reject, FilteredData)\nConditionalSplit1@Reject derive(REJECT_REASON = \"Data Validation Error\",\n\t\tADF_TIME_STMP = currentTimestamp(),\n\t\tADF_RUN_ID = $run_id) ~> AddADFColumns\nConditionalSplit1@FilteredData derive(ADF_TIME_STMP = currentTimestamp(),\n\t\tADF_RUN_ID = $run_id) ~> AddADFColumns2\nStgEquipSchd filter(toDate(updated_at)  >= toDate($date) && toDate(updated_at) < currentDate()) ~> FilterByDate\nAddADFColumns sink(input(\n\t\tEQP_SCHED_ID as integer,\n\t\tAC_RGSTRN as string,\n\t\tSTS_CD as string,\n\t\tSTS_NAME as string,\n\t\tSTS_DESC as string,\n\t\tSTRT_TIME as timestamp,\n\t\tEND_TIME as timestamp,\n\t\tNOTE as string,\n\t\tIS_DELD as boolean,\n\t\tUPDTD_AT as timestamp,\n\t\tREJECT_REASON as string,\n\t\tADF_TIME_STMP as timestamp,\n\t\tADF_RUN_ID as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tmapColumn(\n\t\tEQP_SCHED_ID = eqp_sched_id,\n\t\tAC_RGSTRN = ac_registration,\n\t\tSTS_CD = status_code,\n\t\tSTS_NAME = status_name,\n\t\tSTS_DESC = status_description,\n\t\tSTRT_TIME = start_time,\n\t\tEND_TIME = end_time,\n\t\tNOTE = notes,\n\t\tIS_DELD = is_deleted,\n\t\tUPDTD_AT = updated_at,\n\t\tREJECT_REASON,\n\t\tADF_TIME_STMP,\n\t\tADF_RUN_ID\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> EquipReject\nAddADFColumns2 sink(input(\n\t\tEQP_SCHED_ID as integer,\n\t\tAC_RGSTRN as string,\n\t\tSTS_CD as string,\n\t\tSTS_NAME as string,\n\t\tSTS_DESC as string,\n\t\tSTRT_TIME as string,\n\t\tEND_TIME as string,\n\t\tNOTE as string,\n\t\tIS_DELD as boolean,\n\t\tUPDTD_AT as string,\n\t\tADF_TIME_STMP as timestamp,\n\t\tADF_RUN_ID as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\ttruncate:true,\n\tformat: 'table',\n\tmapColumn(\n\t\tEQP_SCHED_ID = eqp_sched_id,\n\t\tAC_RGSTRN = ac_registration,\n\t\tSTS_CD = status_code,\n\t\tSTS_NAME = status_name,\n\t\tSTS_DESC = status_description,\n\t\tSTRT_TIME = start_time,\n\t\tEND_TIME = end_time,\n\t\tNOTE = notes,\n\t\tIS_DELD = is_deleted,\n\t\tUPDTD_AT = updated_at,\n\t\tADF_TIME_STMP,\n\t\tADF_RUN_ID\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> EquipStg"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/s_flights_load')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "Flights"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "eal_az_flights",
+								"type": "DatasetReference"
+							},
+							"name": "BlobFlights"
+						},
+						{
+							"dataset": {
+								"referenceName": "eal_ac_bdavis_Airports",
+								"type": "DatasetReference"
+							},
+							"name": "BdavisAirport"
+						},
+						{
+							"dataset": {
+								"referenceName": "eal_az_flights_delay",
+								"type": "DatasetReference"
+							},
+							"name": "FlightsDelay"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "sql_flights_rej",
+								"type": "DatasetReference"
+							},
+							"name": "Reject"
+						},
+						{
+							"dataset": {
+								"referenceName": "sql_s_flights",
+								"type": "DatasetReference"
+							},
+							"name": "StagingFlights"
+						}
+					],
+					"transformations": [
+						{
+							"name": "ConditionalSplit1"
+						},
+						{
+							"name": "IATAAirportExists"
+						},
+						{
+							"name": "IATAAirportDoesntExists1"
+						},
+						{
+							"name": "ICAOAirportExists"
+						},
+						{
+							"name": "ExsistUnion"
+						},
+						{
+							"name": "ICAOAirportdoesntExists"
+						},
+						{
+							"name": "RejectUnion1"
+						},
+						{
+							"name": "NullRejectReason"
+						},
+						{
+							"name": "AddRejectReason2"
+						},
+						{
+							"name": "ConditionalSplit2"
+						},
+						{
+							"name": "FilterUnion1"
+						},
+						{
+							"name": "ConditionalSplit3"
+						},
+						{
+							"name": "IATAAirportDoesntExists2"
+						},
+						{
+							"name": "ICAOAirportExists2"
+						},
+						{
+							"name": "ICAOAirportdoesntExists2"
+						},
+						{
+							"name": "AddRejectReason3"
+						},
+						{
+							"name": "RejectUnion2"
+						},
+						{
+							"name": "FilterUnion2"
+						},
+						{
+							"name": "ConditionalSplit4"
+						},
+						{
+							"name": "IATAAirportExists3"
+						},
+						{
+							"name": "IATAAirportDoesntExists3"
+						},
+						{
+							"name": "IATAAirportExists2"
+						},
+						{
+							"name": "ICAOAirportExists3"
+						},
+						{
+							"name": "ICAOAirportdoesntExists3"
+						},
+						{
+							"name": "FilterUnion3"
+						},
+						{
+							"name": "AddRejectReason4"
+						},
+						{
+							"name": "ExistUnion2"
+						},
+						{
+							"name": "ExistUnion3"
+						},
+						{
+							"name": "RejectUnion3"
+						},
+						{
+							"name": "SchdArrvlAirportNull"
+						},
+						{
+							"name": "IATAAirportDoesntExists4"
+						},
+						{
+							"name": "ICAOAirportExists4"
+						},
+						{
+							"name": "ICAOAirportDoesntExists4"
+						},
+						{
+							"name": "IATAAirportExists4"
+						},
+						{
+							"name": "ExistUnion4"
+						},
+						{
+							"name": "FilterUnion4"
+						},
+						{
+							"name": "AddRejectReason5"
+						},
+						{
+							"name": "SchdDptrAirportNull"
+						},
+						{
+							"name": "IATAAirportDoesntExists5"
+						},
+						{
+							"name": "ICAOAirportExists5"
+						},
+						{
+							"name": "ICAOAirportDoesntExists5"
+						},
+						{
+							"name": "IATAAirportExists5"
+						},
+						{
+							"name": "ExistUnion5"
+						},
+						{
+							"name": "FilterUnion5"
+						},
+						{
+							"name": "AddRejectReason6"
+						},
+						{
+							"name": "RejectUnion4"
+						},
+						{
+							"name": "RejectUnion5"
+						},
+						{
+							"name": "AddADFColumns"
+						},
+						{
+							"name": "AddADFColumns2"
+						},
+						{
+							"name": "FlightsJoinFlightsDelay"
+						},
+						{
+							"name": "TypeConvertion"
+						},
+						{
+							"name": "RemoveDuplicates"
+						},
+						{
+							"name": "FilterRows"
+						},
+						{
+							"name": "ConditionalSplit5"
+						},
+						{
+							"name": "OOOIRejectReason"
+						},
+						{
+							"name": "ConditionalSplit6"
+						},
+						{
+							"name": "EstSchdRejectReason"
+						},
+						{
+							"name": "UnionNullRejection"
+						},
+						{
+							"name": "UnionOOOIRejection"
+						}
+					],
+					"script": "parameters{\n\trun_id as string (''),\n\tdate as string ('2021-02-07')\n}\nsource(output(\n\t\tflight_id as string,\n\t\tflight_number as string,\n\t\tflight_date as string,\n\t\taircraft_registration_number as string,\n\t\taircraft_type as string,\n\t\tscheduled_departure as string,\n\t\tscheduled_arrival as string,\n\t\testimated_departure as string,\n\t\testimated_arrival as string,\n\t\tactual_oooi_out as string,\n\t\tactual_oooi_off as string,\n\t\tactual_oooi_on as string,\n\t\tactual_oooi_in as string,\n\t\tbase_airport as string,\n\t\tscheduled_departure_airport as string,\n\t\tscheduled_arrival_airport as string,\n\t\tactual_departure_airport as string,\n\t\tactual_arrival_airport as string,\n\t\tis_verified as boolean,\n\t\tnotes as string,\n\t\tis_canceled as boolean,\n\t\tflight_type as string,\n\t\tcargo_weight as string,\n\t\tfuel_out as string,\n\t\tfuel_in as string,\n\t\tfuel_uplift as string,\n\t\tmaint_log_page as string,\n\t\tupdated_at as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tdocumentForm: 'documentPerLine') ~> BlobFlights\nsource(output(\n\t\tAirport_Name as string,\n\t\tCity as string,\n\t\tCountry as string,\n\t\tIATA as string,\n\t\tICAO as string,\n\t\tLatitude as double,\n\t\tLongitude as double,\n\t\tAltitude as integer,\n\t\tUTC_offset as double,\n\t\tDST as string,\n\t\tTime_Zone as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> BdavisAirport\nsource(output(\n\t\tflight_id as string,\n\t\tdelay_type as string,\n\t\tduration_mins as string,\n\t\tdelay_code as string,\n\t\tdelay_code_name as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tdocumentForm: 'documentPerLine') ~> FlightsDelay\nFilterRows split(isNull(flight_date) || isNull(flight_id) || isNull(flight_number) || isNull(flight_type) || isNull(SCHDD_DPTR) || isNull(UPDTD_AT),\n\tdisjoint: false) ~> ConditionalSplit1@(NullReject, NullAcpt)\nConditionalSplit2@ActlArrvlAirportNotNull, BdavisAirport exists(actual_arrival_airport == IATA,\n\tnegate:false,\n\tbroadcast: 'auto')~> IATAAirportExists\nConditionalSplit2@ActlArrvlAirportNotNull, BdavisAirport exists(actual_arrival_airport == IATA,\n\tnegate:true,\n\tbroadcast: 'auto')~> IATAAirportDoesntExists1\nIATAAirportDoesntExists1, BdavisAirport exists(toString(actual_arrival_airport)  == ICAO,\n\tnegate:false,\n\tbroadcast: 'auto')~> ICAOAirportExists\nIATAAirportExists, ICAOAirportExists union(byName: true)~> ExsistUnion\nIATAAirportDoesntExists1, BdavisAirport exists(actual_arrival_airport == ICAO,\n\tnegate:true,\n\tbroadcast: 'auto')~> ICAOAirportdoesntExists\nAddRejectReason2, UnionOOOIRejection union(byName: true)~> RejectUnion1\nConditionalSplit1@NullReject derive(Reject_Reason = \"Null Error\") ~> NullRejectReason\nICAOAirportdoesntExists derive(Reject_Reason = \"Invalid ACTL_ARRVL Airport Name\") ~> AddRejectReason2\nConditionalSplit6@EstSchdAcpt split(isNull(actual_arrival_airport),\n\tdisjoint: false) ~> ConditionalSplit2@(ActlArrvlAirportNull, ActlArrvlAirportNotNull)\nExsistUnion, ConditionalSplit2@ActlArrvlAirportNull union(byName: true)~> FilterUnion1\nFilterUnion1 split(isNull(actual_departure_airport),\n\tdisjoint: false) ~> ConditionalSplit3@(ActlDptrAirportNull, ActlDptrAirportNotNull)\nConditionalSplit3@ActlDptrAirportNotNull, BdavisAirport exists(actual_departure_airport == IATA,\n\tnegate:true,\n\tbroadcast: 'auto')~> IATAAirportDoesntExists2\nIATAAirportDoesntExists2, BdavisAirport exists(actual_departure_airport == ICAO,\n\tnegate:false,\n\tbroadcast: 'auto')~> ICAOAirportExists2\nIATAAirportDoesntExists2, BdavisAirport exists(actual_departure_airport == ICAO,\n\tnegate:true,\n\tbroadcast: 'auto')~> ICAOAirportdoesntExists2\nICAOAirportdoesntExists2 derive(Reject_Reason = \"Actl Dptr Airport Name not found\") ~> AddRejectReason3\nRejectUnion1, AddRejectReason3 union(byName: true)~> RejectUnion2\nExistUnion2, ConditionalSplit3@ActlDptrAirportNull union(byName: true)~> FilterUnion2\nFilterUnion2 split(isNull(base_airport),\n\tdisjoint: false) ~> ConditionalSplit4@(BaseAirportNull, BaseAirportNotNull)\nConditionalSplit4@BaseAirportNotNull, BdavisAirport exists(base_airport == IATA,\n\tnegate:false,\n\tbroadcast: 'auto')~> IATAAirportExists3\nConditionalSplit4@BaseAirportNotNull, BdavisAirport exists(base_airport == IATA,\n\tnegate:true,\n\tbroadcast: 'auto')~> IATAAirportDoesntExists3\nConditionalSplit3@ActlDptrAirportNotNull, BdavisAirport exists(actual_departure_airport == IATA,\n\tnegate:false,\n\tbroadcast: 'auto')~> IATAAirportExists2\nIATAAirportDoesntExists3, BdavisAirport exists(base_airport == ICAO,\n\tnegate:false,\n\tbroadcast: 'auto')~> ICAOAirportExists3\nIATAAirportDoesntExists3, BdavisAirport exists(base_airport == ICAO,\n\tnegate:true,\n\tbroadcast: 'auto')~> ICAOAirportdoesntExists3\nExistUnion3, ConditionalSplit4@BaseAirportNull union(byName: true)~> FilterUnion3\nICAOAirportdoesntExists3 derive(Reject_Reason = \"Base Airport Name not found\") ~> AddRejectReason4\nICAOAirportExists2, IATAAirportExists2 union(byName: true)~> ExistUnion2\nIATAAirportExists3, ICAOAirportExists3 union(byName: true)~> ExistUnion3\nRejectUnion2, AddRejectReason4 union(byName: true)~> RejectUnion3\nFilterUnion3 split(isNull(scheduled_arrival_airport),\n\tdisjoint: false) ~> SchdArrvlAirportNull@(SchdArrvlAirportNull, SchdArrvlAirportNotNull)\nSchdArrvlAirportNull@SchdArrvlAirportNotNull, BdavisAirport exists(scheduled_arrival_airport == IATA,\n\tnegate:true,\n\tbroadcast: 'auto')~> IATAAirportDoesntExists4\nIATAAirportDoesntExists4, BdavisAirport exists(scheduled_arrival_airport == ICAO,\n\tnegate:false,\n\tbroadcast: 'auto')~> ICAOAirportExists4\nIATAAirportDoesntExists4, BdavisAirport exists(scheduled_arrival_airport == ICAO,\n\tnegate:true,\n\tbroadcast: 'auto')~> ICAOAirportDoesntExists4\nSchdArrvlAirportNull@SchdArrvlAirportNotNull, BdavisAirport exists(scheduled_arrival_airport == IATA,\n\tnegate:false,\n\tbroadcast: 'auto')~> IATAAirportExists4\nICAOAirportExists4, IATAAirportExists4 union(byName: true)~> ExistUnion4\nExistUnion4, SchdArrvlAirportNull@SchdArrvlAirportNull union(byName: true)~> FilterUnion4\nICAOAirportDoesntExists4 derive(Reject_Reason = \"Schd Arrvl Airport Name not found\") ~> AddRejectReason5\nFilterUnion4 split(isNull(scheduled_departure_airport),\n\tdisjoint: false) ~> SchdDptrAirportNull@(SchdDptrAirportNull, SchdDptrAirportNotNull)\nSchdDptrAirportNull@SchdDptrAirportNotNull, BdavisAirport exists(scheduled_departure_airport == IATA,\n\tnegate:true,\n\tbroadcast: 'auto')~> IATAAirportDoesntExists5\nIATAAirportDoesntExists5, BdavisAirport exists(scheduled_departure_airport == ICAO,\n\tnegate:false,\n\tbroadcast: 'auto')~> ICAOAirportExists5\nIATAAirportDoesntExists5, BdavisAirport exists(scheduled_departure_airport == ICAO,\n\tnegate:true,\n\tbroadcast: 'auto')~> ICAOAirportDoesntExists5\nSchdDptrAirportNull@SchdDptrAirportNotNull, BdavisAirport exists(scheduled_departure_airport == IATA,\n\tnegate:false,\n\tbroadcast: 'auto')~> IATAAirportExists5\nICAOAirportExists5, IATAAirportExists5 union(byName: true)~> ExistUnion5\nExistUnion5, SchdDptrAirportNull@SchdDptrAirportNull union(byName: true)~> FilterUnion5\nICAOAirportDoesntExists5 derive(Reject_Reason = \"Schd Dptr Airport Name not found\") ~> AddRejectReason6\nRejectUnion3, AddRejectReason5 union(byName: true)~> RejectUnion4\nRejectUnion4, AddRejectReason6 union(byName: true)~> RejectUnion5\nRejectUnion5 derive(ADF_TIME_STMP = currentTimestamp(),\n\t\tADF_RUN_ID = $run_id) ~> AddADFColumns\nFlightsJoinFlightsDelay derive(ADF_TIME_STMP = currentTimestamp(),\n\t\tADF_RUN_ID = $run_id) ~> AddADFColumns2\nFilterUnion5, FlightsDelay join(FilterUnion5@flight_id == FlightsDelay@flight_id,\n\tjoinType:'left',\n\tbroadcast: 'auto')~> FlightsJoinFlightsDelay\nBlobFlights derive(ACTL_OOOI_IN = toTimestamp(actual_oooi_in),\n\t\tACTL_OOOI_OFF = toTimestamp(actual_oooi_off),\n\t\tACTL_OOOI_ON = toTimestamp(actual_oooi_on),\n\t\tACTL_OOOI_OUT = toTimestamp(actual_oooi_out),\n\t\tESTD_ARRVL = toTimestamp(estimated_arrival),\n\t\tESTD_DPTR = toTimestamp(estimated_departure),\n\t\tSCHDD_ARRVL = toTimestamp(scheduled_arrival),\n\t\tSCHDD_DPTR = toTimestamp(scheduled_departure),\n\t\tUPDTD_AT = toTimestamp(updated_at)) ~> TypeConvertion\nTypeConvertion select(mapColumn(\n\t\tflight_id,\n\t\tflight_number,\n\t\tflight_date,\n\t\taircraft_registration_number,\n\t\taircraft_type,\n\t\tbase_airport,\n\t\tscheduled_departure_airport,\n\t\tscheduled_arrival_airport,\n\t\tactual_departure_airport,\n\t\tactual_arrival_airport,\n\t\tis_verified,\n\t\tnotes,\n\t\tis_canceled,\n\t\tflight_type,\n\t\tcargo_weight,\n\t\tfuel_out,\n\t\tfuel_in,\n\t\tfuel_uplift,\n\t\tmaint_log_page,\n\t\tACTL_OOOI_IN,\n\t\tACTL_OOOI_OFF,\n\t\tACTL_OOOI_ON,\n\t\tACTL_OOOI_OUT,\n\t\tESTD_ARRVL,\n\t\tESTD_DPTR,\n\t\tSCHDD_ARRVL,\n\t\tSCHDD_DPTR,\n\t\tUPDTD_AT\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> RemoveDuplicates\nRemoveDuplicates filter(toDate(UPDTD_AT)  >= toDate($date) && toDate(UPDTD_AT) < currentDate()) ~> FilterRows\nConditionalSplit1@NullAcpt split(iif(isNull(ACTL_OOOI_IN), false(), iif(isNull(ACTL_OOOI_ON), iif(isNull(ACTL_OOOI_OUT), false(), ACTL_OOOI_IN>ACTL_OOOI_OUT), ACTL_OOOI_IN<ACTL_OOOI_ON)) || \r\niif(isNull(ACTL_OOOI_OFF), iif(isNull(ACTL_OOOI_ON), false(),true()), iif(isNull(ACTL_OOOI_OUT), false(), ACTL_OOOI_OFF<ACTL_OOOI_OUT)) ||\r\niif(isNull(ACTL_OOOI_ON), iif(isNull(ACTL_OOOI_IN), iif(isNull(ACTL_OOOI_OFF), false(),true()),true()),iif(isNull(ACTL_OOOI_OFF), false(), ACTL_OOOI_ON<=ACTL_OOOI_OFF)) ||\r\niif(isNull(ACTL_OOOI_OUT), iif(isNull(ACTL_OOOI_OFF), false(), true()), false()),\n\tdisjoint: false) ~> ConditionalSplit5@(OOOIReject, OOOIAcpt)\nConditionalSplit5@OOOIReject derive(Reject_Reason = \"OOOI Validation Error\") ~> OOOIRejectReason\nConditionalSplit5@OOOIAcpt split(iif(isNull(ESTD_ARRVL), iif(isNull(ESTD_DPTR), false(), true()), ESTD_ARRVL<ESTD_DPTR) ||\r\niif(isNull(SCHDD_ARRVL), true(), SCHDD_ARRVL<SCHDD_DPTR),\n\tdisjoint: false) ~> ConditionalSplit6@(EstSchdReject, EstSchdAcpt)\nConditionalSplit6@EstSchdReject derive(Reject_Reason = \"Estimated or Scheduled Arrival Validation Error\") ~> EstSchdRejectReason\nEstSchdRejectReason, NullRejectReason union(byName: true)~> UnionNullRejection\nUnionNullRejection, OOOIRejectReason union(byName: true)~> UnionOOOIRejection\nAddADFColumns sink(input(\n\t\tACTL_ARRVL_AIR_PORT as string,\n\t\tACTL_DPTR_AIR_PORT as string,\n\t\tACTL_OOOI_IN as timestamp,\n\t\tACTL_OOOI_OFF as timestamp,\n\t\tACTL_OOOI_ON as timestamp,\n\t\tACTL_OOOI_OUT as timestamp,\n\t\tAIR_CRAFT_RGSTRN_NUM as string,\n\t\tAIR_CRAFT_TYPE as string,\n\t\tBASE_AIR_PORT as string,\n\t\tCRGO_WGT as integer,\n\t\tESTD_ARRVL as timestamp,\n\t\tESTD_DPTR as timestamp,\n\t\tFLT_DT as date,\n\t\tFLT_ID as long,\n\t\tFLT_NUM as string,\n\t\tFLT_TYPE as string,\n\t\tFUEL_IN as double,\n\t\tFUEL_OUT as double,\n\t\tFUEL_UPLIFT as integer,\n\t\tIS_CNCLD as boolean,\n\t\tIS_VERFD as boolean,\n\t\tMAINT_LOG_PG as string,\n\t\tNOTES as string,\n\t\tSCHDD_ARRVL as timestamp,\n\t\tSCHDD_ARRVL_AIR_PORT as string,\n\t\tSCHDD_DPTR as timestamp,\n\t\tSCHDD_DPTR_AIR_PORT as string,\n\t\tUPDTD_AT as timestamp,\n\t\tREJECT_REASON as string,\n\t\tADF_TIME_STMP as timestamp,\n\t\tADF_RUN_ID as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tmapColumn(\n\t\tACTL_ARRVL_AIR_PORT = actual_arrival_airport,\n\t\tACTL_DPTR_AIR_PORT = actual_departure_airport,\n\t\tACTL_OOOI_IN,\n\t\tACTL_OOOI_OFF,\n\t\tACTL_OOOI_ON,\n\t\tACTL_OOOI_OUT,\n\t\tAIR_CRAFT_RGSTRN_NUM = aircraft_registration_number,\n\t\tAIR_CRAFT_TYPE = aircraft_type,\n\t\tBASE_AIR_PORT = base_airport,\n\t\tCRGO_WGT = cargo_weight,\n\t\tESTD_ARRVL,\n\t\tESTD_DPTR,\n\t\tFLT_DT = flight_date,\n\t\tFLT_ID = flight_id,\n\t\tFLT_NUM = flight_number,\n\t\tFLT_TYPE = flight_type,\n\t\tFUEL_IN = fuel_in,\n\t\tFUEL_OUT = fuel_out,\n\t\tFUEL_UPLIFT = fuel_uplift,\n\t\tIS_CNCLD = is_canceled,\n\t\tIS_VERFD = is_verified,\n\t\tMAINT_LOG_PG = maint_log_page,\n\t\tNOTES = notes,\n\t\tSCHDD_ARRVL,\n\t\tSCHDD_ARRVL_AIR_PORT = scheduled_arrival_airport,\n\t\tSCHDD_DPTR,\n\t\tSCHDD_DPTR_AIR_PORT = scheduled_departure_airport,\n\t\tUPDTD_AT,\n\t\tREJECT_REASON = Reject_Reason,\n\t\tADF_TIME_STMP,\n\t\tADF_RUN_ID\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> Reject\nAddADFColumns2 sink(input(\n\t\tACTL_ARRVL_AIR_PORT as string,\n\t\tACTL_DPTR_AIR_PORT as string,\n\t\tACTL_OOOI_IN as timestamp,\n\t\tACTL_OOOI_OFF as timestamp,\n\t\tACTL_OOOI_ON as timestamp,\n\t\tACTL_OOOI_OUT as timestamp,\n\t\tAIR_CRAFT_RGSTRN_NUM as string,\n\t\tAIR_CRAFT_TYPE as string,\n\t\tBASE_AIR_PORT as string,\n\t\tCRGO_WGT as integer,\n\t\tESTD_ARRVL as timestamp,\n\t\tESTD_DPTR as timestamp,\n\t\tFLT_DT as date,\n\t\tFLT_ID as long,\n\t\tFLT_NUM as string,\n\t\tFLT_TYPE as string,\n\t\tFUEL_IN as double,\n\t\tFUEL_OUT as double,\n\t\tFUEL_UPLIFT as integer,\n\t\tIS_CNCLD as boolean,\n\t\tIS_VERFD as boolean,\n\t\tMAINT_LOG_PG as string,\n\t\tNOTES as string,\n\t\tSCHDD_ARRVL as timestamp,\n\t\tSCHDD_ARRVL_AIR_PORT as string,\n\t\tSCHDD_DPTR as timestamp,\n\t\tSCHDD_DPTR_AIR_PORT as string,\n\t\tUPDTD_AT as timestamp,\n\t\tDLAY_TYP as string,\n\t\tDURTN_MNT as integer,\n\t\tDLAY_CD as string,\n\t\tDLAY_CD_NAME as string,\n\t\tADF_TIME_STMP as timestamp,\n\t\tADF_RUN_ID as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\ttruncate:true,\n\tformat: 'table',\n\tmapColumn(\n\t\tACTL_ARRVL_AIR_PORT = actual_arrival_airport,\n\t\tACTL_DPTR_AIR_PORT = actual_departure_airport,\n\t\tACTL_OOOI_IN,\n\t\tACTL_OOOI_OFF,\n\t\tACTL_OOOI_ON,\n\t\tACTL_OOOI_OUT,\n\t\tAIR_CRAFT_RGSTRN_NUM = aircraft_registration_number,\n\t\tAIR_CRAFT_TYPE = aircraft_type,\n\t\tBASE_AIR_PORT = base_airport,\n\t\tCRGO_WGT = cargo_weight,\n\t\tESTD_ARRVL,\n\t\tESTD_DPTR,\n\t\tFLT_DT = flight_date,\n\t\tFLT_ID = FilterUnion5@flight_id,\n\t\tFLT_NUM = flight_number,\n\t\tFLT_TYPE = flight_type,\n\t\tFUEL_IN = fuel_in,\n\t\tFUEL_OUT = fuel_out,\n\t\tFUEL_UPLIFT = fuel_uplift,\n\t\tIS_CNCLD = is_canceled,\n\t\tIS_VERFD = is_verified,\n\t\tMAINT_LOG_PG = maint_log_page,\n\t\tNOTES = notes,\n\t\tSCHDD_ARRVL,\n\t\tSCHDD_ARRVL_AIR_PORT = scheduled_arrival_airport,\n\t\tSCHDD_DPTR,\n\t\tSCHDD_DPTR_AIR_PORT = scheduled_departure_airport,\n\t\tUPDTD_AT,\n\t\tDLAY_TYP = delay_type,\n\t\tDURTN_MNT = duration_mins,\n\t\tDLAY_CD = delay_code,\n\t\tDLAY_CD_NAME = delay_code_name,\n\t\tADF_TIME_STMP,\n\t\tADF_RUN_ID\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> StagingFlights"
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}
