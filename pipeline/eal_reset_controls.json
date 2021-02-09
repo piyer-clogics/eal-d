@@ -19,7 +19,7 @@
 						"referenceName": "adf_reset_dataflow",
 						"type": "DataFlowReference",
 						"parameters": {
-							"job_name": "''"
+							"job_name": "'eal_stg_flights_load'"
 						}
 					},
 					"compute": {
