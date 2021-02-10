@@ -37,7 +37,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "eal_arpt_az_blob",
+						"referenceName": "eal_az_flights",
 						"type": "DatasetReference"
 					}
 				]
