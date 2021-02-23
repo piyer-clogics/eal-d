@@ -21,7 +21,7 @@
 						"referenceName": "sql_s_flights_delay",
 						"type": "DatasetReference"
 					},
-					"name": "sink1"
+					"name": "WriteStagingDelay"
 				}
 			],
 			"transformations": [
@@ -29,7 +29,7 @@
 					"name": "AddADFColumns"
 				}
 			],
-			"script": "parameters{\n\trun_id as string ('')\n}\nsource(output(\n\t\tflight_id as string,\n\t\tdelay_type as string,\n\t\tduration_mins as string,\n\t\tdelay_code as string,\n\t\tdelay_code_name as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tdocumentForm: 'documentPerLine') ~> FlightsDelayBlob\nFlightsDelayBlob derive(ADF_TIME_STMP = currentTimestamp(),\n\t\tADF_RUN_ID = $run_id) ~> AddADFColumns\nAddADFColumns sink(input(\n\t\tFLT_ID as long,\n\t\tDLAY_TYP as string,\n\t\tDURTN_MNT as integer,\n\t\tDLAY_CD as string,\n\t\tDLAY_CD_NAME as string,\n\t\tADF_TIME_STMP as timestamp,\n\t\tADF_RUN_ID as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> sink1"
+			"script": "parameters{\n\trun_id as string ('')\n}\nsource(output(\n\t\tflight_id as string,\n\t\tdelay_type as string,\n\t\tduration_mins as string,\n\t\tdelay_code as string,\n\t\tdelay_code_name as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tdocumentForm: 'documentPerLine') ~> FlightsDelayBlob\nFlightsDelayBlob derive(ADF_TIME_STMP = currentTimestamp(),\n\t\tADF_RUN_ID = $run_id) ~> AddADFColumns\nAddADFColumns sink(input(\n\t\tFLT_ID as long,\n\t\tDLAY_TYP as string,\n\t\tDURTN_MNT as integer,\n\t\tDLAY_CD as string,\n\t\tDLAY_CD_NAME as string,\n\t\tADF_TIME_STMP as timestamp,\n\t\tADF_RUN_ID as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tmapColumn(\n\t\tFLT_ID = flight_id,\n\t\tDLAY_TYP = delay_type,\n\t\tDURTN_MNT = duration_mins,\n\t\tDLAY_CD = delay_code,\n\t\tDLAY_CD_NAME = delay_code_name,\n\t\tADF_TIME_STMP,\n\t\tADF_RUN_ID\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> WriteStagingDelay"
 		}
 	}
 }
