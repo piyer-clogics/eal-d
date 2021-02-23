@@ -147,23 +147,6 @@
 				"scale": 3
 			},
 			{
-				"name": "DLAY_TYP",
-				"type": "text"
-			},
-			{
-				"name": "DURTN_MNT",
-				"type": "int",
-				"precision": 10
-			},
-			{
-				"name": "DLAY_CD",
-				"type": "text"
-			},
-			{
-				"name": "DLAY_CD_NAME",
-				"type": "text"
-			},
-			{
 				"name": "ADF_TIME_STMP",
 				"type": "datetime",
 				"precision": 23,
