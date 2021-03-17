@@ -13,8 +13,11 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "eal_az_equipment_schd.json",
-				"container": "eal-src-stg"
+				"fileName": {
+					"value": "@concat('bi-flights-equip-schd-',split(utcnow(),'T')[0])",
+					"type": "Expression"
+				},
+				"container": "eal-src-equip-schd"
 			}
 		},
 		"schema": {
