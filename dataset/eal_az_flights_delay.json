@@ -14,7 +14,7 @@
 			"location": {
 				"type": "AzureBlobStorageLocation",
 				"fileName": {
-					"value": "@concat(concat('bi-flight-delay-',utcnow()),'.csv')",
+					"value": "@concat('bi-flights-delay-',split(utcnow(),'T')[0])",
 					"type": "Expression"
 				},
 				"container": "eal-src-flight-delay"
