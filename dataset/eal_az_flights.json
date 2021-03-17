@@ -13,8 +13,11 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "eal_flights_postgres.json",
-				"container": "eal-src-stg"
+				"fileName": {
+					"value": "concat(@concat('bi-flights-',utcnow()),'.csv')",
+					"type": "Expression"
+				},
+				"container": "eal-flights"
 			}
 		},
 		"schema": {
