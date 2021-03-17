@@ -2,7 +2,7 @@
 	"name": "sql_flights_rej",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "eal_sqldb_STG",
+			"referenceName": "eal_sqldb_piyer",
 			"type": "LinkedServiceReference"
 		},
 		"folder": {
