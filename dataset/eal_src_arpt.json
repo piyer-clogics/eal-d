@@ -1,0 +1,62 @@
+{
+	"name": "eal_src_arpt",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ealblobdconnection",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Azure blobs"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "eal_aprt.json",
+				"container": "eal-src-stg"
+			}
+		},
+		"schema": {
+			"type": "object",
+			"properties": {
+				"ARPT_NAME": {
+					"type": "string"
+				},
+				"ARPT_CITY": {
+					"type": "string"
+				},
+				"ARPT_CNTRY": {
+					"type": "string"
+				},
+				"ARPT_IATA_CD": {
+					"type": "string"
+				},
+				"ARPT_ICAO_CD": {
+					"type": "string"
+				},
+				"ARPT_LAT": {
+					"type": "number"
+				},
+				"ARPT_LONG": {
+					"type": "number"
+				},
+				"ARPT_ALTD": {
+					"type": "integer"
+				},
+				"ARPT_UTC_OFSET": {
+					"type": "number"
+				},
+				"ARPT_DST": {
+					"type": "string"
+				},
+				"ARPT_TZONE": {
+					"type": "string"
+				},
+				"LAST_UPDT_DT": {
+					"type": "string"
+				}
+			}
+		}
+	}
+}

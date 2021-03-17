@@ -1,0 +1,44 @@
+{
+	"name": "eal_stg_flights_delay",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ealblobdconnection",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Azure blobs"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": {
+					"value": "@concat('stg-flights-delay-',split(utcnow(),'T')[0])",
+					"type": "Expression"
+				},
+				"container": "eal-stg-flight-delay"
+			}
+		},
+		"schema": {
+			"type": "object",
+			"properties": {
+				"flight_id": {
+					"type": "integer"
+				},
+				"delay_type": {
+					"type": "string"
+				},
+				"duration_mins": {
+					"type": "integer"
+				},
+				"delay_code": {
+					"type": "string"
+				},
+				"delay_code_name": {
+					"type": "string"
+				}
+			}
+		}
+	}
+}

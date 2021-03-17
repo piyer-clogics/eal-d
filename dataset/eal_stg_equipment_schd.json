@@ -1,5 +1,5 @@
 {
-	"name": "eal_arpt_az_blob",
+	"name": "eal_stg_equipment_schd",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ealblobdconnection",
@@ -13,47 +13,44 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "eal_aprt.json",
-				"container": "eal-src-stg"
+				"fileName": {
+					"value": "@concat('stg-flights-equip-schd-',split(utcnow(),'T')[0])",
+					"type": "Expression"
+				},
+				"container": "eal-stg-equip-schd"
 			}
 		},
 		"schema": {
 			"type": "object",
 			"properties": {
-				"ARPT_NAME": {
-					"type": "string"
-				},
-				"ARPT_CITY": {
-					"type": "string"
-				},
-				"ARPT_CNTRY": {
-					"type": "string"
-				},
-				"ARPT_IATA_CD": {
-					"type": "string"
-				},
-				"ARPT_ICAO_CD": {
-					"type": "string"
-				},
-				"ARPT_LAT": {
-					"type": "number"
-				},
-				"ARPT_LONG": {
-					"type": "number"
-				},
-				"ARPT_ALTD": {
+				"eqp_sched_id": {
 					"type": "integer"
 				},
-				"ARPT_UTC_OFSET": {
-					"type": "number"
-				},
-				"ARPT_DST": {
+				"ac_registration": {
 					"type": "string"
 				},
-				"ARPT_TZONE": {
+				"status_code": {
 					"type": "string"
 				},
-				"LAST_UPDT_DT": {
+				"status_name": {
+					"type": "string"
+				},
+				"status_description": {
+					"type": "string"
+				},
+				"start_time": {
+					"type": "string"
+				},
+				"end_time": {
+					"type": "string"
+				},
+				"notes": {
+					"type": "string"
+				},
+				"is_deleted": {
+					"type": "boolean"
+				},
+				"updated_at": {
 					"type": "string"
 				}
 			}

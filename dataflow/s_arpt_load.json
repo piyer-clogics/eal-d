@@ -9,7 +9,7 @@
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "eal_arpt_az_blob",
+						"referenceName": "eal_src_arpt",
 						"type": "DatasetReference"
 					},
 					"name": "ArptBlob"

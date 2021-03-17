@@ -37,7 +37,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "eal_az_flights",
+						"referenceName": "eal_src_flights",
 						"type": "DatasetReference"
 					}
 				]
@@ -219,7 +219,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "eal_az_flights_delay",
+						"referenceName": "eal_src_flights_delay",
 						"type": "DatasetReference"
 					}
 				]
