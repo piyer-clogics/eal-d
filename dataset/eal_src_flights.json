@@ -1,5 +1,5 @@
 {
-	"name": "eal_az_flights",
+	"name": "eal_src_flights",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ealblobdconnection",

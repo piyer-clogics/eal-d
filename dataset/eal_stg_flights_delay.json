@@ -1,5 +1,5 @@
 {
-	"name": "eal_src_flights_delay",
+	"name": "eal_stg_flights_delay",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ealblobdconnection",
@@ -14,10 +14,10 @@
 			"location": {
 				"type": "AzureBlobStorageLocation",
 				"fileName": {
-					"value": "@concat('bi-flights-delay-',split(utcnow(),'T')[0])",
+					"value": "@concat('stg-flights-delay-',split(utcnow(),'T')[0])",
 					"type": "Expression"
 				},
-				"container": "eal-src-flight-delay"
+				"container": "eal-stg-flight-delay"
 			}
 		},
 		"schema": {

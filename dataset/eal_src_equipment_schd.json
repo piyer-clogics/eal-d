@@ -1,5 +1,5 @@
 {
-	"name": "eal_az_equipment_schd",
+	"name": "eal_src_equipment_schd",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ealblobdconnection",

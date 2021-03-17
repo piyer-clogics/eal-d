@@ -37,7 +37,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "eal_az_equipment_schd",
+						"referenceName": "eal_src_equipment_schd",
 						"type": "DatasetReference"
 					}
 				]

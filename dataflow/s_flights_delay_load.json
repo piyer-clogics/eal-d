@@ -9,7 +9,7 @@
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "eal_az_flights_delay",
+						"referenceName": "eal_src_flights_delay",
 						"type": "DatasetReference"
 					},
 					"name": "FlightsDelayBlob"

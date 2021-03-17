@@ -1,5 +1,5 @@
 {
-	"name": "eal_arpt_az_blob",
+	"name": "eal_src_arpt",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ealblobdconnection",
