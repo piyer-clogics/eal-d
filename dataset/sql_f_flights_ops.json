@@ -2,7 +2,7 @@
 	"name": "sql_f_flights_ops",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "eal_sqldb_piyer",
+			"referenceName": "eal_sqldb_EDW",
 			"type": "LinkedServiceReference"
 		},
 		"folder": {
