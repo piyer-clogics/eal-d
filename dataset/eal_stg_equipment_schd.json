@@ -1,0 +1,59 @@
+{
+	"name": "eal_stg_equipment_schd",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ealblobdconnection",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Azure blobs"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": {
+					"value": "@concat('stg-flights-equip-schd-',split(utcnow(),'T')[0])",
+					"type": "Expression"
+				},
+				"container": "eal-stg-equip-schd"
+			}
+		},
+		"schema": {
+			"type": "object",
+			"properties": {
+				"eqp_sched_id": {
+					"type": "integer"
+				},
+				"ac_registration": {
+					"type": "string"
+				},
+				"status_code": {
+					"type": "string"
+				},
+				"status_name": {
+					"type": "string"
+				},
+				"status_description": {
+					"type": "string"
+				},
+				"start_time": {
+					"type": "string"
+				},
+				"end_time": {
+					"type": "string"
+				},
+				"notes": {
+					"type": "string"
+				},
+				"is_deleted": {
+					"type": "boolean"
+				},
+				"updated_at": {
+					"type": "string"
+				}
+			}
+		}
+	}
+}
