@@ -14,7 +14,7 @@
 			"location": {
 				"type": "AzureBlobStorageLocation",
 				"fileName": {
-					"value": "@concat('bi-flights-',formatDateTime('o'))",
+					"value": "@concat('bi-flights-',split(utcnow(),'T')[0])",
 					"type": "Expression"
 				},
 				"container": "eal-src-flights"
