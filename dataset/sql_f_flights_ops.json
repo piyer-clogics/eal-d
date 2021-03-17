@@ -18,8 +18,8 @@
 			},
 			{
 				"name": "FLGHT_DT_ID",
-				"type": "int",
-				"precision": 10
+				"type": "bigint",
+				"precision": 19
 			},
 			{
 				"name": "FLGHT_NUM",
@@ -132,7 +132,8 @@
 			},
 			{
 				"name": "FUEL_IN",
-				"type": "char"
+				"type": "float",
+				"precision": 15
 			},
 			{
 				"name": "FUEL_OUT",
@@ -236,6 +237,12 @@
 			{
 				"name": "DELAY_DESC",
 				"type": "varchar"
+			},
+			{
+				"name": "UPDT_TIME_STMP",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
 			}
 		],
 		"typeProperties": {
