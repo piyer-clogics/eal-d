@@ -13,8 +13,11 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "eal_az_flights_delay.json",
-				"container": "eal-src-stg"
+				"fileName": {
+					"value": "@concat(concat('bi-flight-delay-',utcnow()),'.csv')",
+					"type": "Expression"
+				},
+				"container": "eal-src-flight-delay"
 			}
 		},
 		"schema": {

@@ -17,7 +17,7 @@
 					"value": "concat(@concat('bi-flights-',utcnow()),'.csv')",
 					"type": "Expression"
 				},
-				"container": "eal-flights"
+				"container": "eal-src-flights"
 			}
 		},
 		"schema": {
