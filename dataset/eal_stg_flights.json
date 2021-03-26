@@ -14,7 +14,7 @@
 			"location": {
 				"type": "AzureBlobStorageLocation",
 				"fileName": {
-					"value": "@concat('stg-flights-',split(utcnow(),'T')[0])",
+					"value": "@concat(concat('stg-flights-',split(utcnow(),'T')[0]),'.json')",
 					"type": "Expression"
 				},
 				"container": "eal-stg-flights"
