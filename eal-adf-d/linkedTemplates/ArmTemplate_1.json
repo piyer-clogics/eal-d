@@ -959,7 +959,7 @@
 					"location": {
 						"type": "AzureBlobStorageLocation",
 						"fileName": {
-							"value": "@concat('bi-flights-equip-schd-',split(utcnow(),'T')[0])",
+							"value": "@concat(concat('bi-flights-equip-schd',split(utcnow(),'T')[0]),'.json')",
 							"type": "Expression"
 						},
 						"container": "eal-src-equip-schd"
@@ -1021,7 +1021,7 @@
 					"location": {
 						"type": "AzureBlobStorageLocation",
 						"fileName": {
-							"value": "@concat('bi-flights-',split(utcnow(),'T')[0])",
+							"value": "@concat(concat('bi-flights-',split(utcnow(),'T')[0]),'.json')",
 							"type": "Expression"
 						},
 						"container": "eal-src-flights"
@@ -1137,7 +1137,7 @@
 					"location": {
 						"type": "AzureBlobStorageLocation",
 						"fileName": {
-							"value": "@concat('bi-flights-delay-',split(utcnow(),'T')[0])",
+							"value": "@concat(concat('bi-flights-delay-',split(utcnow(),'T')[0]),'.json')",
 							"type": "Expression"
 						},
 						"container": "eal-src-flight-delay"
@@ -1184,7 +1184,7 @@
 					"location": {
 						"type": "AzureBlobStorageLocation",
 						"fileName": {
-							"value": "@concat('stg-flights-equip-schd-',split(utcnow(),'T')[0])",
+							"value": "@concat(concat('stg-flights-equip-schd',split(utcnow(),'T')[0]),'.json')",
 							"type": "Expression"
 						},
 						"container": "eal-stg-equip-schd"
@@ -1246,7 +1246,7 @@
 					"location": {
 						"type": "AzureBlobStorageLocation",
 						"fileName": {
-							"value": "@concat('stg-flights-',split(utcnow(),'T')[0])",
+							"value": "@concat(concat('stg-flights-',split(utcnow(),'T')[0]),'.json')",
 							"type": "Expression"
 						},
 						"container": "eal-stg-flights"
@@ -1362,7 +1362,7 @@
 					"location": {
 						"type": "AzureBlobStorageLocation",
 						"fileName": {
-							"value": "@concat('stg-flights-delay-',split(utcnow(),'T')[0])",
+							"value": "@concat(concat('stg-flights-delay-',split(utcnow(),'T')[0]),'.json')",
 							"type": "Expression"
 						},
 						"container": "eal-stg-flight-delay"
