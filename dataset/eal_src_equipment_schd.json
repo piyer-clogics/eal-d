@@ -14,7 +14,7 @@
 			"location": {
 				"type": "AzureBlobStorageLocation",
 				"fileName": {
-					"value": "@concat('bi-flights-equip-schd-',split(utcnow(),'T')[0])",
+					"value": "@concat(concat('bi-flights-equip-schd',split(utcnow(),'T')[0]),'.json')",
 					"type": "Expression"
 				},
 				"container": "eal-src-equip-schd"
